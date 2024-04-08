@@ -1,4 +1,16 @@
-# Thesis Template: University of Exeter (unofficial)
+# University of Exeter
+
+> Practical Adversarial Attacks and Interpretation Methods for Deep Learning Models
+
+From Han Wu:
+
+Based on [George's template](https://github.com/georgedeath/University_of_Exeter_Thesis_Template), I added the university logo and header.
+
+![](overview.png)
+
+<br />
+
+From George De Ath:
 
 This is a minimum working example of a template that adheres to the
 [University guidelines](http://as.exeter.ac.uk/academic-policy-standards/tqa-manual/pgr/presentationoftheses/)
