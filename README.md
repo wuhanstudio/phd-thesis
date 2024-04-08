@@ -6,7 +6,7 @@ Based on [George's template](https://github.com/georgedeath/University_of_Exeter
 
 ![](overview.png)
 
-<br />
+<hr />
 
 From George De Ath:
 
