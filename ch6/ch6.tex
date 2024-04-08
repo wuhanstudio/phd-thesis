@@ -36,26 +36,26 @@ Deep learning models that achieves high accuracy provide fewer interpretations d
 
 \textbf{Permutation Feature Importance: } The idea behind Permutation Feature Importance is intuitive. A feature is significant for the model if there is a noticeable increase in the model's prediction error after permutation. On the other hand, the feature is less important if the prediction error remains nearly unchanged after shuffling.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\textwidth]{figures/chapter_defence/pdp.jpg}
-\caption{Partial Dependence Plot that draws the average of predicted value (y axis) if we change target features to be the value at each grid (x axis). For example, if we change all temperatures in the training set to be 20 Celsius, it's predicted that averagely around 5000 bikes will be sold \cite{molnar2019}.}
-\label{fig.pdp}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.7\textwidth]{figures/chapter_defence/pdp.jpg}
+% \caption{Partial Dependence Plot that draws the average of predicted value (y axis) if we change target features to be the value at each grid (x axis). For example, if we change all temperatures in the training set to be 20 Celsius, it's predicted that averagely around 5000 bikes will be sold \cite{molnar2019}.}
+% \label{fig.pdp}
+% \end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\textwidth]{figures/chapter_defence/ice.png}
-\caption{Individual Conditional Expectation that draws predictions for each individual \cite{molnar2019}.}
-\label{fig.ice}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.7\textwidth]{figures/chapter_defence/ice.png}
+% \caption{Individual Conditional Expectation that draws predictions for each individual \cite{molnar2019}.}
+% \label{fig.ice}
+% \end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\textwidth]{figures/chapter_defence/ale.png}
-\caption{ALE that draws the difference to the mean prediction calculated \cite{molnar2019}.}
-\label{fig.ale}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.7\textwidth]{figures/chapter_defence/ale.png}
+% \caption{ALE that draws the difference to the mean prediction calculated \cite{molnar2019}.}
+% \label{fig.ale}
+% \end{figure}
 
 \clearpage
 
@@ -124,7 +124,7 @@ In this chapter, we intend to investigate if it's possible to improve the robust
 % \begin{figure}[H]
 % \setcounter{figure}{3}
 % \centering
-% \includegraphics[width=3in]{fig/nature_dt.png}
+% \includegraphics[width=3in]{figures/chapter_interp/nature_dt.png}
 % \caption{A decision rule using three key features and their thresholds in
 % absolute value. Num, the number of patients in a class; T, the number of
 % correctly classified; F, the number of misclassified patients. \cite{Yan2020}}
@@ -132,12 +132,12 @@ In this chapter, we intend to investigate if it's possible to improve the robust
 
 \begin{figure*}
 \centering
-\includegraphics[width=6.16in]{fig/interpretable-ml-covid19.png}
+\includegraphics[width=6.16in]{figures/chapter_interp/interpretable-ml-covid19.png}
 \caption{The difference between the usual workflow of machine learning, and our approach.}
 \label{fig:approach}
 \end{figure*}
 
-\IEEEPARstart{T}he sudden outbreak of COVID-19 has caused an unprecedented disruption and impact worldwide. With more than 100 million confirmed cases as of February 2021, the pandemic is still accelerating globally. The disease is transmitted by inhalation or contact with infected droplets with an incubation period ranging from 2 to 14 days \cite{singhal2020review}, making it highly infectious and difficult to contain and mitigate.
+% \IEEEPARstart{T}he sudden outbreak of COVID-19 has caused an unprecedented disruption and impact worldwide. With more than 100 million confirmed cases as of February 2021, the pandemic is still accelerating globally. The disease is transmitted by inhalation or contact with infected droplets with an incubation period ranging from 2 to 14 days \cite{singhal2020review}, making it highly infectious and difficult to contain and mitigate.
 
 With the rapid transmission of COVID-19, the demand for medical supplies goes beyond hospitals' capacity in many countries. Various diagnostic and predictive models are employed to release the pressure on healthcare workers. For instance, a deep learning model that detects abnormalities and extract key features of the altered lung parenchyma using chest CT images is proposed \cite{Basu2020Deep}. On the other hand, Rich Caruana et al. exploit intelligible models that use generalized additive models with pairwise interactions to predict the probability of readmission \cite{Caruana2015IntelligibleMF}. To maintain both interpretability and complexity, DeepCOVIDNet is present to achieve predictive surveillance that identifies the most influential features for the prediction of the growth of the pandemic\cite{ramch2020deepcovidnet} through the combination of two modules. The embedding module takes various heterogeneous feature groups as input and outputs an equidimensional embedding corresponding to each feature group. The DeepFM \cite{guo2017deepfm} module computes second and higher-order interactions between them.
 
@@ -409,14 +409,14 @@ For healthcare applications, both accuracy and interpretability are significant.
 \centering
 \begin{subfigure}[b]{0.475\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/dt_pdp_crp_ntproBNP.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/dt_pdp_crp_ntproBNP.png}
     \caption{Decision Tree}
     \label{fig:dt_pdp}
 \end{subfigure}
 % \hfill
 \begin{subfigure}[b]{0.475\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/rf_pdp_crp_ntproBNP.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/rf_pdp_crp_ntproBNP.png}
     \caption{Random Forest}
     \label{fig:rf_pdp}
 \end{subfigure}
@@ -424,14 +424,14 @@ For healthcare applications, both accuracy and interpretability are significant.
 % \hfill
 \begin{subfigure}[b]{0.475\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/xgbc_pdp_crp_ntproBNP.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/xgbc_pdp_crp_ntproBNP.png}
     \caption{Gradient Boosted Trees}
     \label{fig:gbt_pdp}
 \end{subfigure}
 % \hfill
 \begin{subfigure}[b]{0.475\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/nn_pdp_crp_ntproBNP.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/nn_pdp_crp_ntproBNP.png}
     \caption{Neural Networks}
     \label{fig:nn_pdp}
 \end{subfigure}
@@ -493,14 +493,14 @@ Neural Networks         & 0.58   & 0.78       & 1.00    & 0.80  & 0.27\\ \bottom
 \centering
 \begin{subfigure}[b]{0.485\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/dt_ice_crp_ntproBNP.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/dt_ice_crp_ntproBNP.png}
     \caption{Decision Tree}
     \label{fig:dt_ice}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.485\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/rf_ice_crp_ntproBNP.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/rf_ice_crp_ntproBNP.png}
     \caption{Random Forest}
     \label{fig:rf_ice}
 \end{subfigure}
@@ -508,14 +508,14 @@ Neural Networks         & 0.58   & 0.78       & 1.00    & 0.80  & 0.27\\ \bottom
 % \vskip\baselineskip
 \begin{subfigure}[b]{0.485\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/xgbc_ice_crp_ntproBNP.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/xgbc_ice_crp_ntproBNP.png}
     \caption{Gradient Boosted Trees}
     \label{fig:gbt_ice}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.485\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/nn_ice_crp_ntproBNP.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/nn_ice_crp_ntproBNP.png}
     \caption{Neural Networks}
     \label{fig:nn_ice}
 \end{subfigure}
@@ -530,14 +530,14 @@ Neural Networks         & 0.58   & 0.78       & 1.00    & 0.80  & 0.27\\ \bottom
 \centering
 \begin{subfigure}[b]{0.485\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/dt_ALE_NTproBNP_CRP.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/dt_ALE_NTproBNP_CRP.png}
     \caption{Decision Tree}
     \label{fig:dt_ale}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.485\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/rf_ALE_NTproBNP_CRP.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/rf_ALE_NTproBNP_CRP.png}
     \caption{Random Forest}
     \label{fig:rf_ale}
 \end{subfigure}
@@ -545,14 +545,14 @@ Neural Networks         & 0.58   & 0.78       & 1.00    & 0.80  & 0.27\\ \bottom
 % \vskip\baselineskip
 \begin{subfigure}[b]{0.485\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/xgbc_ALE_NTproBNP_CRP.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/xgbc_ALE_NTproBNP_CRP.png}
     \caption{Gradient Boosted Trees}
     \label{fig:gbt_ale}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.485\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/nn_ALE_NTproBNP_CRP.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/nn_ALE_NTproBNP_CRP.png}
     \caption{Neural Networks}
     \label{fig:nn_ale}
 \end{subfigure}
@@ -802,28 +802,28 @@ In this section, the interpretation of four different machine learning models re
 \centering
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/lime_dt_5.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_dt_5.png}
     \caption{Decision Tree}
     \label{fig:lime_dt_5}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/lime_rf_5.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_rf_5.png}
     \caption{Random Forests}
     \label{fig:lime_rf_5}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/lime_xgbc_5.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_xgbc_5.png}
     \caption{Gradient Boosted Trees}
     \label{fig:lime_xgbc_5}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/lime_nn_5.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_nn_5.png}
     \caption{Neural Networks}
     \label{fig:lime_nn_5}
 \end{subfigure}
@@ -836,28 +836,28 @@ In this section, the interpretation of four different machine learning models re
 \centering
 \begin{subfigure}[b]{1.0\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/shap_dt_5.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_dt_5.png}
     \caption{Decision Tree}
     \label{fig:shap_dt_5}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{1.0\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/shap_rf_5.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_rf_5.png}
     \caption{Random Forests}
     \label{fig:shap_rf_5}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{1.0\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/shap_xgbc_5.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_xgbc_5.png}
     \caption{Gradient Boosted Trees}
     \label{fig:shap_xgbc_5}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{1.0\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/shap_nn_5.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_nn_5.png}
     \caption{Neural Networks}
     \label{fig:shap_nn_5}
 \end{subfigure}
@@ -872,28 +872,28 @@ In this section, the interpretation of four different machine learning models re
 \centering
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/lime_dt_2.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_dt_2.png}
     \caption{Decision Tree}
     \label{fig:lime_dt_2}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/lime_rf_2.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_rf_2.png}
     \caption{Random Forests}
     \label{fig:lime_rf_2}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/lime_xgbc_2.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_xgbc_2.png}
     \caption{Gradient Boosted Trees}
     \label{fig:lime_xgb_2}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/lime_nn_2.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_nn_2.png}
     \caption{Neural Networks}
     \label{fig:lime_nn_2}
 \end{subfigure}
@@ -906,28 +906,28 @@ In this section, the interpretation of four different machine learning models re
 \centering
 \begin{subfigure}[b]{1.0\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/shap_dt_2.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_dt_2.png}
     \caption{Decision Tree}
     \label{fig:shap_dt_2}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{1.0\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/shap_rf_2.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_rf_2.png}
     \caption{Random Forests}
     \label{fig:shap_rf_2}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{1.0\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/shap_xgbc_2.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_xgbc_2.png}
     \caption{Gradient Boosted Trees}
     \label{fig:shap_xgbc_2}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{1.0\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/shap_nn_2.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_nn_2.png}
     \caption{Neural Networks}
     \label{fig:shap_nn_2}
 \end{subfigure}
@@ -950,7 +950,7 @@ Findings from the dedicated model are consistent with current medical knowledge.
 \begin{figure}[H]
 % \setcounter{figure}{3}
 \centering
-\includegraphics[width=2.8in]{fig/nature_dt.png}
+\includegraphics[width=2.8in]{figures/chapter_interp/nature_dt.png}
 \caption{A decision rule using three key features and their thresholds in
 absolute value. Num, the number of patients in a class; T, the number of
 correctly classified; F, the number of misclassified patients. \cite{Yan2020}}
@@ -965,28 +965,28 @@ Our methods reveal the same results without taking efforts to design a dedicated
 \centering
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/lime_kaggle_dt.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_kaggle_dt.png}
     \caption{Decision Tree}
     \label{fig:lime_kaggle_dt}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/lime_kaggle_rf.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_kaggle_rf.png}
     \caption{Random Forests}
     \label{fig:lime_kaggle_rf}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/lime_kaggle_xgbc.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_kaggle_xgbc.png}
     \caption{Gradient Boosted Trees}
     \label{fig:lime_kaggle_xgbc}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{fig/lime_kaggle_nn.png}
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_kaggle_nn.png}
     \caption{Neural Networks}
     \label{fig:lime_kaggle_nn}
 \end{subfigure}
