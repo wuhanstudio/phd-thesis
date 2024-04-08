@@ -5,7 +5,7 @@
 \usepackage[style=authoryear, % cite with authoryear
             citestyle=authoryear,
 %           sorting=none,     % refs appear in the order they are cited
-            backend=bibtex,   % use bibtex backend
+            backend=biber,   % use bibtex backend
             dashed=false,     % so same author doesnt show up 2nd time as '----'
             natbib=true,      % allow citep and citet
             uniquename=false, % turn off differentiating between authors of same
@@ -148,6 +148,7 @@
 \fancyhead[LO]{\rightmark}
 \fancyhead[RO]{\thepage}
 
+\setlength{\headheight}{10mm}
 \renewcommand{\headrulewidth}{0.5pt}
 
 % allows more space at the bottom of the page to stop all the warnings from 
