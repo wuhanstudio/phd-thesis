@@ -11,9 +11,9 @@ Starting with an introduction to existing object detection models and related wh
 
 \section{Introduction}
 
-Deep neural networks have been widely adopted in the task of object detection, and achieving SOTA performance. However, it's no more a secret that deep learning models are vulnerable to adversarial attacks. It has been nearly 8 years since the first adversarial attack against neural networks \cite{goodfellow2015explaining}. We can fool a deep learning model by adding small perturbations to the original input image. The perturbation is unperceivable by human eyes but can lead the detection model to inaccurate results.
+Deep neural networks have been widely adopted in the task of object detection, and achieving SOTA performance. However, it's no more a secret that deep learning models are vulnerable to adversarial attacks. It has been nearly 8 years since the first adversarial attack against neural networks \citep{goodfellow2015explaining}. We can fool a deep learning model by adding small perturbations to the original input image. The perturbation is unperceivable by human eyes but can lead the detection model to inaccurate results.
 
-Based on where we apply the attack, current adversarial attacks can be classified into two categories: digital perturbation and physical perturbation. For digital perturbation, we apply perturbation in the digital world. The perturbation does not exist in the actual world. It is applied to the digital image captured by the camera. For physical perturbation, we apply the perturbation in the physical world. For instance, we print out the adversarial perturbation on a poster \cite{lee2019physical} or T-shirt \cite{xu2020adversarial}.
+Based on where we apply the attack, current adversarial attacks can be classified into two categories: digital perturbation and physical perturbation. For digital perturbation, we apply perturbation in the digital world. The perturbation does not exist in the actual world. It is applied to the digital image captured by the camera. For physical perturbation, we apply the perturbation in the physical world. For instance, we print out the adversarial perturbation on a poster \citep{lee2019physical} or T-shirt \citep{xu2020adversarial}.
 
 \begin{figure}[H]
 \centering
@@ -29,7 +29,7 @@ Based on where we apply the attack, current adversarial attacks can be classifie
 \label{fig.adv_physical}
 \end{figure}
 
-However, there are several disadvantages to both attacks. Digital perturbation is applied directly to the input image of the detection model \cite{lu2017no}. The problem is that the input of the model is inside the operating system, which we do not have access to. It's not trivial to hack into the system of Google's Self-Driving Car and apply the perturbation. As a result, the biggest hurdle for digital perturbation is that we cannot add the perturbation into a real system. This renders digital perturbation useless in practice. Research interests are shifting from digital perturbation to physical perturbation. 
+However, there are several disadvantages to both attacks. Digital perturbation is applied directly to the input image of the detection model \citep{lu2017no}. The problem is that the input of the model is inside the operating system, which we do not have access to. It's not trivial to hack into the system of Google's Self-Driving Car and apply the perturbation. As a result, the biggest hurdle for digital perturbation is that we cannot add the perturbation into a real system. This renders digital perturbation useless in practice. Research interests are shifting from digital perturbation to physical perturbation. 
 
 % No need to worry about adversarial attacks
 
@@ -39,43 +39,43 @@ In summary, digital perturbation is flexible and inconspicuous, but impractical.
 
 \subsection{Object Detection Models}
 
-Before introducing adversarial attacks, it's worthwhile to get familiar with target object detection models. Existing frameworks of object detection can be categorized into two types: region proposal-based methods and regression/classification-based methods \cite{Zhao2019}. We can either solve localization and classification problems separately or simultaneously. If we first generate a series of region proposals and then classify each proposal into different categories, this is a region proposal-based method (Two-stage). On the other hand, if we regard object detection as a classification or regression task that outputs locations and categories simultaneously, this is a regression/classification-based method (One-stage). The PASCAL VOC dataset and MS COCO dataset are used for a benchmark among different models.
+Before introducing adversarial attacks, it's worthwhile to get familiar with target object detection models. Existing frameworks of object detection can be categorized into two types: region proposal-based methods and regression/classification-based methods \citep{Zhao2019}. We can either solve localization and classification problems separately or simultaneously. If we first generate a series of region proposals and then classify each proposal into different categories, this is a region proposal-based method (Two-stage). On the other hand, if we regard object detection as a classification or regression task that outputs locations and categories simultaneously, this is a regression/classification-based method (One-stage). The PASCAL VOC dataset and MS COCO dataset are used for a benchmark among different models.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{figures/chapter_detection/detection_review.png}
-\caption{Two types of frameworks: region-proposal based (two-stage) and regression / classification based (one-stage) \cite{Zhao2019}.}
+\caption{Two types of frameworks: region-proposal based (two-stage) and regression / classification based (one-stage) \citep{Zhao2019}.}
 \label{fig.detection_frame}
 \end{figure}
 
-OverFeat \cite{overfeat2014} is one of the first papers that use Convolution Neural Network on object detection. They use a multi-scale and sliding window approach to scan over the image and find locations of objects in regression layers. This is computationally expensive as most sub-sections of the input image do not contain any object. A more efficient approach is to first generate region proposals, regions that could contain objects, and then extract features from these proposals for regression. Selective search \cite{uijlings2013selective} is a common approach to generate region proposals, and it's employed in R-CNN \cite{girshick2014rich} as well. 
+OverFeat \citep{overfeat2014} is one of the first papers that use Convolution Neural Network on object detection. They use a multi-scale and sliding window approach to scan over the image and find locations of objects in regression layers. This is computationally expensive as most sub-sections of the input image do not contain any object. A more efficient approach is to first generate region proposals, regions that could contain objects, and then extract features from these proposals for regression. Selective search \citep{uijlings2013selective} is a common approach to generate region proposals, and it's employed in R-CNN \citep{girshick2014rich} as well. 
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.45]{figures/chapter_detection/rcnn.png}
-\caption{The architecture of RCNN \cite{girshick2014rich}.}
+\caption{The architecture of RCNN \citep{girshick2014rich}.}
 \label{fig.rcnn}
 \end{figure}
 
-RCNN generates around 2000 region proposals using selective search. It's more efficient than the sliding window method, but still computationally expensive. The same author of RCNN then proposed Fast-RCNN \cite{girshick2015fast} to improve the efficiency. RCNN feeds 2000 region proposals into CNN to compute features, while Fast-RCNN only feeds the original input image once to the CNN to generate feature maps, making it more efficient. To further improve its efficiency, region proposal computation becomes the bottleneck. Thus, Faster-RCNN \cite{ren2015faster} employs Region Proposal Network (RPN) that takes an image of arbitrary size to generate a set of rectangular object proposals.
+RCNN generates around 2000 region proposals using selective search. It's more efficient than the sliding window method, but still computationally expensive. The same author of RCNN then proposed Fast-RCNN \citep{girshick2015fast} to improve the efficiency. RCNN feeds 2000 region proposals into CNN to compute features, while Fast-RCNN only feeds the original input image once to the CNN to generate feature maps, making it more efficient. To further improve its efficiency, region proposal computation becomes the bottleneck. Thus, Faster-RCNN \citep{ren2015faster} employs Region Proposal Network (RPN) that takes an image of arbitrary size to generate a set of rectangular object proposals.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.4]{figures/chapter_detection/fast-rcnn.png}
-\caption{The architecture of Fast-RCNN \cite{girshick2015fast}.}
+\caption{The architecture of Fast-RCNN \citep{girshick2015fast}.}
 \label{fig.fastrcnn}
 \end{figure}
 
 % FPN is not an object detector by itself. It is a feature extractor that works with object detectors. FPN extracts feature maps and later feeds into a detector, says RPN, for object detection. 
 
-In contrast, regression/classification-based methods generate detection results in a single run, making it even more efficient. Region proposal-based frameworks consist of region proposal generation, feature extraction with CNN, classification, and bounding box regression. Different components are usually trained separately. This becomes the bottleneck for real-time applications.  Experimental results demonstrate that two-stage models are more accurate, while one-stage models are more efficient. Here, we introduce the two most widely deployed one-stage models: YOLO \cite{redmon2016you} and SSD \cite{liu2016ssd}. 
+In contrast, regression/classification-based methods generate detection results in a single run, making it even more efficient. Region proposal-based frameworks consist of region proposal generation, feature extraction with CNN, classification, and bounding box regression. Different components are usually trained separately. This becomes the bottleneck for real-time applications.  Experimental results demonstrate that two-stage models are more accurate, while one-stage models are more efficient. Here, we introduce the two most widely deployed one-stage models: YOLO \citep{redmon2016you} and SSD \citep{liu2016ssd}. 
 
 YOLO divides the input image into SxS grids. Each grid cell is supposed to predict objects at the center of each grid cell. To handle different aspect ratios of objects, YOLO predefines several anchor boxes at 3 different scales. Each grid cell outputs the confidence value, bounding boxes, and probability vectors of different classes. For example, if an input image of size 416x416 is divided into grid cells of shape 13x13, we have 32x32 grid cells in total. Suppose we have 9 predefined anchors, 3 at each scale, the YOLO model produces 32x32x9 = 9216 outputs, each output includes the confidence value, the position and shape of the bounding box, and the probability vector for each class. If we have 80 classes, each output is a vector of size 80 + 4 +1 = 85. All the outputs are then handled by NMS boxes to eliminate duplicated boxes and boxes that have a low confidence value of containing objects.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{figures/chapter_detection/yolo.png}
-\caption{The architecture of YOLO \cite{redmon2016you}.}
+\caption{The architecture of YOLO \citep{redmon2016you}.}
 \label{fig.yolo}
 \end{figure}
 
@@ -84,20 +84,20 @@ SSD is another one-stage detection model that can outperform Faster-RCNN on both
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{figures/chapter_detection/ssd.png}
-\caption{The architecture of SSD \cite{liu2016ssd}.}
+\caption{The architecture of SSD \citep{liu2016ssd}.}
 \label{fig.ssd}
 \end{figure}
 
-However, both one-stage and two-stage models are vulnerable to adversarial attacks. In this research, we test adversarial attacks against both types of models. In other words, we choose Faster-RCNN, Mask-RCNN \cite{he2017mask}, YOLO and SSD as our target models.
+However, both one-stage and two-stage models are vulnerable to adversarial attacks. In this research, we test adversarial attacks against both types of models. In other words, we choose Faster-RCNN, Mask-RCNN \citep{he2017mask}, YOLO and SSD as our target models.
 
 
 \subsection{White-box Adversarial Attacks}
 
-Adversarial attacks against object detection are still in their inchoate stage. The first adversarial attack against neural networks was published in 2014 that targets image classification models. A lot of following works on adversarial attacks have emerged since then. Most of them still attack image classification models. We find the first adversarial attack against image segmentation in 2017 \cite{fischer2017adversarial}, and an evaluation of the transferability of adversarial attacks against segmentation and detection \cite{gurbaxani2018traits} in 2018. More adversarial attacks against object detection arises since 2019, and most of them target two-stage detection models. More specifically, the Region Proposal Network (RPN) in Faster RCNN.
+Adversarial attacks against object detection are still in their inchoate stage. The first adversarial attack against neural networks was published in 2014 that targets image classification models. A lot of following works on adversarial attacks have emerged since then. Most of them still attack image classification models. We find the first adversarial attack against image segmentation in 2017 \citep{fischer2017adversarial}, and an evaluation of the transferability of adversarial attacks against segmentation and detection \citep{gurbaxani2018traits} in 2018. More adversarial attacks against object detection arises since 2019, and most of them target two-stage detection models. More specifically, the Region Proposal Network (RPN) in Faster RCNN.
 
-The Dense Adversary Generation (DAG) \cite{xie2017adversarial} method intends to misclassify objects by adding small perturbations to the input image. It deviates predictions of $n$ target objects from ground-truth class label $l_n$ by reducing the error between $l_n$ and $l^{'}_{n}$, where $l^{'}_{n}$ denotes adversarial labels that can be randomly sampled from other incorrect labels. The DAG attack against segmentation models is relatively easy because the attack can be achieved by assigning each pixel to a different class. While for object detection models that output several thousands of bounding boxes, fooling one bounding box is not enough as the rest could still make correct predictions. This problem is solved by attacking the Region Proposal Network (RPN) in FasterRCNN, where they increase the threshold of NMS in RPN, such that they attack several thousands of bounding boxes simultaneously.
+The Dense Adversary Generation (DAG) \citep{xie2017adversarial} method intends to misclassify objects by adding small perturbations to the input image. It deviates predictions of $n$ target objects from ground-truth class label $l_n$ by reducing the error between $l_n$ and $l^{'}_{n}$, where $l^{'}_{n}$ denotes adversarial labels that can be randomly sampled from other incorrect labels. The DAG attack against segmentation models is relatively easy because the attack can be achieved by assigning each pixel to a different class. While for object detection models that output several thousands of bounding boxes, fooling one bounding box is not enough as the rest could still make correct predictions. This problem is solved by attacking the Region Proposal Network (RPN) in FasterRCNN, where they increase the threshold of NMS in RPN, such that they attack several thousands of bounding boxes simultaneously.
 
-The Robust Adversarial Perturbation (RAP) \cite{li2018robust} attacks the RPN as well. It fools the RPN to predict most objects as background and produces wrong estimations on bounding boxes even if correct foreground objects are proposed. This is achieved by optimizing the following loss function:
+The Robust Adversarial Perturbation (RAP) \citep{li2018robust} attacks the RPN as well. It fools the RPN to predict most objects as background and produces wrong estimations on bounding boxes even if correct foreground objects are proposed. This is achieved by optimizing the following loss function:
 
 \begin{equation} 
 min_\mathcal{I} \quad L_{label}(\mathcal{I};\mathcal{F}_{\theta}) + L_{shape}(\mathcal{I};\mathcal{F}_{\theta}), \quad s.t. \ \ PSNR(\mathcal{I}) \geq \epsilon
@@ -111,23 +111,23 @@ min_\mathcal{I} \quad L_{label}(\mathcal{I};\mathcal{F}_{\theta}) + L_{shape}(\m
     L_{shape}(\mathcal{I};\mathcal{F}_{\theta}) = \sum_{j=1}^{m} z_j((\Delta x_j - \tau_x)^2 + (\Delta y_j - \tau_y)^2 + (\Delta w_j - \tau_w)^2 + (\Delta h_j - \tau_h)^2)
 \end{equation}
 
-The Unified and Efficient Adversary (UEA) \cite{ijcai2019-134} methods extends DAG with a feature loss to train a generative adversarial network (GAN) to generate adversarial examples. 
+The Unified and Efficient Adversary (UEA) \citep{ijcai2019-134} methods extends DAG with a feature loss to train a generative adversarial network (GAN) to generate adversarial examples. 
 
-The above methods generate one adversarial perturbation for each image, thus the perturbation is image-specific. It is also possible to generate a universal perturbation that is image-agnostic. The adversarial objectness gradient attack (TOG)\cite{chow2020adversarial} iterates over the training set to generate a single perturbation that can fool all the images in the training set. The Universal Dense Object Suppression (U-DOS) \cite{LI2021107584} uses a similar approach, but it focuses on fooling objects to be the background. It is also possible to only attack specific objects using TAR \cite{mohamad2021}.
+The above methods generate one adversarial perturbation for each image, thus the perturbation is image-specific. It is also possible to generate a universal perturbation that is image-agnostic. The adversarial objectness gradient attack (TOG)\citep{chow2020adversarial} iterates over the training set to generate a single perturbation that can fool all the images in the training set. The Universal Dense Object Suppression (U-DOS) \citep{LI2021107584} uses a similar approach, but it focuses on fooling objects to be the background. It is also possible to only attack specific objects using TAR \citep{mohamad2021}.
 
 Here's a summary of the aforementioned adversarial attacks against object detection models:
 
-- TAR \cite{mohamad2021} - 2021
+- TAR \citep{mohamad2021} - 2021
 
-- U-DOS \cite{LI2021107584} - 2021
+- U-DOS \citep{LI2021107584} - 2021
 
-- TOG \cite{chow2020adversarial} - 2020
+- TOG \citep{chow2020adversarial} - 2020
 
-- UEA \cite{ijcai2019-134} - 2019
+- UEA \citep{ijcai2019-134} - 2019
 
-- RAP \cite{li2018robust} - 2018
+- RAP \citep{li2018robust} - 2018
 
-- DAG \cite{xie2017adversarial} - 2017
+- DAG \citep{xie2017adversarial} - 2017
 
 Though these methods generate digital perturbations, similar approaches can be utilized to produce physical perturbations. If we print out digital perturbations on a poster, it won't be a valid physical perturbation. Valid physical perturbations can be generated by adding extra constraints to the loss function, such as the Sub-sampled Non-Printability Score (SNPS). The Non-Printability Score (NPS) is employed to measure the error between a printed pixel and its digital counterparts. Thus the adversarial effect of digital perturbations can be preserved after being printed out.
 
@@ -141,7 +141,7 @@ In summary, different adversarial attacks define distinct loss functions that de
 Intelligent robots rely on object detection models to perceive the environment. Following advances in deep learning security it has been revealed that object detection models are vulnerable to adversarial attacks. However, prior research primarily focuses on attacking static images or offline videos. Therefore, it is still unclear if such attacks could jeopardize real-world robotic applications in dynamic environments. 
 This paper bridges this gap by presenting the first real-time online attack against object detection models. We devise three attacks that fabricate bounding boxes for nonexistent objects at desired locations. The attacks achieve a success rate of about 90\% within about 20 iterations. The demo video is available at \href{https://youtu.be/zJZ1aNlXsMU}{https://youtu.be/zJZ1aNlXsMU}.
 
-Our objective is to fool the YOLOv3 \cite{redmon2018yolov3}, and YOLOv4 \cite{bochkovskiy2020yolov4} object detection models to mistakenly detect objects at locations where there is no object. We generate adversarial overlays by combining the imperceptibility of adversarial filters with the localizability of adversarial patches.
+Our objective is to fool the YOLOv3 \citep{redmon2018yolov3}, and YOLOv4 \citep{bochkovskiy2020yolov4} object detection models to mistakenly detect objects at locations where there is no object. We generate adversarial overlays by combining the imperceptibility of adversarial filters with the localizability of adversarial patches.
 
 \subsection{Preliminaries}
 \label{section_preliminaries}
@@ -152,12 +152,12 @@ This section clarifies the differences between adversarial filters and adversari
     \centering
     \begin{subfigure}[b]{0.42\textwidth}
         \includegraphics[width=1\linewidth]{figures/chapter_detection/digital_filter.jpg}
-        \caption{Digital filters apply the perturbation to the entire input image in the digital world \cite{wang2021daedalus}.}
+        \caption{Digital filters apply the perturbation to the entire input image in the digital world \citep{wang2021daedalus}.}
         \label{fig:digital_filter}
     \end{subfigure}
     \begin{subfigure}[b]{0.42\textwidth}
         \includegraphics[width=1\linewidth]{figures/chapter_detection/physical_filter.jpg}
-        \caption{Physical filters apply the perturbation by attacking the camera using, e.g., a translucent film attached to the camera lens \cite{li2019adversarial}.}
+        \caption{Physical filters apply the perturbation by attacking the camera using, e.g., a translucent film attached to the camera lens \citep{li2019adversarial}.}
         \label{fig:physical_filter}
     \end{subfigure}
     \caption{Adversarial filters perturb the entire image.}
@@ -170,11 +170,11 @@ An adversarial filter refers to a perturbation added to the entire image. Thus, 
 
 \textbf{Digital Filter} (Fig. \ref{fig:digital_filter})
 
-The first adversarial attack against image classification models was a digital filter that added a small perturbation to the entire input image \cite{goodfellow2014explaining}. The perturbation can be generated using either gradient-based methods \cite{madryMSTV18} \cite{kurakin2018adversarial} \cite{wong2019wasserstein} \cite{croce2020reliable} or optimization-based methods \cite{papernot2016transferability} \cite{carlini2017towards} \cite{qin2019imperceptible}. Prior research uses the $l_1$, $l_2$, and $l_{\infty}$ norms to measure the human perceptual distance between the adversarial and the original input image \cite{miyato2015distributional} \cite{sabour2015adversarial} \cite{chen2018ead}. While the digital filter first proved the existence of adversarial examples, it is limited in practical scenarios since it is not always possible to assume access to the input image.
+The first adversarial attack against image classification models was a digital filter that added a small perturbation to the entire input image \citep{goodfellow2014explaining}. The perturbation can be generated using either gradient-based methods \citep{madryMSTV18} \citep{kurakin2018adversarial} \citep{wong2019wasserstein} \citep{croce2020reliable} or optimization-based methods \citep{papernot2016transferability} \citep{carlini2017towards} \citep{qin2019imperceptible}. Prior research uses the $l_1$, $l_2$, and $l_{\infty}$ norms to measure the human perceptual distance between the adversarial and the original input image \citep{miyato2015distributional} \citep{sabour2015adversarial} \citep{chen2018ead}. While the digital filter first proved the existence of adversarial examples, it is limited in practical scenarios since it is not always possible to assume access to the input image.
 
 \textbf{Physical Filter} (Fig. \ref{fig:physical_filter})
 
-Physical filters attach a translucent film to the camera lens to perturb the entire image \cite{li2019adversarial}. While physical filters do not require access to the input image, they do require physical access to the camera. One big challenge with physical filters is the difficulty of manufacturing a film that precisely replicates the adversarial perturbation. Thus, the practical applicability of adversarial filters in the physical world is still rather limited. In addition, to the best of our knowledge, physical filters has so far only been used to attack image classification models, not object detection models. 
+Physical filters attach a translucent film to the camera lens to perturb the entire image \citep{li2019adversarial}. While physical filters do not require access to the input image, they do require physical access to the camera. One big challenge with physical filters is the difficulty of manufacturing a film that precisely replicates the adversarial perturbation. Thus, the practical applicability of adversarial filters in the physical world is still rather limited. In addition, to the best of our knowledge, physical filters has so far only been used to attack image classification models, not object detection models. 
 
 % \pagebreak
 
@@ -182,12 +182,12 @@ Physical filters attach a translucent film to the camera lens to perturb the ent
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=1\linewidth]{figures/chapter_detection/digital_patch.jpg}
-        \caption{Digital patches replace a part of the input image with the adversarial patch (left top corner) \cite{liu2018dpatch}.}
+        \caption{Digital patches replace a part of the input image with the adversarial patch (left top corner) \citep{liu2018dpatch}.}
         \label{fig:digital_patch}
     \end{subfigure}
     \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=1\linewidth]{figures/chapter_detection/physical_patch.jpg}
-        \caption{Physical patches print the adversarial patch on a physical object, e.g., on a poster \cite{lee2019physical}.}
+        \caption{Physical patches print the adversarial patch on a physical object, e.g., on a poster \citep{lee2019physical}.}
         \label{fig:physical_patch}
     \end{subfigure}
     \caption{Adversarial patches perturb part of the image.}
@@ -200,9 +200,9 @@ In some scenarios, it is possible to remove the constraint of the imperceptibili
 
 Contrary to filters, these patches are limited in size and only perturb part of the image, allowing us to better control the location of generated objects when attacking an object detection model. Similar to filters, patches can be categorized as digital or physical patches.
 
-\textbf{Digital Patch} (Fig. \ref{fig:digital_patch}) In 2018, Liu etc al. designed the DPatch \cite{liu2018dpatch} to attack the Faster R-CNN object detection model \cite{ren2015faster}. The DPatch is location-independent, which means that it can be placed anywhere in the input image. Another notable digital patch is the TOG attack, presented in 2020 by Chow et al \cite{chow2020adversarial}. They generated a 40x40 adversarial patch to fool object detection models into misclassifying objects to which the patch was attached.
+\textbf{Digital Patch} (Fig. \ref{fig:digital_patch}) In 2018, Liu etc al. designed the DPatch \citep{liu2018dpatch} to attack the Faster R-CNN object detection model \citep{ren2015faster}. The DPatch is location-independent, which means that it can be placed anywhere in the input image. Another notable digital patch is the TOG attack, presented in 2020 by Chow et al \citep{chow2020adversarial}. They generated a 40x40 adversarial patch to fool object detection models into misclassifying objects to which the patch was attached.
 
-\textbf{Physical Patch} (Fig. \ref{fig:physical_patch}) In 2017, Google presented landmark research for generating a physical patch to attack an image classification model \cite{brown2017patch}. As a result, research interest gradually shifted to from digital to physical patches. Later, Lee et al. \cite{lee2019physical} and Wang et al. \cite{wang2021daedalus} extended the physical patch attack from image classification to object detection. One shortcoming of physical patches is their inflexibility. Once the adversarial patch has been printed out, the only way to change it is through reprinting. To improve their flexibility, Hoory et al. dynamically displayed adversarial patches on a flat screen attached to a car \cite{hoory2020dynamic}.
+\textbf{Physical Patch} (Fig. \ref{fig:physical_patch}) In 2017, Google presented landmark research for generating a physical patch to attack an image classification model \citep{brown2017patch}. As a result, research interest gradually shifted to from digital to physical patches. Later, Lee et al. \citep{lee2019physical} and Wang et al. \citep{wang2021daedalus} extended the physical patch attack from image classification to object detection. One shortcoming of physical patches is their inflexibility. Once the adversarial patch has been printed out, the only way to change it is through reprinting. To improve their flexibility, Hoory et al. dynamically displayed adversarial patches on a flat screen attached to a car \citep{hoory2020dynamic}.
 
 % \subsection{Summary}
 
@@ -212,7 +212,7 @@ Contrary to filters, these patches are limited in size and only perturb part of 
 
 \subsection{Problem Formulation} 
 
-The YOLO object detection model splits the input image into $S$x$S$ grids and makes predictions for each grid. For example, the input shape of YOLO is 416x416x3 (height, width, and channel). If $S=13$, we divide each channel into 13x13 grids, and each grid is 32x32 pixels. To detect objects of different sizes, YOLO makes predictions at three different scales (see Fig. \ref{fig.grid}). The first, second, and third output layer contains 13x13, 26x26, and 52x52 grids, respectively. The first output layer detects larger objects, and the third output layer detects smaller objects. In addition, YOLO pre-defines three anchor boxes ($B=3$) at each scale to detect objects of different aspect ratios. Thus, we have 9 pre-defined anchor boxes for 3 scales. Lastly, each output contains the shape and location of the bounding box, the confidence value, and the probability vector for each class (see Fig. \ref{fig.grid}). For example, if the model is pretrained on the MS COCO dataset \cite{mscoco2014} \cite{moore2020fiftyone} that contains 80 classes ($K=80$), each output contains 85 values consisting of four dimensions ($b_x, b_y, b_w, b_h$), one confidence value ($c$), and 80 probabilities $(p_1, p_2, ..., p_{80})$ for each class.
+The YOLO object detection model splits the input image into $S$x$S$ grids and makes predictions for each grid. For example, the input shape of YOLO is 416x416x3 (height, width, and channel). If $S=13$, we divide each channel into 13x13 grids, and each grid is 32x32 pixels. To detect objects of different sizes, YOLO makes predictions at three different scales (see Fig. \ref{fig.grid}). The first, second, and third output layer contains 13x13, 26x26, and 52x52 grids, respectively. The first output layer detects larger objects, and the third output layer detects smaller objects. In addition, YOLO pre-defines three anchor boxes ($B=3$) at each scale to detect objects of different aspect ratios. Thus, we have 9 pre-defined anchor boxes for 3 scales. Lastly, each output contains the shape and location of the bounding box, the confidence value, and the probability vector for each class (see Fig. \ref{fig.grid}). For example, if the model is pretrained on the MS COCO dataset \citep{mscoco2014} \citep{moore2020fiftyone} that contains 80 classes ($K=80$), each output contains 85 values consisting of four dimensions ($b_x, b_y, b_w, b_h$), one confidence value ($c$), and 80 probabilities $(p_1, p_2, ..., p_{80})$ for each class.
 
 Putting things together: Given an input image $x$, the object detection model outputs $S$x$S$ candidate bounding boxes $o \in \mathcal{O}$ at three different scales ($S \in \{13,26,52\}$, $B=3$, and $|\mathcal{O}| = \sum_{1 \leq i \leq 3} S_i \times S_i \times B$, where $S_i$ represents the grid size of the $i_{th}$ output layer). Further, each candidate box is
 \begin{equation}
@@ -280,7 +280,7 @@ Here, the function $\sigma (x)$ represents the sigmoid function.
 
 Note that it is also possible to generate monochrome greyscale overlays. Greyscale overlays add the same value to each channel, making the perturbation less conspicuous. We can generate monochrome overlays using the average of the red, green, and blue channels or from a single channel since human eyes are most sensitive to the green channel.
 
-The perturbation is computed using gradients. At the end of each iteration, we clip the value of the perturbation so that it does not exceed the pre-defined boundary. The adversarial image of the original DPatch \cite{liu2018dpatch} contains invalid negative pixel values. Thus, we also clip the value of the adversarial image to make sure it is still a valid image. The adversarial overlay attack is summarized in Algorithm \ref{alg:adv-overlay}.
+The perturbation is computed using gradients. At the end of each iteration, we clip the value of the perturbation so that it does not exceed the pre-defined boundary. The adversarial image of the original DPatch \citep{liu2018dpatch} contains invalid negative pixel values. Thus, we also clip the value of the adversarial image to make sure it is still a valid image. The adversarial overlay attack is summarized in Algorithm \ref{alg:adv-overlay}.
 
 \begin{figure*}[b]
 \centering
@@ -424,7 +424,7 @@ We used YOLO object detection models pre-trained on the MS COCO dataset for the 
 
 \subsubsection{Evaluation Metrics}
 
-Prior research have used the Mean Average Precision (mAP) \cite{map2018} to evaluate the accuracy of object detection models. However, the objective of our attack is to fabricate new bounding boxes, not to decrease the accuracy of existing objects. Therefore, the evaluation metrics need to reflect the efficiency of generating new bounding boxes in real time, something which mAP cannot do. In addition, the mAP evaluation metric requires access to the ground truth, that is, human-labeled bounding boxes. The online attack that fools the object detection system in real time does not have any such ground truth since it is impossible for humans to label the video stream in real time. Thus, we use the following two evaluation metrics that evaluate the efficiency of generating new objects and do not require ground truth labels.
+Prior research have used the Mean Average Precision (mAP) \citep{map2018} to evaluate the accuracy of object detection models. However, the objective of our attack is to fabricate new bounding boxes, not to decrease the accuracy of existing objects. Therefore, the evaluation metrics need to reflect the efficiency of generating new bounding boxes in real time, something which mAP cannot do. In addition, the mAP evaluation metric requires access to the ground truth, that is, human-labeled bounding boxes. The online attack that fools the object detection system in real time does not have any such ground truth since it is impossible for humans to label the video stream in real time. Thus, we use the following two evaluation metrics that evaluate the efficiency of generating new objects and do not require ground truth labels.
 
 \textbf{Success Rate}
 
@@ -534,7 +534,7 @@ In Table \ref{tab:fix-it}, the attack achieved 24 FPS (1 iteration cost 41 ms). 
 
 As illustrated in Table \ref{tab:fix-box}, on average, the attack requires only 7 iterations within around 300 ms to generate one bounding box for each static image (offline attack). 
 
-For an online attack, the attack can be even more efficient. It is unnecessary to re-generate the adversarial overlay from scratch for every input video frame since there is a high correlation between consecutive video frames and iterations \cite{ilyas2018prior}. As a result, we can save computations by reusing the overlay generated in the previous timestep. In the demo video, the attack achieved near real-time performance on an Intel i7-8665U CPU.
+For an online attack, the attack can be even more efficient. It is unnecessary to re-generate the adversarial overlay from scratch for every input video frame since there is a high correlation between consecutive video frames and iterations \citep{ilyas2018prior}. As a result, we can save computations by reusing the overlay generated in the previous timestep. In the demo video, the attack achieved near real-time performance on an Intel i7-8665U CPU.
 
 \subsection{Conclusions}
 
@@ -557,13 +557,13 @@ Demo Video: \href{https://youtu.be/OvIpe-R3ZS8}{https://youtu.be/OvIpe-R3ZS8}.
 
 \subsection{Introduction}
 
-The development of deep neural networks has enabled the creation of intelligent robots that possess a more comprehensive perception of the environment than traditional robots. However, this shift towards intelligent robots has also brought with it an increasing risk of adversarial attacks, especially in safety-critical applications. It has been nearly a decade since the first adversarial attack against neural networks, in which Goodfellow et al.\ fooled an image classification model by adding a small perturbation to the input image \cite{GoodfellowSS14}. Although the perturbation was imperceptible to humans, it caused the deep learning model to produce erroneous classification results. The attack was later extended from classification models to detection models \cite{LuSFF17}. 
+The development of deep neural networks has enabled the creation of intelligent robots that possess a more comprehensive perception of the environment than traditional robots. However, this shift towards intelligent robots has also brought with it an increasing risk of adversarial attacks, especially in safety-critical applications. It has been nearly a decade since the first adversarial attack against neural networks, in which Goodfellow et al.\ fooled an image classification model by adding a small perturbation to the input image \citep{GoodfellowSS14}. Although the perturbation was imperceptible to humans, it caused the deep learning model to produce erroneous classification results. The attack was later extended from classification models to detection models \citep{LuSFF17}. 
 
 %Despite substantial research efforts to understand adversarial attacks, it is still unclear how they could affect real-world systems, such as object detection models deployed in autonomous driving systems.  
 
-Adversarial attacks against deep learning models can be divided into two categories: digital attacks and physical attacks. Digital attacks directly apply perturbations to the digital input image by modifying pixel values, while physical attacks involve printing the perturbation on physical objects such as posters \cite{lee2019physical} or T-shirts \cite{xu2020adversarial}.
+Adversarial attacks against deep learning models can be divided into two categories: digital attacks and physical attacks. Digital attacks directly apply perturbations to the digital input image by modifying pixel values, while physical attacks involve printing the perturbation on physical objects such as posters \citep{lee2019physical} or T-shirts \citep{xu2020adversarial}.
 
-However, both digital and physical attacks have their limitations. Digital perturbation requires access to the detection system, making it difficult to apply in real-world scenarios such as hacking into a self-driving car. Physical attacks, on the other hand, are sensitive to position and angle variations. For instance, experiments in \cite{LuSFF17} showed that an autonomous vehicle only misclassified traffic signs placed within 0.5 meters of the camera and viewed from specific angles. Moreover, these attacks lack flexibility, as once the adversarial object is printed, it can only be changed through reprinting. The trial-and-error process of finding a successful attack object can take a long time and require significant amounts of printing.
+However, both digital and physical attacks have their limitations. Digital perturbation requires access to the detection system, making it difficult to apply in real-world scenarios such as hacking into a self-driving car. Physical attacks, on the other hand, are sensitive to position and angle variations. For instance, experiments in \citep{LuSFF17} showed that an autonomous vehicle only misclassified traffic signs placed within 0.5 meters of the camera and viewed from specific angles. Moreover, these attacks lack flexibility, as once the adversarial object is printed, it can only be changed through reprinting. The trial-and-error process of finding a successful attack object can take a long time and require significant amounts of printing.
 
 \begin{figure}[tpb]
     \centering
@@ -605,7 +605,7 @@ This paper presents a novel hardware attack that combines the flexibility of phy
 
 \subsubsection{Object Detection Models}
 
-The task of object detection aims to locate the position and classify the category of each object in an image. Therefore, the task consists of two distinct problems: localization and classification. Existing object detection models can be categorized into two types, one-stage and two-stage methods, based on whether these two problems are solved together or separately \cite{Zhao2019}. Two of the most widely deployed one-stage models are YOLO \cite{redmon2016you, redmon2018yolov3, bochkovskiy2020yolov4} and SSD \cite{liu2016ssd}, which can achieve real-time performance on CPUs without GPUs. Faster RCNN \cite{ren2015faster} and Mask RCNN \cite{he2017mask} are two well-known two-stage models. 
+The task of object detection aims to locate the position and classify the category of each object in an image. Therefore, the task consists of two distinct problems: localization and classification. Existing object detection models can be categorized into two types, one-stage and two-stage methods, based on whether these two problems are solved together or separately \citep{Zhao2019}. Two of the most widely deployed one-stage models are YOLO \citep{redmon2016you, redmon2018yolov3, bochkovskiy2020yolov4} and SSD \citep{liu2016ssd}, which can achieve real-time performance on CPUs without GPUs. Faster RCNN \citep{ren2015faster} and Mask RCNN \citep{he2017mask} are two well-known two-stage models. 
 
 % Mask RCNN is capable of solving the image segmentation task by assigning labels to each pixel instead of just outputting bounding boxes.
 
@@ -624,21 +624,21 @@ In robotic applications, one-stage models are generally preferred due to their s
 
 \subsubsection{Adversarial Attacks}
 
-The Fast Gradient Sign Method (FGSM) \cite{GoodfellowSS14} was the first adversarial attack against classification models, using gradients to generate image-specific perturbations. However, for real-world robotic applications, it is more practical to use Universal Adversarial Perturbations (UAPs) \cite{moosavi2017universal}, which are image-agnostic. UAPs demonstrated the ability to fool classification models on most images in a dataset using a single perturbation. Adversarial attacks have since been extended from image classification to detection models \cite{gurbaxani2018traits}.
+The Fast Gradient Sign Method (FGSM) \citep{GoodfellowSS14} was the first adversarial attack against classification models, using gradients to generate image-specific perturbations. However, for real-world robotic applications, it is more practical to use Universal Adversarial Perturbations (UAPs) \citep{moosavi2017universal}, which are image-agnostic. UAPs demonstrated the ability to fool classification models on most images in a dataset using a single perturbation. Adversarial attacks have since been extended from image classification to detection models \citep{gurbaxani2018traits}.
 
-In addition to image-specific and image-agnostic methods, it is also possible to classify adversarial attacks into data-driven and data-independent approaches. Data-driven approaches require access to the input image, while data-independent methods only need access to the parameters and architecture of the target model. Generally, data-driven approaches achieve a higher fooling rate as they have more information at their disposal. Data-driven methods include gradient-based methods \cite{chow2020adversarial,li2021universal,mohamad2021, xie2017adversarial}, methods using Generative Adversarial Networks (GANs) \cite{hashemi2020transferable,Wei2019}, and optimization-based methods \cite{carlini2017towards,liao2021transferable}. 
+In addition to image-specific and image-agnostic methods, it is also possible to classify adversarial attacks into data-driven and data-independent approaches. Data-driven approaches require access to the input image, while data-independent methods only need access to the parameters and architecture of the target model. Generally, data-driven approaches achieve a higher fooling rate as they have more information at their disposal. Data-driven methods include gradient-based methods \citep{chow2020adversarial,li2021universal,mohamad2021, xie2017adversarial}, methods using Generative Adversarial Networks (GANs) \citep{hashemi2020transferable,Wei2019}, and optimization-based methods \citep{carlini2017towards,liao2021transferable}. 
 
-% - TAR \cite{mohamad2021} - 2021
+% - TAR \citep{mohamad2021} - 2021
 
-% - U-DOS \cite{li2021universal} - 2021
+% - U-DOS \citep{li2021universal} - 2021
 
-% - TOG \cite{chow2020adversarial} - 2020
+% - TOG \citep{chow2020adversarial} - 2020
 
-% - RAP \cite{li2018robust} - 2018
+% - RAP \citep{li2018robust} - 2018
 
-% - DAG \cite{xie2017adversarial} - 2017
+% - DAG \citep{xie2017adversarial} - 2017
 
-% By adding extra constraints to data-driven methods these can also be used to generate physical perturbations \cite{lee2019physical}. For example, it is possible to add the Sub-sampled Non-Printability Score (SNPS) constraint to the loss function. The Non-Printability Score (NPS) measures the error between a printed pixel and its digital counterpart. Additional constraints can be used to generate physical perturbations that preserve the adversarial effect if printed out on a poster. Methods for generating and applying perturbations are summarized in Fig. \ref{fig:attack}.
+% By adding extra constraints to data-driven methods these can also be used to generate physical perturbations \citep{lee2019physical}. For example, it is possible to add the Sub-sampled Non-Printability Score (SNPS) constraint to the loss function. The Non-Printability Score (NPS) measures the error between a printed pixel and its digital counterpart. Additional constraints can be used to generate physical perturbations that preserve the adversarial effect if printed out on a poster. Methods for generating and applying perturbations are summarized in Fig. \ref{fig:attack}.
 
 Our proposed method is a gradient-based data-driven approach that generates image-agnostic Universal Adversarial Perturbations (UAPs) and applies them via a Man-in-the-Middle attack, as depicted in Fig. \ref{fig:attack}.
 
@@ -674,7 +674,7 @@ In Section II, we discussed that object detection models can be categorized into
 %     \item $p_i$: The softmax probability vector of the $i_{th}$ candidate box. $p_i=(p^1_i, p^2_i, ..., p^K_i)$ for $K$ classes and $\sum{p_i}=1$.
 % \end{itemize}
 
-Given an input image $x$, the object detection model outputs $N$ candidate bounding boxes $\mathcal{O}(x) = \{o_1, o_2, o_3, ..., o_N\}$. Each candidate box $o_i=(b_i, c_i, p_i)$ contains $b_i=(b^x_i, b^y_i, b^w_i, b^h_i)$ that represents the location and dimension of the box, the confidence value $c_i \in [0, 1]$ that represents how probable it is that the the candidate box represents an object, and the softmax probability vector, $p_i=(p^1_i, p^2_i, ..., K_i)$ for $K$ classes. The raw outputs from the detection model $\mathcal{O}(x)$ may contain several thousand candidate bounding boxes. We then use the Non-maximum Suppression (NMS) method \cite{bodla2017soft} to filter out bounding boxes with low confidence values, and high Intersection over Union (IoU) to generate final detection results.
+Given an input image $x$, the object detection model outputs $N$ candidate bounding boxes $\mathcal{O}(x) = \{o_1, o_2, o_3, ..., o_N\}$. Each candidate box $o_i=(b_i, c_i, p_i)$ contains $b_i=(b^x_i, b^y_i, b^w_i, b^h_i)$ that represents the location and dimension of the box, the confidence value $c_i \in [0, 1]$ that represents how probable it is that the the candidate box represents an object, and the softmax probability vector, $p_i=(p^1_i, p^2_i, ..., K_i)$ for $K$ classes. The raw outputs from the detection model $\mathcal{O}(x)$ may contain several thousand candidate bounding boxes. We then use the Non-maximum Suppression (NMS) method \citep{bodla2017soft} to filter out bounding boxes with low confidence values, and high Intersection over Union (IoU) to generate final detection results.
 
 % An adversarial example $x^{'} = x + \delta$ aims to fool the detection model so that it outputs candidate boxes $\mathcal{O}(x^{'}) \neq \mathcal{O}(x)$. For example, the adversarial output $\mathcal{O}(x^{'})$ may detect more false positive objects after the NMS. Next, we will describe how to generate the perturbation $\delta$.
 
@@ -710,7 +710,7 @@ and
 \end{equation}
 Using $\mathcal{L}_{PCB}(x)$ will give smaller bounding boxes, while $\mathcal{L}_{PC}(x)$ gives larger bounding boxes. By maximizing the adversarial loss, we generate large amounts of incorrect bounding boxes (fabrication attack). By minimizing the loss, we remove bounding boxes (vanishing attack).
 
-The optimization of \eqref{eq_adversarial_opt} is performed by first zero-initializing the perturbation $\delta$, and then using Projected Gradient Descent (PGD) \cite{madry2017towards} with learning rate decay so that 
+The optimization of \eqref{eq_adversarial_opt} is performed by first zero-initializing the perturbation $\delta$, and then using Projected Gradient Descent (PGD) \citep{madry2017towards} with learning rate decay so that 
 \begin{equation}
 \delta_{t+1} = proj_p(\delta_{t} + \alpha sign(\frac{\partial L_{adv}(x'_{t};O^*)}{\partial x'_{t}} )).
 \end{equation}
@@ -824,13 +824,13 @@ To implement the Man-in-the-Middle hardware attack, specialized hardware such as
 
 \subsection{Experimental Evaluation}
 
-This section aims to provide insight into why the Mean Average Precision (mAP) is an appropriate metric to evaluate the accuracy of object detection models, but not suitable for evaluating adversarial attacks. For adversarial attacks, the choice of the adversarial loss function determines the type of attack to be conducted (e.g., fabrication or vanishing), whereas the strength of the attack is determined by the iteration process. In this study, we employ our novel evaluation metrics to investigate the iteration process and achieve more efficient attacks against a one-stage detection model, namely YOLO, on the VOC2012 dataset \cite{pascal-voc-2012}.
+This section aims to provide insight into why the Mean Average Precision (mAP) is an appropriate metric to evaluate the accuracy of object detection models, but not suitable for evaluating adversarial attacks. For adversarial attacks, the choice of the adversarial loss function determines the type of attack to be conducted (e.g., fabrication or vanishing), whereas the strength of the attack is determined by the iteration process. In this study, we employ our novel evaluation metrics to investigate the iteration process and achieve more efficient attacks against a one-stage detection model, namely YOLO, on the VOC2012 dataset \citep{pascal-voc-2012}.
 
 % In addition to this, we compare different initialization methods and adversarial loss functions, and investigate the effectiveness of using learning rate decay to enhance the performance of the attack.
 
 \subsubsection{Evaluation Metrics}
 
-The mAP \cite{cartucho2018} is typically used to both to measure the accuracy of object detection models and to evaluate the strength of adversarial attacks. However, it can be noticed that the mAP cannot distinguish between different attacks. 
+The mAP \citep{cartucho2018} is typically used to both to measure the accuracy of object detection models and to evaluate the strength of adversarial attacks. However, it can be noticed that the mAP cannot distinguish between different attacks. 
 
 For example, both the fabrication and vanishing attacks result in an mAP $\approx$ 0, even though they serve different attacking purposes (see Fig. \ref{fig:fabrication}). Similarly, while an attacker will prefer a stronger attack (Dog 99\%) over a weaker attack (Dog 60\%), mAP does not reflect the strength of an attack (see Fig. \ref{fig:mislabel}).
 In addition, note that the overall detection error 
@@ -892,7 +892,7 @@ Therefore, we devise three new evaluation metrics.
 
 \subsubsection{Initialization Methods}
 
-The TOG attack employs uniform initialization as noted in \cite{chow2020adversarial}. In contrast, other attacks use zero initialization, including \cite{fischer2017adversarial,li2021universal,mohamad2021,madry2017towards}. 
+The TOG attack employs uniform initialization as noted in \citep{chow2020adversarial}. In contrast, other attacks use zero initialization, including \citep{fischer2017adversarial,li2021universal,mohamad2021,madry2017towards}. 
 
 Gradient-based attacks rely on gradients to iterate from the original image to an adversarial input. The use of uniform initialization may impede the initial gradient at the first iteration, potentially limiting the attack's effectiveness. To investigate this hypothesis, we conducted 5 runs of the PCB attack with uniform initialization and compared the results with zero initialization. Our evaluation metrics included the mean confidence variation, number of boxes, and relative box variation.
 

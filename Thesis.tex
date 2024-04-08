@@ -1,14 +1,11 @@
 \documentclass[a4paper, 12pt, twoside]{report}
 
-% Uncomment this to see lines drawn around the margins
-%\usepackage[showframe]{geometry}
-
 % need these two packages to use biber correctly
 %\usepackage{biblatex}[style=ieee]
 \usepackage[style=authoryear, % cite with authoryear
             citestyle=authoryear,
 %           sorting=none,     % refs appear in the order they are cited
-            backend=biber,   % use bibtex backend
+            backend=bibtex,   % use bibtex backend
             dashed=false,     % so same author doesnt show up 2nd time as '----'
             natbib=true,      % allow citep and citet
             uniquename=false, % turn off differentiating between authors of same
@@ -23,7 +20,6 @@
             backref=true,
             backrefstyle=three,
             ]{biblatex}
-\DeclareFieldFormat{labelalphawidth}{#1}
 \DeclareNameAlias{sortname}{given-family} % change to firstname-lastname
 \usepackage[UKenglish]{babel} % British English hyphenation rules
 \usepackage{csquotes}

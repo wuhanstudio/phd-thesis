@@ -57,7 +57,7 @@ This paper aims to investigate if black-box adversarial attacks have become a pr
 
 % \subsubsection{Attacking Cloud Services}
 
-During our implementation of distributed black-box attacks, we observed that some previous research made certain errors in the query process, which provided their attacks with an unfair advantage. This advantage led these methods to outperform state-of-the-art black-box attacks, but it was based on the assumption of accessing information that is not available in black-box attacks \cite{ilyas2018black}\cite{ilyas2018prior}\cite{guo2019simple}\cite{Brunner_2019}\cite{moon2019parsimonious}\cite{andriushchenko2020square}.
+During our implementation of distributed black-box attacks, we observed that some previous research made certain errors in the query process, which provided their attacks with an unfair advantage. This advantage led these methods to outperform state-of-the-art black-box attacks, but it was based on the assumption of accessing information that is not available in black-box attacks \citep{ilyas2018black}\citep{ilyas2018prior}\citep{guo2019simple}\citep{Brunner_2019}\citep{moon2019parsimonious}\citep{andriushchenko2020square}.
 
 \textbf{Image Encoding}: In real-world scenarios, images are typically encoded before being sent to image classification cloud services to reduce the amount of data transmitted and to save bandwidth (see Fig. \ref{fig:cloudapi}). However, prior research often assumes that perturbations can be added directly to the raw input image (see Fig. \ref{fig:local}). 
 
@@ -91,12 +91,12 @@ In the next section, we introduce our open-source image classification cloud ser
 
 Image classification models assign each image with pre-defined labels. The State-Of-The-Art models that use convolutional neural networks achieve more than 90\% Top-1 accuracy on the ImageNet dataset. The most popular models among them are ResNet, MobileNet, InceptionV3, and EfficientNet, because they achieve a good balance between model size and accuracy. It is of great importance to investigate the robustness of these models so that they can be securely deployed in cloud services. 
 
-For adversarial attacks against image classification APIs, the adversary have no access to the models behind the infrastructure. Thus they can only query using black-box adversarial attacks. Prior research usually use ResNet-50 \cite{he2016deep}, VGG-16 \cite{simonyan2014very} and Inception-V3 \cite{szegedy2016rethinking} to test their attacks.
+For adversarial attacks against image classification APIs, the adversary have no access to the models behind the infrastructure. Thus they can only query using black-box adversarial attacks. Prior research usually use ResNet-50 \citep{he2016deep}, VGG-16 \citep{simonyan2014very} and Inception-V3 \citep{szegedy2016rethinking} to test their attacks.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.55]{figures/chapter_classification/efficient_net.png}
-\caption{Model Size vs. ImageNet Accuracy \cite{tan2019efficientnet}}
+\caption{Model Size vs. ImageNet Accuracy \citep{tan2019efficientnet}}
 \label{fig.efficient_net}
 \end{figure}
 
@@ -132,12 +132,12 @@ However, all of the three models are vulnerable to adversarial attacks. It is po
 \subsection{Black-box Adversarial Attacks}
 \label{black_box}
 
-Black-box adversarial attacks aim to fool deep learning models without access to the models' structure and weights. Besides, the perturbation for a successful attack should be unnoticeable by human eyes, which is usually measured by the $L_p$ norm. Current black-box adversarial attacks can be classified into four categories: gradient estimation, transferability, local search, and combinatorics \cite{bhambri2019survey}.
+Black-box adversarial attacks aim to fool deep learning models without access to the models' structure and weights. Besides, the perturbation for a successful attack should be unnoticeable by human eyes, which is usually measured by the $L_p$ norm. Current black-box adversarial attacks can be classified into four categories: gradient estimation, transferability, local search, and combinatorics \citep{bhambri2019survey}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{figures/chapter_classification/review.png}
-\caption{Classification of prior work on black-box scenario-based attacks \cite{bhambri2019survey}}
+\caption{Classification of prior work on black-box scenario-based attacks \citep{bhambri2019survey}}
 \label{fig.bb_review}
 \end{figure}
 
@@ -147,18 +147,18 @@ Black-box adversarial attacks aim to fool deep learning models without access to
 
 \textbf{Local Search}: Additionally, we can treat the problem of generating adversarial inputs as selecting pixels to attack. Thus we can use existing local search methods to search for combinations of pixels to be attacked.  
 
-\textbf{Combinatorics}: \cite{moon2019parsimonious} first reformulates the problem to be a linear program and finds the solution of the problem at the vertex of the $l_\infty$ ball. This method reformulates the problem from a new perspective, still we can  use existing local search methods to solve the reformulated problem.
+\textbf{Combinatorics}: \citep{moon2019parsimonious} first reformulates the problem to be a linear program and finds the solution of the problem at the vertex of the $l_\infty$ ball. This method reformulates the problem from a new perspective, still we can  use existing local search methods to solve the reformulated problem.
 
 All methods require querying the target model. For adversarial attacks against cloud services, there is an additional constraint on the number of queries. The number of queries required for a successful attack is critical because cloud platforms charge per API call. The more you query, the more it costs for every single attack. Thus, we focus on methods that require fewer queries.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.65]{figures/chapter_classification/parsimounious.png}
-\caption{Results for $l_{\infty}$ untargeted attacks on ImageNet \cite{moon2019parsimonious}}
+\caption{Results for $l_{\infty}$ untargeted attacks on ImageNet \citep{moon2019parsimonious}}
 \label{fig.parsi}
 \end{figure}
 
-One simple yet effective method is the Simple Black-box Attack (SimBA) \cite{guo2019simple}. We can randomly sample a vector from a predefined orthonormal basis and either add or subtract it to gradually deviate the classification results. However, this method is less effective if the perturbation added to each pixel is smaller than 0.4, making this attack more conspicuous. Another more sophisticated method proposed by Andrew Ilyas, etc \cite{ilyas2018black} estimates the gradient using the Natural Evolutionary Strategies (NES). Since then, evolutionary strategies have been widely adopted in the scenario of black-box adversarial attacks as in \cite{meunier2019yet} \cite{Ilie2021}.
+One simple yet effective method is the Simple Black-box Attack (SimBA) \citep{guo2019simple}. We can randomly sample a vector from a predefined orthonormal basis and either add or subtract it to gradually deviate the classification results. However, this method is less effective if the perturbation added to each pixel is smaller than 0.4, making this attack more conspicuous. Another more sophisticated method proposed by Andrew Ilyas, etc \citep{ilyas2018black} estimates the gradient using the Natural Evolutionary Strategies (NES). Since then, evolutionary strategies have been widely adopted in the scenario of black-box adversarial attacks as in \citep{meunier2019yet} \citep{Ilie2021}.
 
 \begin{figure}[H]
 \centering
@@ -171,9 +171,9 @@ One simple yet effective method is the Simple Black-box Attack (SimBA) \cite{guo
 
 % \subsection{Problem Formulation}
 
-% Given some input image $x$ and true labels $y$, the objective of the adversary is to add a small perturbation $\delta$ to the original image, and generate an adversarial image $x' = x\ +\ \delta$ that can fool a black-box image classifier $C(x)$, such that $C(x') \neq C(x)$. Typically, the perturbation $\delta$ is bounded in the $l_2$ or $l_\infty$ norm by some user-defined constant \cite{bhambri2019survey}.
+% Given some input image $x$ and true labels $y$, the objective of the adversary is to add a small perturbation $\delta$ to the original image, and generate an adversarial image $x' = x\ +\ \delta$ that can fool a black-box image classifier $C(x)$, such that $C(x') \neq C(x)$. Typically, the perturbation $\delta$ is bounded in the $l_2$ or $l_\infty$ norm by some user-defined constant \citep{bhambri2019survey}.
 
-% The adversary does not know the model structure and weights. Further, the attacker has limited access to model outputs for black-box models deployed on cloud servers. For example, in the partial-information setting, the adversary only has access to the prediction probabilities of the top $k$ classes $\{y_1, ..., y_k\}$. In the label-only setting, the adversary can only access the prediction label without any knowledge of prediction probabilities \cite{ilyas2018black}.
+% The adversary does not know the model structure and weights. Further, the attacker has limited access to model outputs for black-box models deployed on cloud servers. For example, in the partial-information setting, the adversary only has access to the prediction probabilities of the top $k$ classes $\{y_1, ..., y_k\}$. In the label-only setting, the adversary can only access the prediction label without any knowledge of prediction probabilities \citep{ilyas2018black}.
 
 \subsection{Distributed Queries}
 
@@ -218,7 +218,7 @@ To demonstrated this hypothesis, we sent 1, 2, 10, and 20 queries concurrently t
 % To facilitate future research on distributed black-box attacks that attack cloud APIs rather than local models, we designed DeepAPI, an open-source image classification cloud service (see Fig. \ref{fig:deepapi}) that supports:
 
 % \begin{itemize}
-%     \item The three most popular classification models for black-box attacks: VGG16, ResNet50, and Inceptionv3 provided by Keras Model Zoo \cite{chollet2015keras}.
+%     \item The three most popular classification models for black-box attacks: VGG16, ResNet50, and Inceptionv3 provided by Keras Model Zoo \citep{chollet2015keras}.
 %     \item Both soft labels (with probabilities) and hard labels (without probabilities) for label-only setting.
 %     \item Top $k$ predictions ($k \in \{1, 3, 5, 10\}$) for partial-information setting.
 %     % \item Web UI and distributed API requests.
@@ -236,7 +236,7 @@ To demonstrated this hypothesis, we sent 1, 2, 10, and 20 queries concurrently t
 \subsection{Horizontal and Vertical Distribution}
 \label{horizon_vertical}
 
-Both local (multi-core CPU) and cloud-based (load balancer) deep learning models are vulnerable to distributed queries, but the challenge lies in deciding which queries to send concurrently. To address this problem, we propose horizontal and vertical distribution for black-box attacks, inspired by horizontal and vertical scaling of cloud resources \cite{Millnert2020}.
+Both local (multi-core CPU) and cloud-based (load balancer) deep learning models are vulnerable to distributed queries, but the challenge lies in deciding which queries to send concurrently. To address this problem, we propose horizontal and vertical distribution for black-box attacks, inspired by horizontal and vertical scaling of cloud resources \citep{Millnert2020}.
 
 Horizontal distribution concurrently sends queries for different images within the same iteration, thereby allowing the generation of multiple adversarial examples concurrently. This can be achieved without altering existing black-box attack methods. 
 
@@ -247,7 +247,7 @@ In summary, horizontal distribution achieves concurrent attacks against multiple
 
 \subsubsection{Vertically Distributed SimBA and Square Attack (Local Search)}
 
-We use the SimBA (baseline) \cite{guo2019simple} and the Square Attack \cite{andriushchenko2020square} to illustrate how to apply vertical distribution to local search methods. The problem formulation and original SimBA and Square Attack are illustrated in Section \ref{black_box}.
+We use the SimBA (baseline) \citep{guo2019simple} and the Square Attack \citep{andriushchenko2020square} to illustrate how to apply vertical distribution to local search methods. The problem formulation and original SimBA and Square Attack are illustrated in Section \ref{black_box}.
 
 \textbf{The SimBA Attack}: To apply vertical distribution to SimBA, we need to decouple the correlation between queries at different iterations. The original SimBA attack can only choose which pixel to perturb after receiving previous query results and deciding the perturbation $\delta \in \{-\boldsymbol{q}\epsilon, +\boldsymbol{q}\epsilon\}$, where $\epsilon$ is the strength of the attack and $\boldsymbol{q}$ is the perturbation vector that decides the index of the perturbed pixel. Therefore, we send out queries for several $\boldsymbol{q}$ as a batch $\boldsymbol{q}_{batch}$ concurrently. The sign of each perturbation vector is decided independently to reduce the output probability of the highest class. Then, we sum and project the accumulated perturbation $\delta$ to the $L_2$ ball at the end of each iteration to guarantee imperceptibility.
 
@@ -257,7 +257,7 @@ We use the SimBA (baseline) \cite{guo2019simple} and the Square Attack \cite{and
 
 % $$L(C(X), y)=C_y(X)-max_{k \neq y}C_K(X)$$
 
-% The Square Attack is a local search method, just like SimBA. However, it is generally more query-efficient. As its name suggests, the square attack generates square-shaped perturbations to decrease the margin loss $L(C(X^{'}, y))$. The square attack improves query efficiency by initializing the perturbation with vertical stripes, motivated by the fact that CNNs are sensitive to high-frequency perturbations \cite{yin2019fourier}. We apply horizontal distribution to both the initialization and iteration processes across images.
+% The Square Attack is a local search method, just like SimBA. However, it is generally more query-efficient. As its name suggests, the square attack generates square-shaped perturbations to decrease the margin loss $L(C(X^{'}, y))$. The square attack improves query efficiency by initializing the perturbation with vertical stripes, motivated by the fact that CNNs are sensitive to high-frequency perturbations \citep{yin2019fourier}. We apply horizontal distribution to both the initialization and iteration processes across images.
 
 % \subsection{Distributed SimBA (Baseline Method)}
 
@@ -267,9 +267,9 @@ We use the SimBA (baseline) \cite{guo2019simple} and the Square Attack \cite{and
 
 \subsubsection{Vertically Distributed Bandits Attack (Gradient Estimation)}
 
-The Bandits Attack is a gradient estimation method that improves the optimal least-squares estimator by introducing gradient priors \cite{ilyas2018prior}. The perturbation vector $q_i=v_i+\delta u_i$ is computed from the gradient prior $v_i$ and a Gaussian vector $u_i$ sampled from $\mathcal{N}(0, \frac{1}{d_i}I)$. 
+The Bandits Attack is a gradient estimation method that improves the optimal least-squares estimator by introducing gradient priors \citep{ilyas2018prior}. The perturbation vector $q_i=v_i+\delta u_i$ is computed from the gradient prior $v_i$ and a Gaussian vector $u_i$ sampled from $\mathcal{N}(0, \frac{1}{d_i}I)$. 
 
-The Bandits Attack uses imperfect gradient estimators $\nabla_i= \frac{l(v_i+\delta u_i)-l(v_i-\delta u_i)}{\delta} u_i$ to improve query efficiency at the cost of introducing noises in the estimations. Therefore, averaging over a batch of concurrent gradient estimations can improve the accuracy and efficiency. In addition, adversarial images $x'$ are updated using projected gradient descent (PGD), while gradient priors are updated using exponentiated gradients (EG) \cite{pmlr-v117-ghai20a} (see Alg. \ref{alg:bandits_vertical}).
+The Bandits Attack uses imperfect gradient estimators $\nabla_i= \frac{l(v_i+\delta u_i)-l(v_i-\delta u_i)}{\delta} u_i$ to improve query efficiency at the cost of introducing noises in the estimations. Therefore, averaging over a batch of concurrent gradient estimations can improve the accuracy and efficiency. In addition, adversarial images $x'$ are updated using projected gradient descent (PGD), while gradient priors are updated using exponentiated gradients (EG) \citep{pmlr-v117-ghai20a} (see Alg. \ref{alg:bandits_vertical}).
 
 % The horizontally distributed Bandits Attack estimates gradients of different images simultaneously, while the vertically distributed Bandits Attack concurrently estimates a batch of gradients for the same image. 
 
@@ -715,7 +715,7 @@ For the Bandits attack, it is more difficult to estimate gradients accurately be
 
 \subsection{Horizontal Distribution}
 
-In this section, we measure the effect of horizontal distribution on the number of queries and the attack success rate. We sampled 100 images from the ImageNet dataset \cite{moore2020fiftyone} and tested three online black-box attacks against three image classification models \cite{chollet2015keras}.
+In this section, we measure the effect of horizontal distribution on the number of queries and the attack success rate. We sampled 100 images from the ImageNet dataset \citep{moore2020fiftyone} and tested three online black-box attacks against three image classification models \citep{chollet2015keras}.
 
 As shown in Tables \ref{tab:non} and \ref{tab:horizon}, while there is a slight variation in the average number of queries after applying horizontal distribution, this is mainly due to discrepancies in the pseudo-random number generator. This variation is insignificant because horizontal distribution does not change how the attack method generates adversarial perturbations.
 

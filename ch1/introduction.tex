@@ -1,7 +1,7 @@
 \chapter{Introduction}
 \label{chpt:intro}
 
-Advances in deep neural networks have opened a new era of robotics, intelligent robots. Compared with traditional robots that perform repetitive tasks based on manual control or predefined rules, intelligent robots possess a more comprehensive perception of environments and make more sophisticated decisions for various tasks \cite{wang2018current}.
+Advances in deep neural networks have opened a new era of robotics, intelligent robots. Compared with traditional robots that perform repetitive tasks based on manual control or predefined rules, intelligent robots possess a more comprehensive perception of environments and make more sophisticated decisions for various tasks \citep{wang2018current}.
 
 On the other hand, the development of physics engines and realistic renderers makes it feasible to simulate complex robots in simulators. Reinforcement learning that learns from trial and error, can now be trained and verified in a virtual environment before deploying to the physical world.
 
@@ -55,7 +55,7 @@ For instance, the Amazon Kiva Robot and Alibaba Quicktron Robot can help warehou
 \label{fig.autonomous}
 \end{figure}
 
-Autonomous driving systems are commonly divided into sub-tasks: localization, perception, prediction, planning, and control. The vehicle determines its position in the environment through localization. Perception enables vehicles to collect information and extract relevant knowledge from the environment. The task of prediction makes predictions of measurement, behavior, trajectory, etc. The planning task makes purposeful decisions to achieve the goal, and the control component executes the planned actions \cite{pendleton2017perception}. Recently, the end-to-end driving that maps inputs directly to steering commands started to rise as an alternative to modular systems.
+Autonomous driving systems are commonly divided into sub-tasks: localization, perception, prediction, planning, and control. The vehicle determines its position in the environment through localization. Perception enables vehicles to collect information and extract relevant knowledge from the environment. The task of prediction makes predictions of measurement, behavior, trajectory, etc. The planning task makes purposeful decisions to achieve the goal, and the control component executes the planned actions \citep{pendleton2017perception}. Recently, the end-to-end driving that maps inputs directly to steering commands started to rise as an alternative to modular systems.
 
 Our research focuses on adversarial attacks against deep learning models for mobile robots perception, such as image classification, object detection and object tracking in autonomous driving. We also investigate possible vulnerabilities in deep reinforcement learning.
 
@@ -85,9 +85,9 @@ As the research in deep neural networks advances, deep convolutional networks be
 \label{fig.simulator}
 \end{figure}
 
-The Carla simulator is an open-source platform for autonomous driving simulation based on the Unreal Game Engine. It simulates various sensors such as depth camera, 3D lidar, radar. The Carla simulator provides flexible Python API to manipulate the virtual environments and supports Robot Operating System (ROS) integration as well \cite{Dosovitskiy17}.
+The Carla simulator is an open-source platform for autonomous driving simulation based on the Unreal Game Engine. It simulates various sensors such as depth camera, 3D lidar, radar. The Carla simulator provides flexible Python API to manipulate the virtual environments and supports Robot Operating System (ROS) integration as well \citep{Dosovitskiy17}.
 
-The LGSVL is another autonomous vehicle simulation platform based on the Unity3D Game Engine. It provides integration with the Baidu Apollo Platform \cite{rong2020lgsvl}. Besides, the Microsoft Airsim simulator provides virtual environments for both autonomous driving and drone simulation \cite{airsim2017fsr}.
+The LGSVL is another autonomous vehicle simulation platform based on the Unity3D Game Engine. It provides integration with the Baidu Apollo Platform \citep{rong2020lgsvl}. Besides, the Microsoft Airsim simulator provides virtual environments for both autonomous driving and drone simulation \citep{airsim2017fsr}.
 
 \begin{figure}[H]
 \centering
@@ -129,7 +129,7 @@ Deep reinforcement learning can be integrated into robotic systems as well. Give
 \label{fig.issac_gym}
 \end{figure}
 
-However, reinforcement learning models are vulnerable to adversarial attacks by adding perturbations to agents' observations \cite{chen2019adversarial}. Besides, recent research unveils that adversarial policy that acts abnormally in a shared environment can also induce extremely unlikely activations to occur.
+However, reinforcement learning models are vulnerable to adversarial attacks by adding perturbations to agents' observations \citep{chen2019adversarial}. Besides, recent research unveils that adversarial policy that acts abnormally in a shared environment can also induce extremely unlikely activations to occur.
 
 \begin{figure}[H]
 \centering
@@ -138,16 +138,16 @@ However, reinforcement learning models are vulnerable to adversarial attacks by 
 \label{fig.adv_policy}
 \end{figure}
 
-For instance, the red agent tries to prevent the blue agent from crossing the line. Unexpectedly, the red agent wins the game by falling to the ground, which looks like a random policy. But this abnormal action of the red agent effectively causes the blue agent to fall as well \cite{gleave2021adversarial}. 
+For instance, the red agent tries to prevent the blue agent from crossing the line. Unexpectedly, the red agent wins the game by falling to the ground, which looks like a random policy. But this abnormal action of the red agent effectively causes the blue agent to fall as well \citep{gleave2021adversarial}. 
 
 In chapter \ref{chpt:driving}, we provide more experiments of adversarial attacks against end-to-end models in autonomous driving systems.
 
 \section{Adversarial Attacks}
 \label{sec:adv_attack}
 
-Existing adversarial attacks can be categorized into white-box, gray-box, and black-box attacks \cite{REN2020346}. In white-box attacks, the adversaries have full knowledge of the target model, including model architecture and parameters \cite{goodfellow2015explaining}. In gray-box attacks, the adversaries only have access to the structure of the target model. In black-box attacks, the adversaries can only gather information about the model through querying. In our research, we majorly focus on white-box and black-box attacks.
+Existing adversarial attacks can be categorized into white-box, gray-box, and black-box attacks \citep{REN2020346}. In white-box attacks, the adversaries have full knowledge of the target model, including model architecture and parameters \citep{goodfellow2015explaining}. In gray-box attacks, the adversaries only have access to the structure of the target model. In black-box attacks, the adversaries can only gather information about the model through querying. In our research, we majorly focus on white-box and black-box attacks.
 
-Depending on the goal of the attack, adversarial attacks can be further categorized into three types, evasion, poisoning, and extraction attacks \cite{art2018}. Evasion attacks cause models to make incorrect predictions by adding perturbations to the input during inference. The poisoning attack injects malicious data into the training set. Lastly, the extraction attack steals or replicates models that are available to query. For autonomous systems, rather than trying to steal models or poison others' training data, we intend to design a system that is resistant to malicious perturbations in the input. Thus our research object coincides with evasion attacks.
+Depending on the goal of the attack, adversarial attacks can be further categorized into three types, evasion, poisoning, and extraction attacks \citep{art2018}. Evasion attacks cause models to make incorrect predictions by adding perturbations to the input during inference. The poisoning attack injects malicious data into the training set. Lastly, the extraction attack steals or replicates models that are available to query. For autonomous systems, rather than trying to steal models or poison others' training data, we intend to design a system that is resistant to malicious perturbations in the input. Thus our research object coincides with evasion attacks.
 
 \subsection{White-Box Attacks}
 \label{sec:whitebox_attack}
@@ -163,7 +163,7 @@ Deep learning models are trained by minimizing the loss function via updating we
 
 White-box attacks rely on gradients to fool deep learning models. Difference attack methods use different strategies to update the input using gradients. We can either generate human-unperceivable perturbations on the full image or a human-perceivable patch on a part of the image.
 
-Most existing research on adversarial attacks choose a classification model as the target. A neural network is denoted as $f(\cdot)$ with input $x$ and prediction $f(x)$. The corresponding optimization loss is denoted by $J(\theta, x, y)$, where $\theta$ represents the model weights. An adversarial input $x'$ is close to the original input $x$ under a specific distance metric while $f(x') \neq f(x)$ \cite{REN2020346}. Formally, an adversarial sample of  is defined as follows:
+Most existing research on adversarial attacks choose a classification model as the target. A neural network is denoted as $f(\cdot)$ with input $x$ and prediction $f(x)$. The corresponding optimization loss is denoted by $J(\theta, x, y)$, where $\theta$ represents the model weights. An adversarial input $x'$ is close to the original input $x$ under a specific distance metric while $f(x') \neq f(x)$ \citep{REN2020346}. Formally, an adversarial sample of  is defined as follows:
 
 $$x': D(x, x') < \eta, f(x') \neq y $$
 
@@ -173,19 +173,19 @@ $$ ||v||_p = (|v_1|^p + |v_2|^p + \dots + |v_d|^p)^{1/p} $$
 
 Where $p$ is a real number; $d$ is the dimension of the distance vector $v$. For instance, the $L_0$ distance corresponds to the number of pixels being modified in the perturbation. The $L_2$ distance measures the standard Euclidean distance between $x$ and $x'$. The $L_\infty$ distance measures the maximum element-wise difference between $x$ and $x'$.
 
-The Fast Gradient Sign Method (FGSM) \cite{goodfellow2015explaining} generates the adversarial input by:
+The Fast Gradient Sign Method (FGSM) \citep{goodfellow2015explaining} generates the adversarial input by:
 
 $$ x' = x + \epsilon \cdot sign(\bigtriangledown_x J(\theta, x, y)) $$
 
-The Projected Gradient Descent (PGD) \cite{madry2017towards} method transforms the FGSM into a multi-step attack that takes only a small step at each iteration while keeping the perturbation in a $L_p$ ball:
+The Projected Gradient Descent (PGD) \citep{madry2017towards} method transforms the FGSM into a multi-step attack that takes only a small step at each iteration while keeping the perturbation in a $L_p$ ball:
 
 $$ x^{t+1} = proj_{L_p}(x^t + \alpha \cdot sign(\bigtriangledown_x J(\theta, x, y))) $$
 
-The Deep Fool \cite{moosavidezfooli2016deepfool} adds the norm of the gradient difference while iterating over each class:
+The Deep Fool \citep{moosavidezfooli2016deepfool} adds the norm of the gradient difference while iterating over each class:
 
 $$ x^{t+1} = x^t + \frac{|f'_{\hat{l}}|}{||\omega'||^2_2} sign(\omega'_{\hat{l}})$$
 
-If we further project the perturbation to $L_p$ ball of radius $\xi$ and centered at 0, we have the Universal Adversarial Perturbation \cite{moosavidezfooli2017universal}:
+If we further project the perturbation to $L_p$ ball of radius $\xi$ and centered at 0, we have the Universal Adversarial Perturbation \citep{moosavidezfooli2017universal}:
 
 $$\mathcal{P}_{p, \xi}(v) = \arg\ \underset{v'}{\min}||v-v'||_2\ subject\ to\ ||v'||_p\leq\xi$$
 
@@ -200,13 +200,13 @@ The aforementioned methods intend to generate small perturbations to the entire 
 \label{fig.adv_patch}
 \end{figure}
 
-A variant of the Expectation over Transformation (EOT) framework \cite{athalye2018synthesizing} is used to obtain the trained patch. In particular, the patch is trained to optimize the objective function:
+A variant of the Expectation over Transformation (EOT) framework \citep{athalye2018synthesizing} is used to obtain the trained patch. In particular, the patch is trained to optimize the objective function:
 
 $$\hat{p} = \arg \underset{p}{\max}\mathbf{E}_{x \sim X, t \sim T,l \sim L}[logPr(\hat{y}|A(p,x,l,t))]$$
 
-where $X$ is a training set of images, $T$ is a distribution over transformations of the patch, and $L$ is a distribution over locations in the image \cite{brown2018adversarial}.
+where $X$ is a training set of images, $T$ is a distribution over transformations of the patch, and $L$ is a distribution over locations in the image \citep{brown2018adversarial}.
 
-To design a printable physical patch, Non-Printability Score (NPS) can be used for measuring the error between a printed pixel and its digital counterparts. Sum of NPSs of all pixels in an image can be used to measure the image printability \cite{wang2021daedalus}.
+To design a printable physical patch, Non-Printability Score (NPS) can be used for measuring the error between a printed pixel and its digital counterparts. Sum of NPSs of all pixels in an image can be used to measure the image printability \citep{wang2021daedalus}.
 
 $$\hat{p} = \arg \underset{p}{\min}\mathbf{E}_{x \sim X}\mathbf{E}_\phi f_3(x, p, \Phi) + SNPS(p, \beta)$$
 
@@ -223,7 +223,7 @@ In chapter \ref{chpt:detection}, we present real-time white-box attacks against 
 
 White-box attacks that rely on gradients can generate adversarial inputs in real-time. However, gradients are not computed in real-world deep learning applications because those applications only perform the inference that does not require gradients. Without access to gradients, white-box attacks become infeasible in the real world.
 
-Without access to gradients, black-box attacks generate adversarial inputs via querying. The Zeroth Order Optimization (ZOO) Attack amends the C\&W white-box attacks to the black-box setting by modifying the loss function and computing an approximate gradient using a finite difference method \cite{Chen_2017}.
+Without access to gradients, black-box attacks generate adversarial inputs via querying. The Zeroth Order Optimization (ZOO) Attack amends the C\&W white-box attacks to the black-box setting by modifying the loss function and computing an approximate gradient using a finite difference method \citep{Chen_2017}.
 
 $$f(x,t) = \max \{ {\underset{i \neq t}{\max}\ log[F(x)]_i - log[F(x)]_t, -\kappa } \}$$
 
@@ -232,7 +232,7 @@ The ZOO Attack relies on the output of confidence scores to estimate the gradien
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.45]{figures/chapter_intro/query-efficient.jpg}
-\caption{Decision-based adversarial attacks \cite{brendel2018decisionbased}}
+\caption{Decision-based adversarial attacks \citep{brendel2018decisionbased}}
 \label{fig.query}
 \end{figure}
 
@@ -241,7 +241,7 @@ For image classification tasks, decision-based attacks only require access to th
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.35]{figures/chapter_intro/score-decision.jpg}
-\caption{The difference between score-based and decision-based attacks \cite{chen2020hopskipjumpattack}}
+\caption{The difference between score-based and decision-based attacks \citep{chen2020hopskipjumpattack}}
 \label{fig.decision}
 \end{figure}
 
