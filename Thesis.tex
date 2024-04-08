@@ -45,7 +45,8 @@
 
 % algorithms stuff
 \usepackage{braket}
-\usepackage{algorithm} % float wrapper for algorithms
+% \usepackage{algorithm} % float wrapper for algorithms
+\usepackage{algorithm,algorithmic}
 \usepackage{algpseudocode} % also loads algorithmicx
 % change Require: to Input:
 \renewcommand{\algorithmicrequire}{\textbf{Input:}} 
@@ -71,6 +72,46 @@
 \newcommand{\first}[1]{\textcolor{red}{#1}}
 \newcommand{\second}[1]{\textcolor{blue}{#1}}
 \newcommand{\third}[1]{\textcolor{ForestGreen}{#1}}
+
+% Include your packages here by including a \usepackage{<package_name>} command.
+\usepackage{blindtext} % Example package which populates the ever-popular lorem ipsum text.
+
+\usepackage[mathscr]{eucal}
+
+% \usepackage{algorithm,algorithmic}
+% \usepackage{caption}
+
+% \newlength\myindent
+% \setlength\myindent{2em}
+% \newcommand\bindent{%
+%   \begingroup
+%   \setlength{\itemindent}{\myindent}
+%   \addtolength{\algorithmicindent}{\myindent}
+% }
+% \newcommand\eindent{\endgroup}
+
+% \usepackage{algorithm}
+% \usepackage{algcompatible}
+% \usepackage{algorithmic}
+% \usepackage{algpseudocode}
+
+% \usepackage{algorithm2e}
+% \usepackage{algorithmic-modified}
+
+\usepackage{booktabs} % for professional tables
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+\usepackage{bm}
+
+\usepackage{color,array}
+\usepackage{xcolor,colortbl}
+
+\definecolor{Gray}{gray}{0.85}
+\newcolumntype{a}{>{\columncolor{Gray}}c}
+
+% \usepackage[style=numeric, defernumbers=true]{biblatex}
 
 %%%%%%% UNIVERSITY GUIDELINES
 % PAPER: International A4 (210mm x 297mm) or US Letter size
@@ -111,11 +152,11 @@
 \usepackage{microtype}
 
 % title and date of thesis
-\newcommand{\thesisTitle}{THESIS TITLE HERE}
-\newcommand{\thesisDate}{MONTH, YEAR}
-\newcommand{\thesisMyName}{YOUR NAME HERE}
-\newcommand{\thesisSubjectName}{YOUR SUBJECT HERE} % e.g. Computer Science
-\newcommand{\thesisDepartmentName}{YOUR DEPARTMENT HERE} % e.g. Department of Computer Science
+\newcommand{\thesisTitle}{Practical Adversarial Attacks and Interpretation Methods for Deep Learning Models}
+\newcommand{\thesisDate}{May, 2024}
+\newcommand{\thesisMyName}{Han Wu}
+\newcommand{\thesisSubjectName}{Computer Science} % e.g. Computer Science
+\newcommand{\thesisDepartmentName}{Department of Computer Science} % e.g. Department of Computer Science
 
 % Copyright declaration.
 \newcommand{\statement}{
@@ -259,15 +300,20 @@ Signed: \makebox[3in]{\dotfill}\\[-3pt]
 
 \pagenumbering{roman} % start with roman numbering
 
-% ABSTRACT
-\phantomsection
-\addcontentsline{toc}{chapter}{Abstract}
-\include{ch0/abstract}
-
 %% Acknowledgements.
 \phantomsection
 \addcontentsline{toc}{chapter}{Acknowledgements}
 \include{ch0/acknowledgements}
+
+% List of Publications
+\phantomsection
+\addcontentsline{toc}{chapter}{Lister of Publications}
+\include{ch0/publication}
+
+% ABSTRACT
+\phantomsection
+\addcontentsline{toc}{chapter}{Abstract}
+\include{ch0/abstract}
 
 %% TABLES OF CONTENTS / FIGURES / TABLES
 \tableofcontents
@@ -282,7 +328,7 @@ Signed: \makebox[3in]{\dotfill}\\[-3pt]
 \include{ch1/introduction}
 
 %% LITERATURE REVIEW
-\include{ch2/literaturereview}
+\include{ch2/ch2}
 
 %% MAIN CONTENT CHAPTERS
 \include{ch3/ch3}
