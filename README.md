@@ -2,8 +2,6 @@
 
 > Practical Adversarial Attacks and Interpretation Methods for Deep Learning Models
 
-From Han Wu:
-
 Based on [George's template](https://github.com/georgedeath/University_of_Exeter_Thesis_Template), I added the university logo and header.
 
 ![](overview.png)
