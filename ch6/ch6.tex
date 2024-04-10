@@ -5,21 +5,21 @@
 
 In previous chapters, we study adversarial attacks against end-to-end driving, image classification, object detection and object tracking models, including both white-box and black-box attacks. In this chapter, we use interpretation methods to understand deep learning models and apply defence techniques to secure the system against adversarial attacks.
 
-\section{Interpretation Methods}
-\label{sec:interpret_deep_learn}
+% \section{Interpretation Methods}
+% \label{sec:interpret_deep_learn}
 
-To investigate how black-box models make predictions, several model-agnostic methods have been proposed.
-Deep learning models that achieves high accuracy provide fewer interpretations due to the trade-off between accuracy and interpretability \citep{doshivelez2017rigorous}. For instance, the black-box nature of machine learning models hinders the deployment of some high-accuracy models in medical diagnosis. It is risky to put one's life in the hands of models that medical researchers do not fully understand.
+% To investigate how black-box models make predictions, several model-agnostic methods have been proposed.
+% Deep learning models that achieves high accuracy provide fewer interpretations due to the trade-off between accuracy and interpretability \citep{doshivelez2017rigorous}. For instance, the black-box nature of machine learning models hinders the deployment of some high-accuracy models in medical diagnosis. It is risky to put one's life in the hands of models that medical researchers do not fully understand.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{figures/chapter_defence/interpret.jpg}
-\caption{The workflow of traditional machine learning}
-\label{fig.interpret}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.8\textwidth]{figures/chapter_defence/interpret.jpg}
+% \caption{The workflow of traditional machine learning}
+% \label{fig.interpret}
+% \end{figure}
 
 
-\textbf{Partial Dependence Plot:} Partial Dependence Plots (PDP) reveal the dependence between the target function and target features. The partial function $ \hat{f_{xs}}(x_s) $ is estimated by calculating averages in the training data, also known as the Monte Carlo method. After setting up a grid for features we are interested in (target features), all target features in the training set are modified to be the value at each grid point. Lastly, average prediction at each grid are computed to draw the plot. 
+% \textbf{Partial Dependence Plot:} Partial Dependence Plots (PDP) reveal the dependence between the target function and target features. The partial function $ \hat{f_{xs}}(x_s) $ is estimated by calculating averages in the training data, also known as the Monte Carlo method. After setting up a grid for features we are interested in (target features), all target features in the training set are modified to be the value at each grid point. Lastly, average prediction at each grid are computed to draw the plot. 
 
 % The drawback of PDP is that one target feature produces 2D plots and two produce 3D plots while it can be pretty hard for a human to understand plots in higher dimensions.
 
@@ -30,11 +30,11 @@ Deep learning models that achieves high accuracy provide fewer interpretations d
 
 % \clearpage
 
-\textbf{Individual Conditional Expectation: } Individual Conditional Expectation (ICE) is similar to PDP. The difference is that PDP calculates the average over the marginal distribution while ICE keeps them all. Each line in the ICE plot represents predictions for each individual. Without averaging on all instances, ICE unveils heterogeneous relationships but is limited to only one target feature since two features result in overlay surfaces that cannot be identified by human eyes.
+% \textbf{Individual Conditional Expectation: } Individual Conditional Expectation (ICE) is similar to PDP. The difference is that PDP calculates the average over the marginal distribution while ICE keeps them all. Each line in the ICE plot represents predictions for each individual. Without averaging on all instances, ICE unveils heterogeneous relationships but is limited to only one target feature since two features result in overlay surfaces that cannot be identified by human eyes.
 
-\textbf{Accumulated Local Effects: } Accumulated Local Effects (ALE) averages the changes in the predictions and accumulate them over the local grid. The difference with PDP is that the value at each point of the ALE curve is the difference to the mean prediction calculated in a small window rather than all of the grid. Thus ALE eliminates the effect of correlated features which makes it more suitable in healthcare because it's usually irrational to assume young people having similar physical conditions with the elderly.
+% \textbf{Accumulated Local Effects: } Accumulated Local Effects (ALE) averages the changes in the predictions and accumulate them over the local grid. The difference with PDP is that the value at each point of the ALE curve is the difference to the mean prediction calculated in a small window rather than all of the grid. Thus ALE eliminates the effect of correlated features which makes it more suitable in healthcare because it's usually irrational to assume young people having similar physical conditions with the elderly.
 
-\textbf{Permutation Feature Importance: } The idea behind Permutation Feature Importance is intuitive. A feature is significant for the model if there is a noticeable increase in the model's prediction error after permutation. On the other hand, the feature is less important if the prediction error remains nearly unchanged after shuffling.
+% \textbf{Permutation Feature Importance: } The idea behind Permutation Feature Importance is intuitive. A feature is significant for the model if there is a noticeable increase in the model's prediction error after permutation. On the other hand, the feature is less important if the prediction error remains nearly unchanged after shuffling.
 
 % \begin{figure}[H]
 % \centering
@@ -57,28 +57,28 @@ Deep learning models that achieves high accuracy provide fewer interpretations d
 % \label{fig.ale}
 % \end{figure}
 
-\clearpage
+% \clearpage
 
-\textbf{Local Interpretable Model-agnostic Explanations:} Local Interpretable Model-agnostic Explanations (LIME) uses interpretable models to approximate the predictions of the original black-box model in specific regions. LIME works for tabular data, text, and images.
+% \textbf{Local Interpretable Model-agnostic Explanations:} Local Interpretable Model-agnostic Explanations (LIME) uses interpretable models to approximate the predictions of the original black-box model in specific regions. LIME works for tabular data, text, and images.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.4\textwidth]{figures/chapter_defence/lime.jpg}
-\caption{The black-box model’s complex decision function $f$ is approximated by a local model (the dashed line). LIME samples instances, gets predictions using $f$, and weighs them by the proximity to the instance being explained (represented here by size). \citep{ribeiro2016should}}
-\label{fig.lime}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.4\textwidth]{figures/chapter_defence/lime.jpg}
+% \caption{The black-box model’s complex decision function $f$ is approximated by a local model (the dashed line). LIME samples instances, gets predictions using $f$, and weighs them by the proximity to the instance being explained (represented here by size). \citep{ribeiro2016should}}
+% \label{fig.lime}
+% \end{figure}
 
 
-\textbf{Shapley Additive Explanation: } Shapley Additive exPlanation (SHAP) borrows the idea of Shapley value from Game Theory \citep{shapley_1953}, which represents contributions of each player in a game. Calculating Shapley values is computationally expensive when there are hundreds of features, thus Lundberg, Scott M., and Su-In Lee proposed a fast implementation for tree-based models to boost the calculation process \citep{lundberg2017unified}. SHAP has a solid theoretical foundation but is still computationally slow for a lot of instances.
+% \textbf{Shapley Additive Explanation: } Shapley Additive exPlanation (SHAP) borrows the idea of Shapley value from Game Theory \citep{shapley_1953}, which represents contributions of each player in a game. Calculating Shapley values is computationally expensive when there are hundreds of features, thus Lundberg, Scott M., and Su-In Lee proposed a fast implementation for tree-based models to boost the calculation process \citep{lundberg2017unified}. SHAP has a solid theoretical foundation but is still computationally slow for a lot of instances.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth]{figures/chapter_defence/shap.png}
-\caption{SHAP \citep{lundberg2017unified}}
-\label{fig.shap}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.9\textwidth]{figures/chapter_defence/shap.png}
+% \caption{SHAP \citep{lundberg2017unified}}
+% \label{fig.shap}
+% \end{figure}
 
-To summarize, PDP, ICE, and ALE use graphs to visualize the impact of target features while Permutation Feature Importance, LIME, and SHAP provide numerical feature importance that quantitatively ranks the importance of each feature to provide explanations for black-box models.
+% To summarize, PDP, ICE, and ALE use graphs to visualize the impact of target features while Permutation Feature Importance, LIME, and SHAP provide numerical feature importance that quantitatively ranks the importance of each feature to provide explanations for black-box models.
 
 % Different interpretation methods try to find out the most important features to provide explanations for the output. But as Doshi-Velez and Kim questioned, "Are all models in all defined-to-be-interpretable model classes equally interpretable?"  \citep{doshivelez2017rigorous} And how can we measure the quality of different interpretation methods? 
 
@@ -91,33 +91,33 @@ To summarize, PDP, ICE, and ALE use graphs to visualize the impact of target fea
 % \textbf{Monotonicity:} Monotonicity incrementally adds each attribute in order of increasing importance. As each feature is added, the performance of the model should correspondingly increase, thereby resulting in monotonically increasing model performance, and it returns True of False \citep{luss2019generating}.
 % \color{black}
 
-\clearpage
+% \clearpage
 
-\section{Defence Techniques}
-\label{sec:defence}
+% \section{Defence Techniques}
+% \label{sec:defence}
 
-In previous chapters, we demonstrate that deep neural networks are vulnerable to adversarial attacks. The robustness of deep learning models could even deteriorate after quantization and pruning. Similar to data augmentation, one intuitive solution to this problem is Adversarial Training that incorporates adversarial examples into the training set so that the model can distinguish adversarial examples \citep{goodfellow2015explaining}.
+% In previous chapters, we demonstrate that deep neural networks are vulnerable to adversarial attacks. The robustness of deep learning models could even deteriorate after quantization and pruning. Similar to data augmentation, one intuitive solution to this problem is Adversarial Training that incorporates adversarial examples into the training set so that the model can distinguish adversarial examples \citep{goodfellow2015explaining}.
 
-$$\tilde{J}(\theta, x, y) = \alpha J(\theta, x, y) + (1-\alpha)J(\theta, x+\epsilon sign(\bigtriangledown_{x}J(\theta, x, y)))$$
+% $$\tilde{J}(\theta, x, y) = \alpha J(\theta, x, y) + (1-\alpha)J(\theta, x+\epsilon sign(\bigtriangledown_{x}J(\theta, x, y)))$$
 
-On the other hand, we can train a distilled network using Defensive Distillation. In addition to the one-hot encoding of the correct class, if we provide additional information about each class such as probability vectors, the model can extract more information from the training set. A normal DNN is trained using hard class labels (0 or 1) to generate probability vectors that act as soft class labels for the training of the distilled network.
+% On the other hand, we can train a distilled network using Defensive Distillation. In addition to the one-hot encoding of the correct class, if we provide additional information about each class such as probability vectors, the model can extract more information from the training set. A normal DNN is trained using hard class labels (0 or 1) to generate probability vectors that act as soft class labels for the training of the distilled network.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\textwidth]{figures/chapter_defence/defensive_distillation.png}
-\caption{Defensive Distillation \citep{papernot2016distillation}}
-\label{fig.defensive_distillation}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.6\textwidth]{figures/chapter_defence/defensive_distillation.png}
+% \caption{Defensive Distillation \citep{papernot2016distillation}}
+% \label{fig.defensive_distillation}
+% \end{figure}
 
-The probability vector $F(X)$ is computed using the following equation:
+% The probability vector $F(X)$ is computed using the following equation:
 
-$$F(X)=\begin{bmatrix}
-\frac{e^{z_i(X)/T}}{\sum_{l=0}^{N-1}e^{z_l(X)/T}}
-\end{bmatrix}_{i\in 0..N-1}$$
+% $$F(X)=\begin{bmatrix}
+% \frac{e^{z_i(X)/T}}{\sum_{l=0}^{N-1}e^{z_l(X)/T}}
+% \end{bmatrix}_{i\in 0..N-1}$$
 
-where $Z(X)=z_0(X), ..., z_{N-1}(X)$ are the N logits corresponding to the hidden layer outputs for each of the N classes in the dataset, and $T$ is a parameter named temperature and shared across the softmax layer. If the temperature is larger than 1, the probability distribution becomes more ambiguous. The temperature is set back to 1 to produce discrete probability predictions.
+% where $Z(X)=z_0(X), ..., z_{N-1}(X)$ are the N logits corresponding to the hidden layer outputs for each of the N classes in the dataset, and $T$ is a parameter named temperature and shared across the softmax layer. If the temperature is larger than 1, the probability distribution becomes more ambiguous. The temperature is set back to 1 to produce discrete probability predictions.
 
-In this chapter, we intend to investigate if it's possible to improve the robustness of the model during inference without retraining.
+% In this chapter, we intend to investigate if it's possible to improve the robustness of the model during inference without retraining.
 
 \section{Introduction}
 
@@ -269,7 +269,8 @@ Overall, this paper makes the following contributions:
 % \fnbelowfloat command of the stfloats package.
 
 
-\newpage
+% \newpage
+
 \section{Preliminary of AI Interpretability}
 
 In this section, six interpretation methods, Partial Dependence Plot, Individual Conditional Expectation, Accumulated Local Effects, Local Interpretable Model-agnostic Explanations, and Shapley Additive Explanation are summarized. We also summarize two evaluation metrics, faithfulness and monotonicity.
@@ -950,7 +951,7 @@ Findings from the dedicated model are consistent with current medical knowledge.
 \begin{figure}[H]
 % \setcounter{figure}{3}
 \centering
-\includegraphics[width=2.8in]{figures/chapter_interp/nature_dt.png}
+\includegraphics[width=0.6\textwidth]{figures/chapter_interp/nature_dt.png}
 \caption{A decision rule using three key features and their thresholds in
 absolute value. Num, the number of patients in a class; T, the number of
 correctly classified; F, the number of misclassified patients. \citep{Yan2020}}

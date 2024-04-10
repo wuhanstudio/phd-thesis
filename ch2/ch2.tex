@@ -3,13 +3,15 @@
 
 % \newrefsection
 
+This chapter real-time attack
+
 As research in deep neural networks advances, deep convolutional networks become promising for autonomous driving tasks. In particular, there is an emerging trend of employing end-to-end neural network models for autonomous driving. However, previous research has shown that deep neural network classifiers are vulnerable to adversarial attacks. While for regression tasks, the effect of adversarial attacks is not as well understood. In this research, we devise two white-box targeted attacks against end-to-end autonomous driving models. Our attacks manipulate the behavior of the autonomous driving system by perturbing the input image. In an average of 800 attacks with the same attack strength (epsilon=1), the image-specific and image-agnostic attack deviates the steering angle from the original output by 0.478 and 0.111, respectively, which is much stronger than random noises that only perturbs the steering angle by 0.002 (The steering angle ranges from [-1, 1]). Both attacks can be initiated in real-time on CPUs without employing GPUs. Demo video: \href{https://youtu.be/I0i8uN2oOP0}{https://youtu.be/I0i8uN2oOP0}.
 
 % The driving system uses a regression model that takes an image as input and outputs the steering angle. 
 
 \section{Introduction}
 
-Autonomous driving is one of the most challenging tasks in safety-critical robotic applications. Most real-world autonomous vehicles employ modular systems that divide the driving task into smaller subtasks. In addition to a perception module that relies on deep learning models to locate and classify objects in the environment, modular systems also include localization, prediction, planning, and control modules. However, researchers are also exploring the potential of end-to-end driving systems. An end-to-end driving system is a monolithic module that directly maps the input to the output, often using deep neural networks. For example, the NVIDIA end-to-end driving model \citep{bojarski2016end} maps raw pixels from the front-facing camera to steering commands. The development of end-to-end driving systems has been facilitated by recent advances in high-performance GPUs and the development of photo-realistic driving simulators, such as the Carla Simulator \citep{Dosovitskiy17} and the Microsoft Airsim Simulator \citep{airsim2017fsr}.  
+Autonomous driving is one of the most challenging tasks in safety-critical robotic applications. Most real-world autonomous vehicles employ modular systems that divide the driving task into smaller subtasks. In addition to a perception module that relies on deep learning models to locate and classify objects in the environment, modular systems also include localization, prediction, planning, and control modules. However, researchers are also exploring the potential of end-to-end driving systems. An end-to-end driving system is a monolithic module that directly maps the input to the output, often using deep neural networks. For example, the NVIDIA end-to-end driving model \cite{bojarski2016end} maps raw pixels from the front-facing camera to steering commands. The development of end-to-end driving systems has been facilitated by recent advances in high-performance GPUs and the development of photo-realistic driving simulators, such as the Carla Simulator \cite{Dosovitskiy17} and the Microsoft Airsim Simulator \cite{airsim2017fsr}.  
 
 \begin{figure}[tbp]
     \centering
@@ -18,7 +20,8 @@ Autonomous driving is one of the most challenging tasks in safety-critical robot
     \label{fig:adv_drv}
 \end{figure} 
 
-As demonstrated in multiple contexts, deep neural networks are vulnerable to adversarial attacks. Typically, these attacks fool an image classification model by adding an unperceivable perturbation to the input image \citep{goodfellow2014explaining}. Despite the fact that the number of academic publications discussing end-to-end deep learning models is steadily increasing, their safety in real-world scenarios is still unclear. Though end-to-end models may lead to better performance and smaller systems, the monolithic module is also particularly vulnerable to adversarial attacks. In addition, note that current research on adversarial attacks primarily focuses on classification tasks. The effect of these attacks on regression tasks, however, largely remains unexplored. Our research explores the possibility of achieving real-time attacks against NVIDIA's end-to-end regression model (See Fig. \ref{fig:adv_drv}). However, the attacks may also be applied to the perception module in a modular driving system.
+As demonstrated in multiple contexts, deep neural networks are vulnerable to adversarial attacks. Typically, these attacks fool an image classification model by adding an unperceivable perturbation to the input image \cite{goodfellow2014explaining}. Despite the fact that the number of academic publications discussing end-to-end deep learning models is steadily increasing, their safety in real-world scenarios is still unclear. Though end-to-end models may lead to better performance and smaller systems, the monolithic module is also particularly vulnerable to adversarial attacks. In addition, note that current research on adversarial attacks primarily focuses on classification tasks. The effect of these attacks on regression tasks, however, largely remains unexplored. Our research explores the possibility of achieving real-time attacks against NVIDIA's end-to-end regression model (See Fig. \ref{fig:adv_drv}). However, the attacks may also be applied to the perception module in a modular driving system.
+
 
 The main contributions of this paper are as follows: 
 
@@ -58,7 +61,7 @@ One big difference between online and offline attacks is that the ground truth i
 
 Existing adversarial attacks can be categorized into white-box, gray-box, and black-box attacks \citep{REN2020346}: In white-box attacks, the adversaries have full knowledge of the target model, including model architecture and parameters; In gray-box attacks, the adversaries have partial information about the target model; In black-box attacks, the adversaries can only gather information about the model through querying. Since white-box attacks are more efficient, we devise two white-box attacks that achieve real-time performance against end-to-end driving models .
 
-\clearpage
+% \clearpage
 
 \section{Problem Formulation}
 \label{section_problem_formulation}
@@ -153,18 +156,18 @@ As explained in Section \ref{adversarial_attacks}, the adversarial loss function
 \begin{equation}
     \eta = \epsilon \ \text{sign}[\nabla_{x}( J(y))]
 \end{equation}
-where $\epsilon$ is a scaling factor that determines the visibility of the perturbation. The image-specific attack is summarized in Algorithm \ref{alg:image-specific}.
+where $\epsilon$ is a scaling factor that determines the visibility of the perturbation. The image-specific attack is summarized in Algorithm \ref{alg:image-specific-driving}.
 
 \begin{algorithm}[t]
-    \caption{Image-specific Attack}\label{alg:image-specific}
+    \caption{Image-specific Attack}\label{alg:image-specific-driving}
     \begin{algorithmic}
-        \STATE Input: The regression model $f(\theta, x)$, the input images $\{x_t\}$ where $x_t$ is the image at time step $t$.
-        \STATE Parameters: The strength of the attack $\epsilon$.
-        \STATE Output: Image-specific perturbation $\eta$.
-        \FOR{each time step $t$}
-            \STATE Inference: $y = f(\theta, x)$
-            \STATE Perturbation: $\eta = \epsilon \ \text{sign}[\nabla_{x}( J(y))]$
-        \ENDFOR
+        \State Input: The regression model $f(\theta, x)$, the input images $\{x_t\}$ where $x_t$ is the image at time step $t$.
+        \State Parameters: The strength of the attack $\epsilon$.
+        \State Output: Image-specific perturbation $\eta$.
+        \For{each time step $t$}
+            \State Inference: $y = f(\theta, x)$
+            \State Perturbation: $\eta = \epsilon \ \text{sign}[\nabla_{x}( J(y))]$
+        \EndFor
     \end{algorithmic}
 \end{algorithm}
 
@@ -173,28 +176,28 @@ As an example, assume that the attacker wishes to attack the vehicle to the righ
 %Our experimental results show that the image-specific attack is a strong attack that deviates the vehicle to the outside of the lane in several seconds.
 
 \begin{algorithm}[t]
-    \caption{Image-agnostic Attack (Training)}\label{alg:image-agnostic}
+    \caption{Image-agnostic Attack (Training)}\label{alg:image-agnostic-driving}
     \begin{algorithmic}
-        \STATE Input: The regression model $f(\theta, x)$, input images in a driving record $X$, the target direction $I \in \{-1, 1\}$.
-        \STATE Parameters: the number of iterations $n$, the learning rate $\alpha$, the step size $\xi$ , and the strength of the attack $\epsilon$ measured by the $l_{\infty}$ norm.
-        \STATE Output: Image-agnostic perturbation $\eta$.
+        \State Input: The regression model $f(\theta, x)$, input images in a driving record $X$, the target direction $I \in \{-1, 1\}$.
+        \State Parameters: the number of iterations $n$, the learning rate $\alpha$, the step size $\xi$ , and the strength of the attack $\epsilon$ measured by the $l_{\infty}$ norm.
+        \State Output: Image-agnostic perturbation $\eta$.
 
-        \STATE Initialization: $\eta \leftarrow 0$
-        \FOR{each iteration}
-            \FOR{each input image $x$ in the driving record $X$}
-                \STATE Inference: $y = f(\theta, x + \eta)$
-                \IF {$\text{sign}(y) \neq I$}
-                    \STATE $x^{'} = x + \eta$
-                    \STATE $\eta_{t} \leftarrow 0$
-                    \WHILE{$\text{sign}(y) \neq I$}
-                        \STATE Gradients: $\nabla = \frac{\partial J(y)}{\partial x'}$
-                        \STATE Perturbation: $\eta_{t} = \eta_{t} + proj_{2}(\nabla,\ \xi)$
-                        \STATE Inference: $y = f(\theta, x + \eta_t)$
-                    \ENDWHILE
-                    \STATE $\eta = proj_{\infty}(\eta + \frac{\alpha}{\xi} \eta_{t},\ \epsilon)$
-                \ENDIF
-            \ENDFOR
-        \ENDFOR
+        \State Initialization: $\eta \leftarrow 0$
+        \For{each iteration}
+            \For{each input image $x$ in the driving record $X$}
+                \State Inference: $y = f(\theta, x + \eta)$
+                \If {$\text{sign}(y) \neq I$}
+                    \State $x^{'} = x + \eta$
+                    \State $\eta_{t} \leftarrow 0$
+                    \While{$\text{sign}(y) \neq I$}
+                        \State Gradients: $\nabla = \frac{\partial J(y)}{\partial x'}$
+                        \State Perturbation: $\eta_{t} = \eta_{t} + proj_{2}(\nabla,\ \xi)$
+                        \State Inference: $y = f(\theta, x + \eta_t)$
+                    \EndWhile
+                    \State $\eta = proj_{\infty}(\eta + \frac{\alpha}{\xi} \eta_{t},\ \epsilon)$
+                \EndIf
+            \EndFor
+        \EndFor
     \end{algorithmic}
 \end{algorithm}
 
@@ -225,7 +228,7 @@ which can be proved using the Lagrangian and the KKT conditions \citep{boyd2004c
 % \Delta \eta_{t} = proj_{2}(\eta,  \xi) = \xi \frac{\nabla_{x} [J(y)]}{||\ \nabla_{x} [J(y)]\ ||_{2}}
 % \end{equation}
 
-After applying the temporary perturbation $\eta_{t}$ at timestep $t$, if the direction of the model output matches the desired direction, we incorporate the temporary perturbation $\eta_{t}$ to the overall perturbation $\eta$ and then project $\eta$ on the $l_2$ ball centred at 0 and of radius $\epsilon$ to ensure that the constraint $||{\eta}^{'}||_{2} \leq \epsilon$ is satisfied. The attack is summarized in Algorithm \ref{alg:image-agnostic}. As can be seen, the attack uses a similar while loop as in DeepFool and the projection function introduced in the PGD attack.
+After applying the temporary perturbation $\eta_{t}$ at timestep $t$, if the direction of the model output matches the desired direction, we incorporate the temporary perturbation $\eta_{t}$ to the overall perturbation $\eta$ and then project $\eta$ on the $l_2$ ball centred at 0 and of radius $\epsilon$ to ensure that the constraint $||{\eta}^{'}||_{2} \leq \epsilon$ is satisfied. The attack is summarized in Algorithm \ref{alg:image-agnostic-driving}. As can be seen, the attack uses a similar while loop as in DeepFool and the projection function introduced in the PGD attack.
 
 %The strength of the attack is not as strong as the image-specific attack, but it still adds an opposite force to the vehicle while turning through the corner.
 
