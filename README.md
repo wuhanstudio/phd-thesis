@@ -4,6 +4,16 @@
 
 Based on [George's template](https://github.com/georgedeath/University_of_Exeter_Thesis_Template), I added the university logo and header.
 
+```
+$ sudo apt install texlive-base texlive-fonts-extra texlive-latex-extra texlive-bibtex-extra texlive-science
+$ tlmgr install cm-super
+
+> pdflatex Thesis.tex
+> biber Thesis
+> pdflatex Thesis.tex
+> pdflatex Thesis.tex
+```
+
 ![](overview.png)
 
 <hr />
