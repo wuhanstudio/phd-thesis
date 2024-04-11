@@ -7,3 +7,33 @@ In conclusion, this research intends to achieve practical adversarial attacks ag
 In the last year, we'll try to devise adversarial attacks against object tracking and investigate the effects of hardware acceleration on our attacks. Eventually, we hope we can understand various models through interpretation, and thus deploying deep learning models more securely in robotics.
 
 \section{Future Research}
+
+We plan to generate adversarial patches against object detection models in a simulated environment by changing the material or texture of an object, which is a special kind of physical patch.
+   
+Adding a small and intentional drift to the input distribution, also known as adversarial perturbations, can substantially decrease the deep neural network's performance. Adversaries can exploit optimization methods, sensitive features, geometric transformations, and generative models to generate adversarial examples \cite{serban2019adversarial}.
+
+In 2017, Brown et al. brought adversarial examples to the physical world by printing human-noticeable patches on stickers \cite{brown2017adversarial}, posing threats against real-world applications. Then, research interests gradually shifted from digital attacks (modifying image pixel values) to physical attacks.
+
+Adversarial examples in the physical world must be able to be captured by sensors, such as cameras. As a result, physical attacks require a substantial intensity of perturbations, making them visually perceptible by human eyes. Among physical attacks, adversarial patches \cite{brown2017adversarial} are the most widely studied methods. In a survey on visually adversarial attacks, Wei et al. categorized adversarial patches into meaningful patches (e.g., QR Code) and meaningless patches that do not correspond to real-world objects \cite{wei2023visually}.
+
+Though most physical attacks are visually perceptible by human eyes, some optical attacks can only be captured by sensors (e.g., rolling shutter attacks). In \cite{li2022survey}, Li et al. summarized optical adversarial attacks, including attacks that use high-frequency light, laser, and projector.
+
+Our research will focus on adversarial patches that are noticeable by human eyes. In \cite{sharma2022adversarial}, Sharma et al. surveyed adversarial patch attacks in vision-based tasks that involve three mainstream models: classification, detection, and re-identification \cite{wei2022physical}, and we will focus on adversarial attacks against object detection models.
+
+\subsection{Digital Patch}
+
+Digital patches generate adversarial examples by directly modifying image pixel values. Some digital patches can be applied to the physical world by adding extra constraints during the optimization. For example, Lee et al. extended digital DPatch \cite{liu2018dpatch} to the physical world \cite{lee2019physical}.
+
+However, some research generates asteroid and grid-shaped patches \cite{wu2020dpattack} or small patches \cite{huang2021rpattack} to reduce the number of perturbed pixels, making it infeasible to be printed out on physical objects. 
+
+Besides, the effectiveness of adversarial patches should be position invariant. Digital patches can fool detection models without overlapping with objects \cite{saha2019adversarial}.
+
+\subsection{Physical Patch}
+
+Physical patches pose a great threat against autonomous driving vehicles as they are invariant to input images and thus can inherently achieve real-time attacks \cite{threet2021physical}. 
+
+Prior research generates stop signs that cannot be recognized by detection models \cite{song2018physical} \cite{chen2019shapeshifter}, and adversarial posters to vanish pedestrian \cite{thys2019fooling} \cite{wang2021towards}. Chindaudom et al. produce meaningful patches by combining patches and QR Codes \cite{chindaudom2020adversarialqr} \cite{chindaudom2022surreptitious}. Though most patches are static, Hoory et al. generate and display dynamic patches on a monitor attached to a vehicle \cite{hoory2020dynamic}. However, physical patches can only attack object detection models when the camera is close enough (see the \href{https://www.youtube.com/watch?v=gps37SqC7dU}{demo video} \cite{wang2021daedalus} \cite{lu2021scale}). Besides, testing physical patches could waste a lot of printing materials.
+
+For autonomous driving, it is more popular to test safety-critical edge cases in simulation. Testing physical attacks in simulators is more efficient than in the physical world since we can easily vary weather and lighting conditions. In simulators, adversarial patches can be applied by changing the material or texture of an object, but prior research only applies patches by modifying pixel values \cite{mathov2021enhancing} \cite{nesti2022evaluating} \cite{rossolini2022realworld}.
+
+In summary, most prior research tests physical attacks in the real world or applies adversarial patches by modifying pixel values in simulators.

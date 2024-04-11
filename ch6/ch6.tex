@@ -275,7 +275,7 @@ Overall, this paper makes the following contributions:
 
 In this section, six interpretation methods, Partial Dependence Plot, Individual Conditional Expectation, Accumulated Local Effects, Local Interpretable Model-agnostic Explanations, and Shapley Additive Explanation are summarized. We also summarize two evaluation metrics, faithfulness and monotonicity.
 
-\subsection{\textbf{Model-Agnostic Methods}}
+\subsection{Model-Agnostic Methods}
 
 In healthcare, restrictions to using only interpretable models bring many limitations in adoption while separating explanations from the model can afford several beneficial flexibilities \citep{ribeiro2016modelagnostic}. As a result, model-agnostic methods have been devised to provide interpretations without knowing model details.
 
@@ -312,7 +312,7 @@ To summarize, PDP, ICE, and ALE only use graphs to visualize the impact of diffe
 % \par
 % Different methods may understand the same model differently. In healthcare applications, sometimes we can use prior medical knowledge to distinguish reasonable ones, while sometimes it can be cumbersome to sort out most influential ones out of hundreds of features. Thus it is important to find quantitative metrics to evaluate different methods without human intervention.
 
-\subsection{\textbf{Metrics for Interpretability Evaluation}}
+\subsection{Metrics for Interpretability Evaluation}
 
 Different interpretation methods try to find out the most important features to provide explanations for the output. But as Doshi-Velez and Kim questioned, "Are all models in all defined-to-be-interpretable model classes equally interpretable?"  \citep{doshivelez2017rigorous} And how can we measure the quality of different interpretation methods? 
 
@@ -332,7 +332,7 @@ In our experiment, both faithfulness and monotonicity are employed to evaluate t
 
 In this section, features in our raw dataset and procedures of data preprocessing are introduced. After preprocessing, four different models: decision tree, random forest, gradient boosted trees, and neural networks are trained on the dataset. Model interpretation is then employed to understand how different models make predictions, and patients that models make false diagnoses are investigated respectively.
 
-\subsection{\textbf{Dataset and Perprocessing}}
+\subsection{Dataset and Pre-processing}
 
 The raw dataset consists of patients with confirmed SARS-CoV-2 laboratory tests between 18th Jan. 2020 and 5th Mar. 2020, in Zhuhai, China. Our Research Ethics Committee waived written informed consent for this retrospective study that evaluated de-identified data and involved no potential risk to patients. All the data of patients have been anonymized before analysis.
 
@@ -400,7 +400,7 @@ Mutual information is calculated using equation \ref{eq:2} that determines how s
 \par
 After feature engineering, there are 37 features left for training and testing.
 
-\subsection{\textbf{Training Models}}
+\subsection{Training Models}
 
 Machine learning models outperform humans in many different areas in terms of accuracy. Interpretable models such as the decision tree are easy to understand, but not suitable for large scale applications. Complex models achieve high accuracy while giving less explanation. 
 
@@ -562,7 +562,7 @@ Neural Networks         & 0.58   & 0.78       & 1.00    & 0.80  & 0.27\\ \bottom
 \end{figure*}
 
 \newpage
-\subsection{\textbf{Interpretation (Permutation Feature Importance)}}
+\subsection{Interpretation (Permutation Feature Importance)}
 
 First, we use  Permutation Feature Importance to find the most important features in different models. In table \ref{tab:important_feature}, CRP2 and NTproBNP are recognized as most important features by most models.
 
@@ -585,7 +585,7 @@ According to medical knowledge, CRP refers to C-Reactive Protein, which increase
 % Thus, the two most important features revealed by machine learning models do not obey medical knowledge.
 
 \newpage
-\subsection{\textbf{Interpretation (PDP, ICE, ALE)}}
+\subsection{Interpretation (PDP, ICE, ALE)}
 
 After recognizing the most important features, PDP, ICE, and ALE are employed to further visualize the relationship between CRP and NTproBNP.
 
@@ -595,8 +595,9 @@ ICE reveals individual differences. Though all of the models give a prediction o
 
 In the ALEs,  as NTproBNP and CRP get higher, all of the four models give a more positive prediction of turning severe, which coincides with medical knowledge.
 
-\clearpage
-\subsection{\textbf{Misclassified Patients}}
+% \clearpage
+
+\subsection{Misclassified Patients}
 
 Even though the most important features revealed by our models exhibit medical meaning, some severe patients fail to be recognized. Both Gradient Boosted Trees and Neural Networks recognize all severe patients and yield a recall of 1.00, while the decision tree and random forests fail to reveal two of them. 
 
@@ -615,7 +616,7 @@ No & Class  & Probability of Severe & Prediction & Type\\ \midrule
 \end{table}
 
 % \clearpage
-\subsection{\textbf{Interpretation (False Negative)}}
+\subsection{Interpretation (False Negative)}
 
 Suppose different models represent different doctors, then the decision tree and random forests make the wrong diagnosis for patient no. 5. The reason human doctors classified the patient as severe is that he actually needed a respirator to survive. To further investigate why the decision tree and random forests make wrong predictions, Local Interpretable Model-agnostic Explanations (LIME) and (Shapley Additive Explanation) SHAP are employed.
 
@@ -632,7 +633,7 @@ In the figure \ref{fig:shap_xgbc_5}, the explanation by SHAP reveals that the pa
 
 However, both gradient boosted trees and neural networks are not deceived by the fact the patient has no symptom. Their predictions indicate that the patient is likely to turn severe in the future.
 
-\subsubsection{\textbf{Correct Diagnoses}}
+\subsubsection{Correct Diagnoses}
 
 In the figure \ref{fig:shap_xgbc_5} and figure \ref{fig:shap_nn_5}, gradient boosted trees and neural networks do not prioritise the feature symptom. They put more weight on test results (NTproBNP and CRP). Thus they make correct predictions based on the fact that the patient's test results are serious.
 
@@ -661,7 +662,7 @@ Medical research is a case-by-case study. Every patient is unique. It's strenuou
 \color{black}
 
 % \clearpage
-\subsection{\textbf{Interpretation (False Positive)}}
+\subsection{Interpretation (False Positive)}
 
 With limited medical resources at the initial outbreak of the pandemic, it's equally important to investigate false positive, so that valuable resources can be distributed to patients in need.
 
@@ -697,12 +698,12 @@ NDisease            & Hypertention & Hypertention, DM, Hyperlipedia \\
 \end{tabular}
 \end{table}
 
-\newpage
-\subsubsection{\textbf{Doctors' Diagnoses}}
+% \newpage
+\subsubsection{Doctors' Diagnoses}
 
 We present the test results of both patients to doctors without indicating which patient is severe. All doctors mark patient No. 2 as more severe which is the same as our models. Doctors' decisions are based on the COVID-19 Diagnosis and Treatment Guide in China. The increased level in CRP, LDH, decreased level in LYM are associated with severe COVID-19 infection in the guideline, and patient 2 has a higher level of CRP and LDH, a lower level of LYM than patient 5. As a result, doctors' diagnoses are consistent with models' predictions
 
-\subsubsection{\textbf{Models' Diagnoses}}
+\subsubsection{Models' Diagnoses}
 
 Even though all of the four models make the same predictions as human doctors, it's important to confirm models' predictions are in accordance with medical knowledge. Table \ref{tab:important_feature_patient} lists the three most important features in the interpretation of LIME and SHAP. More detailed interpretations are illustrated in the figure \ref{fig:lime_2} and figure \ref{fig:shap_2}.
 
@@ -753,7 +754,7 @@ In conclusion, as illustrated previously in the explanation for patient 5 (false
 \color{black}
 
 \newpage
-\subsection{\textbf{Evaluating Interpretation}}
+\subsection{Evaluating Interpretation}
 
 Though we do find some indicative symptoms of COVID-19 through model interpretation, they are confirmed credible because these interpretations are corroborated by medical research. If we use the interpretation to understand a new virus at the early stage of an outbreak, there will be less evidence to support our interpretation. Thus we use Monoitinicity and Faithfulness to evaluate different interpretations using IBM AIX 360 toolbox \citep{aix360-sept-2019}. The decision tree only provides a binary prediction (0 or 1) rather than a probability between 0 and 1, so it cannot be evaluated using Monotonicity and Faithfulness.
 
@@ -792,12 +793,13 @@ As for monotonicity, most interpretation methods receive a False though we do fi
 % The evaluation metrics for different interpretation methods is still an active research direction, thus it's an open question what is the best way to measure interpretations. 
 \color{black}
 
-\subsection{\textbf{Summary}}
+\subsection{Summary}
 
 In this section, the interpretation of four different machine learning models reveals that N-Terminal pro-Brain Natriuretic Peptide (NTproBNP), C-Reaction Protein (CRP), and lactic dehydrogenase (LDH), lymphocyte (LYM) are the four most important biomarkers that indicate the severity level of COVID-19 patients. In the next section, we further validate our methods on two datasets to corroborate our proposal.
 
 
-\clearpage
+% \clearpage
+
 \begin{figure*}
 % \setcounter{figure}{4}
 \centering
@@ -867,7 +869,8 @@ In this section, the interpretation of four different machine learning models re
 \label{fig:shap_5}
 \end{figure*}
 
-\clearpage
+% \clearpage
+
 \begin{figure*}
 % \setcounter{figure}{4}
 \centering
@@ -937,12 +940,13 @@ In this section, the interpretation of four different machine learning models re
 \label{fig:shap_2}
 \end{figure*}
 
-\clearpage
+% \clearpage
+
 \section{Validation on other datasets}
 
 At the initial outbreak of the pandemic, our research leverages a database consisting of patients with confirmed SARS-CoV-2 laboratory tests between 18th January 2020, and 5th March 2020, in Zhuhai, China, and reveals that an increase in NTproBNP, CRP, and LDH, and a decrease in lymphocyte count indicates a higher risk of death. However, the dataset has a limited record of 92 patients which may not be enough to support our proposal. Luckily, and thanks to global cooperation, we do have access to larger datasets. In this section, we further validate our methods on two datasets, one with 485 infected patients in Wuhan, China\citep{Yan2020}, and the other with 5644 confirmed cases from the Hospital Israelita Albert Einstein, at São Paulo, Brazil from Kaggle.
 
-\subsection{\textbf{Validation on 485 infected patients in China}}
+\subsection{Validation on 485 infected patients in China}
 
 The medical record of all patients in this dataset was collected between 10th January and 18th February 2020, within a similar date range as our dataset. Yan et al. construct a dedicated simplified and clinically operable decision model to rank 75 features in this dataset, and the model demonstrates that three key features, lactic dehydrogenase (LDH), lymphocyte (LYM), and high-sensitivity C-reactive protein (hs-CRP) can help to quickly prioritize patients during the pandemic, which is consistent with our interpretation in Table \ref{tab:important_feature}.
 
@@ -959,7 +963,7 @@ correctly classified; F, the number of misclassified patients. \citep{Yan2020}}
 
 Our methods reveal the same results without taking efforts to design a dedicated interpretable model but can be more prompt to react to the pandemic. During pandemic outbreak, a prompt reaction that provides insights on the new virus could save lives and time. 
 
-\subsection{\textbf{Validation on 5644 infected patients in Brazil}}
+\subsection{Validation on 5644 infected patients in Brazil}
 
 \begin{figure*}
 % \setcounter{figure}{4}
@@ -1104,7 +1108,8 @@ Neural Networks & False & False \\ \bottomrule
 In this paper, through the interpretation of four different machine learning models, we reveal that N-Terminal pro-Brain Natriuretic Peptide (NTproBNP), C-Reaction Protein (CRP), and lactic dehydrogenase (LDH), lymphocyte (LYM) are the four most important biomarkers that indicate the severity level of COVID-19 patients. Our findings are consistent with medical knowledge and recent research that exploits dedicated models. We further validate our methods on a large open dataset from Kaggle and unveil leukocytes, eosinophils, and platelets as three indicative biomarkers for COVID-19.
 
 The pandemic is a race against time. Using interpretable machine learning, medical practitioners can incorporate insights from models with their prior medical knowledge to promptly reveal the most significant indicators in early diagnosis and hopefully win the race in the fight against the pandemic.
-\clearpage
+
+% \clearpage
 
 % \printbibliography[
 %   keyword={chapter_defence}, heading=subbibintoc, resetnumbers=true

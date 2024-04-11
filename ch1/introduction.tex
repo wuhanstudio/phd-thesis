@@ -1,17 +1,15 @@
 \chapter{Introduction}
 \label{chpt:intro}
 
-Advances in deep neural networks have opened a new era of robotics, intelligent robots. Compared with traditional robots that perform repetitive tasks based on manual control or predefined rules, intelligent robots possess a more comprehensive perception of environments and make more sophisticated decisions for various tasks \citep{wang2018current}.
+We first introduce deep learning, adversarial attacks, and then existing research questions and the structure of the thesis.
 
-On the other hand, the development of physics engines and realistic renderers makes it feasible to simulate complex robots in simulators. Reinforcement learning that learns from trial and error, can now be trained and verified in a virtual environment before deploying to the physical world.
-
-However, recent research unveils that deep neural networks are vulnerable to adversarial attacks, including deep reinforcement learning. This research intends to design more robust and accountable autonomous systems so that we can safely embrace the benefit of deep learning.
+% On the other hand, the development of physics engines and realistic renderers makes it feasible to simulate complex robots in simulators. Reinforcement learning that learns from trial and error, can now be trained and verified in a virtual environment before deploying to the physical world.
 
 
-\section{Intelligent Robots}
-\label{sec:intelligent_robot}
+\section{Deep Learning}
+\label{sec:deep_learning}
 
-The upsurge of cloud service, deep learning for computer vision, natural language processing,  and etc empowers robots to have more interactions with humans, and other robots. 
+The upsurge of cloud service, deep learning for computer vision, natural language processing,  and etc empowers robots to have more interactions with humans, and other robots. \citep{wang2018current}.
 
 \begin{figure}[H]
 \centering
@@ -60,8 +58,8 @@ Autonomous driving systems are commonly divided into sub-tasks: localization, pe
 Our research focuses on adversarial attacks against deep learning models for mobile robots perception, such as image classification, object detection and object tracking in autonomous driving. We also investigate possible vulnerabilities in deep reinforcement learning.
 
 
-\subsection{Deep Learning}
-\label{sec:deep_robot}
+% \subsubsection{Deep Learning}
+% \label{sec:deep_robot}
 
 As the research in deep neural networks advances, deep convolutional networks become feasible for automated driving tasks. Our research investigates the effect of adversarial attacks against deep learning models. However, it is risky to perform attacks against real-world autonomous driving systems. Thus adversarial attacks are tested in various simulators.
 
@@ -117,30 +115,30 @@ In chapter \ref{chpt:defence}, the interpretability of deep learning models and 
 
 % \clearpage
 
-\subsection{Reinforcement Learning}
-\label{sec:reinf_robot}
+% \subsection{Reinforcement Learning}
+% \label{sec:reinf_robot}
 
-Deep reinforcement learning can be integrated into robotic systems as well. Given observations of the environment under certain states, the agent (robot) takes actions to achieve objectives. Most reinforcement learning tasks are evaluated in games such as the Atari. Recently, the NVIDIA Issac Gym simulator makes large-scale reinforcement learning possible.
+% Deep reinforcement learning can be integrated into robotic systems as well. Given observations of the environment under certain states, the agent (robot) takes actions to achieve objectives. Most reinforcement learning tasks are evaluated in games such as the Atari. Recently, the NVIDIA Issac Gym simulator makes large-scale reinforcement learning possible.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{figures/chapter_intro/issac_gym.jpg}
-\caption{NVIDIA Isaac Gym}
-\label{fig.issac_gym}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=\textwidth]{figures/chapter_intro/issac_gym.jpg}
+% \caption{NVIDIA Isaac Gym}
+% \label{fig.issac_gym}
+% \end{figure}
 
-However, reinforcement learning models are vulnerable to adversarial attacks by adding perturbations to agents' observations \citep{chen2019adversarial}. Besides, recent research unveils that adversarial policy that acts abnormally in a shared environment can also induce extremely unlikely activations to occur.
+% However, reinforcement learning models are vulnerable to adversarial attacks by adding perturbations to agents' observations \citep{chen2019adversarial}. Besides, recent research unveils that adversarial policy that acts abnormally in a shared environment can also induce extremely unlikely activations to occur.
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.4]{figures/chapter_intro/adv_policy.jpg}
-\caption{Adversarial Policies: Attacking Deep Reinforcement Learning}
-\label{fig.adv_policy}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[scale=0.4]{figures/chapter_intro/adv_policy.jpg}
+% \caption{Adversarial Policies: Attacking Deep Reinforcement Learning}
+% \label{fig.adv_policy}
+% \end{figure}
 
-For instance, the red agent tries to prevent the blue agent from crossing the line. Unexpectedly, the red agent wins the game by falling to the ground, which looks like a random policy. But this abnormal action of the red agent effectively causes the blue agent to fall as well \citep{gleave2021adversarial}. 
+% For instance, the red agent tries to prevent the blue agent from crossing the line. Unexpectedly, the red agent wins the game by falling to the ground, which looks like a random policy. But this abnormal action of the red agent effectively causes the blue agent to fall as well \citep{gleave2021adversarial}. 
 
-In chapter \ref{chpt:driving}, we provide more experiments of adversarial attacks against end-to-end models in autonomous driving systems.
+% In chapter \ref{chpt:driving}, we provide more experiments of adversarial attacks against end-to-end models in autonomous driving systems.
 
 \section{Adversarial Attacks}
 \label{sec:adv_attack}
@@ -250,8 +248,24 @@ In chapter \ref{chpt:classification}, we present adversarial classification, a b
 \section{Research Questions}
 \label{sec:research_question}
 
+Can we achieve real-time adversarial attacks?
+
+Hardware attack?
+
+Versus traditional methods Kalman filter?
+
+Is black-box attack practical?
+
+How can we benefit from interpretation methods?
+
 \section{Thesis Overview}
 
 To achieve the research objectives set out in Section 1.4, the remaining of the thesis organized as follows:
 
-Chapter 2: publication
+\begin{enumerate}
+    \item Chapter 2: Real-time adversarial attacks
+    \item Chapter 3: Practical hardware attack
+    \item Chapter 4: Adversarial Tracking
+    \item Chapter 5: Black-box attack
+    \item Chapter 6: interpretation
+\end{enumerate}
