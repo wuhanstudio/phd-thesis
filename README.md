@@ -10,6 +10,7 @@ $ tlmgr install cm-super
 
 > pdflatex Thesis.tex
 > biber Thesis
+> makeglossaries Thesis
 > pdflatex Thesis.tex
 > pdflatex Thesis.tex
 ```
