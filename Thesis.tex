@@ -145,6 +145,12 @@
 \setlength{\headheight}{10mm}
 \renewcommand{\headrulewidth}{0.5pt}
 
+\usepackage[acronym,nomain,nonumberlist]{glossaries}
+
+\makeglossaries
+
+\newacronym{uap}{UAP}{Universal Adversarial Perturbation}
+
 % allows more space at the bottom of the page to stop all the warnings from 
 % latex as well as the large gaps that can appear between paragraphs.
 \makeatletter
@@ -308,7 +314,7 @@
   \printtext[textcitehyperref]{%
     \restorebibmacro{textcite}%
     \usebibmacro{textcite}}}
-    
+
 %%%%%%%
 
 \begin{document}
@@ -324,7 +330,7 @@
 
 % List of Publications
 \phantomsection
-\addcontentsline{toc}{chapter}{Lister of Publications}
+\addcontentsline{toc}{chapter}{List of Publications}
 \include{ch0/publication}
 
 % ABSTRACT
@@ -336,8 +342,18 @@
 \tableofcontents
 
 \listoffigures
+% \addcontentsline{toc}{chapter}{List of Figures}
 
 \listoftables
+% \addcontentsline{toc}{chapter}{List of Tables}
+
+\listofalgorithms
+% \addcontentsline{toc}{chapter}{List of Algorithms}
+
+\printglossary[type=\acronymtype, title=List of Abbreviations, toctitle=List of Abbreviations]
+% \addcontentsline{toc}{chapter}{List of Abbreviations}
+
+% \addtocontents{loa}{\def\string\figurename{Algorithm}}
 
 %% INTRODUCTION
 \newpage
