@@ -1,7 +1,13 @@
 \chapter{Introduction}
 \label{chpt:intro}
 
-We first introduce deep learning, adversarial attacks, and then existing research questions and the structure of the thesis.
+The burgeoning of deep learning models for computer vision, machine-learning cloud services, \acrfull{llm},  and etc empowers robots to have more interactions with humans, and other robots. 
+
+% For instance, the Amazon Kiva Robot and Alibaba Quicktron Robot can help warehouse staffs find desired items by moving goods shelves. Each robot can perceive the surrounding environment to avoid collisions with other robots, and receive commands from warehouse staff via cloud servers. On the other hand, autonomous driving research teams from Waymo (formerly the Google self-driving car project), Tesla, etc intend to achieve autonomous navigation without human interference.
+
+However, deep learning models are vulnerable to adversarial attacks that fool deep learning models by adding small perturbations to model inputs.
+
+In this chapter, we first introduce deep learning applications in autonomous driving and medical research. Then, we discuss existing adversarial attacks, including white-box attacks and black-box attack. Lastly, we summarize existing research questions and the structure of the thesis.
 
 % On the other hand, the development of physics engines and realistic renderers makes it feasible to simulate complex robots in simulators. Reinforcement learning that learns from trial and error, can now be trained and verified in a virtual environment before deploying to the physical world.
 
@@ -9,49 +15,45 @@ We first introduce deep learning, adversarial attacks, and then existing researc
 \section{Deep Learning}
 \label{sec:deep_learning}
 
-The upsurge of cloud service, deep learning for computer vision, natural language processing,  and etc empowers robots to have more interactions with humans, and other robots. \citep{wang2018current}.
+% \begin{figure}[H]
+% \centering
+% \begin{subfigure}[b]{0.485\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{figures/chapter_intro/amazon_kiva.jpg}
+%     \caption{Amazon Kiva Robot}
+%     \label{fig:kiva}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[b]{0.485\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{figures/chapter_intro/alibaba_quicktron.jpg}
+%     \caption{Alibaba Quicktron Robot}
+%     \label{fig:quicktron}
+% \end{subfigure}
+% \hfill
+% \caption{Robots in warehouse.}
+% \label{fig.robot}
+% \end{figure}
 
-\begin{figure}[H]
-\centering
-\begin{subfigure}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_intro/amazon_kiva.jpg}
-    \caption{Amazon Kiva Robot}
-    \label{fig:kiva}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_intro/alibaba_quicktron.jpg}
-    \caption{Alibaba Quicktron Robot}
-    \label{fig:quicktron}
-\end{subfigure}
-\hfill
-\caption{Robots in warehouse.}
-\label{fig.robot}
-\end{figure}
-
-For instance, the Amazon Kiva Robot and Alibaba Quicktron Robot can help warehouse staffs find desired items by moving goods shelves. Each robot can perceive the surrounding environment to avoid collisions with other robots, and receive commands from warehouse staff via cloud servers. On the other hand, autonomous driving research teams from Waymo (formerly the Google self-driving car project), Tesla, etc intend to achieve autonomous navigation without human interference.
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_intro/waymo.jpg}
-    \caption{Waymo (formerly Google self-driving project)}
-    \label{fig:waymo}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_intro/tesla_autopilot.jpg}
-    \caption{Tesla Autopilot}
-    \label{fig:tesla}
-\end{subfigure}
-\hfill
-\caption{Autonomous Driving Research}
-\label{fig.autonomous}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \begin{subfigure}[b]{0.485\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{figures/chapter_intro/waymo.jpg}
+%     \caption{Waymo (formerly Google self-driving project)}
+%     \label{fig:waymo}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[b]{0.485\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{figures/chapter_intro/tesla_autopilot.jpg}
+%     \caption{Tesla Autopilot}
+%     \label{fig:tesla}
+% \end{subfigure}
+% \hfill
+% \caption{Autonomous Driving Research}
+% \label{fig.autonomous}
+% \end{figure}
 
 Autonomous driving systems are commonly divided into sub-tasks: localization, perception, prediction, planning, and control. The vehicle determines its position in the environment through localization. Perception enables vehicles to collect information and extract relevant knowledge from the environment. The task of prediction makes predictions of measurement, behavior, trajectory, etc. The planning task makes purposeful decisions to achieve the goal, and the control component executes the planned actions \citep{pendleton2017perception}. Recently, the end-to-end driving that maps inputs directly to steering commands started to rise as an alternative to modular systems.
 
@@ -63,16 +65,18 @@ Our research focuses on adversarial attacks against deep learning models for mob
 
 As the research in deep neural networks advances, deep convolutional networks become feasible for automated driving tasks. Our research investigates the effect of adversarial attacks against deep learning models. However, it is risky to perform attacks against real-world autonomous driving systems. Thus adversarial attacks are tested in various simulators.
 
+The Carla simulator is an open-source platform for autonomous driving simulation based on the Unreal Game Engine. It simulates various sensors such as depth camera, 3D lidar, radar. The Carla simulator provides flexible Python API to manipulate the virtual environments and supports Robot Operating System (ROS) integration as well \citep{Dosovitskiy17}.
+
 \begin{figure}[H]
 \centering
-\begin{subfigure}[b]{0.485\textwidth}
+\begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_intro/carla.jpg}
     \caption{Carla}
     \label{fig:carla_intro}
 \end{subfigure}
 \hfill
-\begin{subfigure}[b]{0.485\textwidth}
+\begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_intro/lgsvl.png}
     \caption{LGSVL}
@@ -83,20 +87,18 @@ As the research in deep neural networks advances, deep convolutional networks be
 \label{fig.simulator}
 \end{figure}
 
-The Carla simulator is an open-source platform for autonomous driving simulation based on the Unreal Game Engine. It simulates various sensors such as depth camera, 3D lidar, radar. The Carla simulator provides flexible Python API to manipulate the virtual environments and supports Robot Operating System (ROS) integration as well \citep{Dosovitskiy17}.
-
 The LGSVL is another autonomous vehicle simulation platform based on the Unity3D Game Engine. It provides integration with the Baidu Apollo Platform \citep{rong2020lgsvl}. Besides, the Microsoft Airsim simulator provides virtual environments for both autonomous driving and drone simulation \citep{airsim2017fsr}.
 
 \begin{figure}[H]
 \centering
-\begin{subfigure}[b]{0.485\textwidth}
+\begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_intro/airsim_car.jpg}
     \caption{Airsim for Autonomous Driving}
     \label{fig:airsim_car}
 \end{subfigure}
 \hfill
-\begin{subfigure}[b]{0.485\textwidth}
+\begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_intro/airsim_drone.jpg}
     \caption{Airsim for drones}
@@ -107,11 +109,7 @@ The LGSVL is another autonomous vehicle simulation platform based on the Unity3D
 \label{fig.airsim}
 \end{figure}
 
-Practical adversarial attacks are introduced in the following three chapters. In chapter \ref{chpt:classification}, we investigate distributed black-box attacks against image classification models. In chapter \ref{chpt:detection}, we achieve real-time white-box attacks against object detection models. In chapter \ref{chpt:tracking}, we intend to attack object tracking systems, and examine the effect of hardware acceleration on the robustness of deep learning models. 
-
-% Since end-to-end deep learning models are computationally expensive, pruning and quantization are commonly used techniques to make large models feasible for embedded systems, but theses techniques could render deep learning models more vulnerable.
-
-In chapter \ref{chpt:defence}, the interpretability of deep learning models and defense methods against adversarial attacks are explored to help robots embrace deep neural networks safely.
+Medical Applications. During the pandemic. The outbreak of pandemic at the end of 2019.
 
 % \clearpage
 
@@ -140,12 +138,14 @@ In chapter \ref{chpt:defence}, the interpretability of deep learning models and 
 
 % In chapter \ref{chpt:driving}, we provide more experiments of adversarial attacks against end-to-end models in autonomous driving systems.
 
+\clearpage
+
 \section{Adversarial Attacks}
 \label{sec:adv_attack}
 
 Existing adversarial attacks can be categorized into white-box, gray-box, and black-box attacks \citep{REN2020346}. In white-box attacks, the adversaries have full knowledge of the target model, including model architecture and parameters \citep{goodfellow2015explaining}. In gray-box attacks, the adversaries only have access to the structure of the target model. In black-box attacks, the adversaries can only gather information about the model through querying. In our research, we majorly focus on white-box and black-box attacks.
 
-Depending on the goal of the attack, adversarial attacks can be further categorized into three types, evasion, poisoning, and extraction attacks \citep{art2018}. Evasion attacks cause models to make incorrect predictions by adding perturbations to the input during inference. The poisoning attack injects malicious data into the training set. Lastly, the extraction attack steals or replicates models that are available to query. For autonomous systems, rather than trying to steal models or poison others' training data, we intend to design a system that is resistant to malicious perturbations in the input. Thus our research object coincides with evasion attacks.
+% Depending on the goal of the attack, adversarial attacks can be further categorized into three types, evasion, poisoning, and extraction attacks \citep{art2018}. Evasion attacks cause models to make incorrect predictions by adding perturbations to the input during inference. The poisoning attack injects malicious data into the training set. Lastly, the extraction attack steals or replicates models that are available to query. For autonomous systems, rather than trying to steal models or poison others' training data, we intend to design a system that is resistant to malicious perturbations in the input. Thus our research object coincides with evasion attacks.
 
 \subsection{White-Box Attacks}
 \label{sec:whitebox_attack}
@@ -171,11 +171,11 @@ $$ ||v||_p = (|v_1|^p + |v_2|^p + \dots + |v_d|^p)^{1/p} $$
 
 Where $p$ is a real number; $d$ is the dimension of the distance vector $v$. For instance, the $L_0$ distance corresponds to the number of pixels being modified in the perturbation. The $L_2$ distance measures the standard Euclidean distance between $x$ and $x'$. The $L_\infty$ distance measures the maximum element-wise difference between $x$ and $x'$.
 
-The Fast Gradient Sign Method (FGSM) \citep{goodfellow2015explaining} generates the adversarial input by:
+The \acrfull{fgsm} \citep{goodfellow2015explaining} generates the adversarial input by:
 
 $$ x' = x + \epsilon \cdot sign(\bigtriangledown_x J(\theta, x, y)) $$
 
-The Projected Gradient Descent (PGD) \citep{madry2017towards} method transforms the FGSM into a multi-step attack that takes only a small step at each iteration while keeping the perturbation in a $L_p$ ball:
+The \acrfull{pgd} \citep{madry2017towards} method transforms the \acrshort{fgsm} into a multi-step attack that takes only a small step at each iteration while keeping the perturbation in a $L_p$ ball:
 
 $$ x^{t+1} = proj_{L_p}(x^t + \alpha \cdot sign(\bigtriangledown_x J(\theta, x, y))) $$
 
@@ -198,11 +198,11 @@ The aforementioned methods intend to generate small perturbations to the entire 
 \label{fig.adv_patch}
 \end{figure}
 
-A variant of the Expectation over Transformation (EOT) framework \citep{athalye2018synthesizing} is used to obtain the trained patch. In particular, the patch is trained to optimize the objective function:
+% A variant of the Expectation over Transformation (EOT) framework \citep{athalye2018synthesizing} is used to obtain the trained patch. In particular, the patch is trained to optimize the objective function:
 
-$$\hat{p} = \arg \underset{p}{\max}\mathbf{E}_{x \sim X, t \sim T,l \sim L}[logPr(\hat{y}|A(p,x,l,t))]$$
+% $$\hat{p} = \arg \underset{p}{\max}\mathbf{E}_{x \sim X, t \sim T,l \sim L}[logPr(\hat{y}|A(p,x,l,t))]$$
 
-where $X$ is a training set of images, $T$ is a distribution over transformations of the patch, and $L$ is a distribution over locations in the image \citep{brown2018adversarial}.
+% where $X$ is a training set of images, $T$ is a distribution over transformations of the patch, and $L$ is a distribution over locations in the image \citep{brown2018adversarial}.
 
 To design a printable physical patch, Non-Printability Score (NPS) can be used for measuring the error between a printed pixel and its digital counterparts. Sum of NPSs of all pixels in an image can be used to measure the image printability \citep{wang2021daedalus}.
 
@@ -210,16 +210,16 @@ $$\hat{p} = \arg \underset{p}{\min}\mathbf{E}_{x \sim X}\mathbf{E}_\phi f_3(x, p
 
 where SNPS is the Sub-sampled Non-Printability Score of the poster $p$.
 
-In chapter \ref{chpt:driving}, we introduce real-time white-box attacks against autonomous driving systems that that generate unnoticeable full-image perturbation.
-
-In chapter \ref{chpt:detection}, we present real-time white-box attacks against object detection that generate noticeable adversarial patches.
-
 % \clearpage
 
 \subsection{Black-Box Attacks}
 \label{sec:blackbox_attack}
 
 White-box attacks that rely on gradients can generate adversarial inputs in real-time. However, gradients are not computed in real-world deep learning applications because those applications only perform the inference that does not require gradients. Without access to gradients, white-box attacks become infeasible in the real world.
+
+- Gradient Estimation
+
+- Local Search
 
 Without access to gradients, black-box attacks generate adversarial inputs via querying. The Zeroth Order Optimization (ZOO) Attack amends the C\&W white-box attacks to the black-box setting by modifying the loss function and computing an approximate gradient using a finite difference method \citep{Chen_2017}.
 
@@ -245,6 +245,8 @@ For image classification tasks, decision-based attacks only require access to th
 
 In chapter \ref{chpt:classification}, we present adversarial classification, a black-box attack against cloud services of image classification.
 
+\clearpage
+
 \section{Research Questions}
 \label{sec:research_question}
 
@@ -269,3 +271,13 @@ To achieve the research objectives set out in Section \ref{sec:research_question
     \item Chapter 5: Black-box attack
     \item Chapter 6: interpretation
 \end{enumerate}
+
+Practical adversarial attacks are introduced in the following three chapters. In chapter \ref{chpt:classification}, we investigate distributed black-box attacks against image classification models. In chapter \ref{chpt:detection}, we achieve real-time white-box attacks against object detection models. In chapter \ref{chpt:tracking}, we intend to attack object tracking systems, and examine the effect of hardware acceleration on the robustness of deep learning models. 
+
+% Since end-to-end deep learning models are computationally expensive, pruning and quantization are commonly used techniques to make large models feasible for embedded systems, but theses techniques could render deep learning models more vulnerable.
+
+In chapter \ref{chpt:defence}, the interpretability of deep learning models and defense methods against adversarial attacks are explored to help robots embrace deep neural networks safely.
+
+In chapter \ref{chpt:driving}, we introduce real-time white-box attacks against autonomous driving systems that that generate unnoticeable full-image perturbation.
+
+In chapter \ref{chpt:detection}, we present real-time white-box attacks against object detection that generate noticeable adversarial patches.
