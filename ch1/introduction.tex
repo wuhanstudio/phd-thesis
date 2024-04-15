@@ -1,13 +1,11 @@
 \chapter{Introduction}
 \label{chpt:intro}
 
-The burgeoning of deep learning models for computer vision, machine-learning cloud services, \acrfull{llm},  and etc empowers robots to have more interactions with humans, and other robots. 
+Due to its high accuracy, \acrfull{dnn} is widely adopted in image classification cloud services, object detection applications, \acrfull{llm}, etc. Meanwhile, as computational resources grow on edge devices, intelligent robots benefit from deep learning models to obtain a more comprehensive perception of the environment than traditional robots. However, deep learning models are vulnerable to adversarial attacks that can manipulate model outputs by adding carefully crafted small perturbations to model inputs.
+
+This chapter first introduces how deep learning models are employed in autonomous driving systems and clinical diagnosis applications. Then, we review existing adversarial attacks, including white-box attacks and black-box attacks. Lastly, we discuss unexplored research questions and summarize the structure of the thesis.
 
 % For instance, the Amazon Kiva Robot and Alibaba Quicktron Robot can help warehouse staffs find desired items by moving goods shelves. Each robot can perceive the surrounding environment to avoid collisions with other robots, and receive commands from warehouse staff via cloud servers. On the other hand, autonomous driving research teams from Waymo (formerly the Google self-driving car project), Tesla, etc intend to achieve autonomous navigation without human interference.
-
-However, deep learning models are vulnerable to adversarial attacks that fool deep learning models by adding small perturbations to model inputs.
-
-In this chapter, we first introduce deep learning applications in autonomous driving and medical research. Then, we discuss existing adversarial attacks, including white-box attacks and black-box attack. Lastly, we summarize existing research questions and the structure of the thesis.
 
 % On the other hand, the development of physics engines and realistic renderers makes it feasible to simulate complex robots in simulators. Reinforcement learning that learns from trial and error, can now be trained and verified in a virtual environment before deploying to the physical world.
 
@@ -55,31 +53,32 @@ In this chapter, we first introduce deep learning applications in autonomous dri
 % \label{fig.autonomous}
 % \end{figure}
 
-Autonomous driving systems are commonly divided into sub-tasks: localization, perception, prediction, planning, and control. The vehicle determines its position in the environment through localization. Perception enables vehicles to collect information and extract relevant knowledge from the environment. The task of prediction makes predictions of measurement, behavior, trajectory, etc. The planning task makes purposeful decisions to achieve the goal, and the control component executes the planned actions \citep{pendleton2017perception}. Recently, the end-to-end driving that maps inputs directly to steering commands started to rise as an alternative to modular systems.
+% As the research in deep neural networks advances, deep convolutional networks become feasible for automated driving tasks. Our research investigates the effect of adversarial attacks against deep learning models.
 
-Our research focuses on adversarial attacks against deep learning models for mobile robots perception, such as image classification, object detection and object tracking in autonomous driving. We also investigate possible vulnerabilities in deep reinforcement learning.
+Autonomous Driving is an example of successful deep-learning applications. Following the established divide-and-conquer engineering principle, autonomous driving systems are commonly designed as modular systems that divide the driving task into sub-tasks: localization, perception, prediction, planning, and control. 
 
+Through the localization module, the vehicle determines its position in the environment. The perception module enables vehicles to collect information and extract relevant knowledge from the environment. Then, the prediction module predicts future measurement, behavior, trajectory, etc. Lastly, the planning module makes purposeful decisions to achieve the goal, and the control module executes the planned actions \citep{pendleton2017perception}. Besides modular systems, end-to-end driving that maps inputs directly to steering commands has started to rise as an alternative to modular systems.
 
+It is risky to attack real-world autonomous driving systems. The development of physics engines and realistic renderers makes it feasible to test adversarial attacks in photo-realistic simulators.
+ 
 % \subsubsection{Deep Learning}
 % \label{sec:deep_robot}
 
-As the research in deep neural networks advances, deep convolutional networks become feasible for automated driving tasks. Our research investigates the effect of adversarial attacks against deep learning models. However, it is risky to perform attacks against real-world autonomous driving systems. Thus adversarial attacks are tested in various simulators.
-
-The Carla simulator is an open-source platform for autonomous driving simulation based on the Unreal Game Engine. It simulates various sensors such as depth camera, 3D lidar, radar. The Carla simulator provides flexible Python API to manipulate the virtual environments and supports Robot Operating System (ROS) integration as well \citep{Dosovitskiy17}.
+The CARLA simulator is an open-source platform for autonomous driving simulation based on the Unreal Game Engine (see Fig. \ref{fig:carla_intro}). It simulates various sensors such as depth camera, 3D lidar, and radar. Besides, the Carla simulator provides flexible Python API to interact with the virtual environments and supports \acrfull{ros} integration \citep{Dosovitskiy17}.
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_intro/carla.jpg}
-    \caption{Carla}
+    \caption{CARLA Simulator \citep{Dosovitskiy17}}
     \label{fig:carla_intro}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_intro/lgsvl.png}
-    \caption{LGSVL}
+    \caption{LGSVL Simulator\citep{rong2020lgsvl}}
     \label{fig:lvsvl}
 \end{subfigure}
 \hfill
@@ -87,29 +86,29 @@ The Carla simulator is an open-source platform for autonomous driving simulation
 \label{fig.simulator}
 \end{figure}
 
-The LGSVL is another autonomous vehicle simulation platform based on the Unity3D Game Engine. It provides integration with the Baidu Apollo Platform \citep{rong2020lgsvl}. Besides, the Microsoft Airsim simulator provides virtual environments for both autonomous driving and drone simulation \citep{airsim2017fsr}.
+The LGSVL is another autonomous vehicle simulation platform based on the Unity3D Game Engine (see Fig.\ref{fig:lvsvl}). It provides integration with the Baidu Apollo Platform \citep{rong2020lgsvl}. Both the CARLA simulator and LGSVL simulator focus on autonomous driving simulation. On the other hand, the Microsoft Airsim simulator provides virtual environments for both autonomous driving and drone simulation \citep{airsim2017fsr} (see Fig. \ref{fig.airsim}).
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_intro/airsim_car.jpg}
-    \caption{Airsim for Autonomous Driving}
+    \caption{Airsim for Autonomous Vehicles}
     \label{fig:airsim_car}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_intro/airsim_drone.jpg}
-    \caption{Airsim for drones}
+    \caption{Airsim for Drones}
     \label{fig:airsim_drone}
 \end{subfigure}
 \hfill
-\caption{Microsoft Airsim Simulator}
+\caption{Microsoft Airsim Simulator \citep{airsim2017fsr}}
 \label{fig.airsim}
 \end{figure}
 
-Medical Applications. During the pandemic. The outbreak of pandemic at the end of 2019.
+Besides autonomous driving, deep learning models are also widely used in medical applications, especially during the COVID-19 pandemic. With the rapid transmission of COVID-19, the demand for medical supplies goes beyond hospitals' capacity in many countries. Various diagnostic and predictive models are employed to release the pressure on healthcare workers.
 
 % \clearpage
 
@@ -138,65 +137,107 @@ Medical Applications. During the pandemic. The outbreak of pandemic at the end o
 
 % In chapter \ref{chpt:driving}, we provide more experiments of adversarial attacks against end-to-end models in autonomous driving systems.
 
-\clearpage
+Unfortunately, both modular systems and end-to-end driving models are vulnerable to adversarial attacks. The trustworthiness of deep learning models for medical diagnoses is also challenged.
+
+% \clearpage
 
 \section{Adversarial Attacks}
 \label{sec:adv_attack}
 
-Existing adversarial attacks can be categorized into white-box, gray-box, and black-box attacks \citep{REN2020346}. In white-box attacks, the adversaries have full knowledge of the target model, including model architecture and parameters \citep{goodfellow2015explaining}. In gray-box attacks, the adversaries only have access to the structure of the target model. In black-box attacks, the adversaries can only gather information about the model through querying. In our research, we majorly focus on white-box and black-box attacks.
+The existence of adversarial examples was first identified by Biggio et al. \citep{biggio2013evasion}, and Szegedy et al. \citep{szegedy2013intriguing}, in which they fooled a classification model by adding a small perturbation to the input image. Existing adversarial attacks can be categorized into white-box, gray-box, and black-box attacks. 
+
+In white-box attacks, the adversaries have full knowledge of the target model, including the model architecture and parameters. In gray-box attacks, the adversaries only have limited access to the training set, model structure, model parameters, and model outputs. In black-box attacks, the adversaries can only gather information about the target model through querying \citep{REN2020346}. This thesis focuses on white-box and black-box attacks because the boundary between gray-box and black-box attacks is unclear. For instance, gray-box attacks with no access to predicted probabilities are also known as label-only black-box attacks.
 
 % Depending on the goal of the attack, adversarial attacks can be further categorized into three types, evasion, poisoning, and extraction attacks \citep{art2018}. Evasion attacks cause models to make incorrect predictions by adding perturbations to the input during inference. The poisoning attack injects malicious data into the training set. Lastly, the extraction attack steals or replicates models that are available to query. For autonomous systems, rather than trying to steal models or poison others' training data, we intend to design a system that is resistant to malicious perturbations in the input. Thus our research object coincides with evasion attacks.
 
 \subsection{White-Box Attacks}
 \label{sec:whitebox_attack}
 
-Deep learning models are trained by minimizing the loss function via updating weights according to gradients, while white-box attacks maximize the loss function by adding noises to the input.
+White-box attacks rely on gradients to fool deep-learning models. Different attack methods use different loss functions to compute the gradient, thus achieving different attack objectives. The strategy of updating and applying the perturbation also varies. Next, we use image classification models as target models to illustrate the general idea of white-box adversarial attacks (see Fig. \ref{fig.adv_perturb}).
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.5]{figures/chapter_intro/fgsm.jpg}
-\caption{Unperceivable perturbations on the full image}
+\includegraphics[width=0.95\textwidth]{figures/chapter_intro/fgsm.jpg}
+\caption{The \acrfull{fgsm}\citep{goodfellow2015explaining} is the first gradient-based white-box attack.}
 \label{fig.adv_perturb}
 \end{figure}
 
-White-box attacks rely on gradients to fool deep learning models. Difference attack methods use different strategies to update the input using gradients. We can either generate human-unperceivable perturbations on the full image or a human-perceivable patch on a part of the image.
+\subsubsection{Problem Definition}
 
-Most existing research on adversarial attacks choose a classification model as the target. A neural network is denoted as $f(\cdot)$ with input $x$ and prediction $f(x)$. The corresponding optimization loss is denoted by $J(\theta, x, y)$, where $\theta$ represents the model weights. An adversarial input $x'$ is close to the original input $x$ under a specific distance metric while $f(x') \neq f(x)$ \citep{REN2020346}. Formally, an adversarial sample of  is defined as follows:
+Taking image classification models as an example, the deep learning model is denoted as $f(\cdot)$ with input $x$ and prediction $f(x, \theta)$, where $\theta$ is the model weights. The corresponding optimization loss is denoted by $\mathcal{L}(f(x, \theta), y^*)$, where $y^*$ is the ground truth. An adversarial input $x'$ is close to the original input $x$ under a specific distance metric while $f(x', \theta) \neq f(x, \theta)$. Formally, an adversarial example is defined as follows:
 
-$$x': D(x, x') < \eta, f(x') \neq y $$
+\begin{equation}
+x^{'}: ||x - x^{'}|| < \eta, f(x', \theta) \neq f(x, \theta)
+\end{equation}
 
-Where $D(\cdot, \cdot)$ is the distance metric and $ \eta $ is a predefined distance constraint that defines the maximum allowed perturbation. The most commonly used distance metric is the $L_p$ distance metric. The distance between $x$ and $x'$ is denoted as $||x-x'||_{p}$, where $||\cdot||_p$ is defined as follows:
+where $ \eta $ is a predefined distance constraint on the maximum allowed perturbation. The most commonly used distance metric is the $L_p$ distance metric. The distance between $x$ and $x'$ is denoted as $||x-x'||_{p}$, where $||\cdot||_p$ is defined as follows:
 
-$$ ||v||_p = (|v_1|^p + |v_2|^p + \dots + |v_d|^p)^{1/p} $$
+\begin{equation}
+ ||\textbf{v}||_p = (|v_1|^p + |v_2|^p + \dots + |v_d|^p)^{1/p}
+\end{equation}
+where $p$ is a real number and $d$ is the dimension of the vector $\textbf{v}$. For instance, the $L_0$ distance corresponds to the number of pixels being modified in the perturbation. The $L_2$ distance measures the standard Euclidean distance between $x$ and $x'$, and the $L_\infty$ distance measures the maximum element-wise difference between $x$ and $x'$.
 
-Where $p$ is a real number; $d$ is the dimension of the distance vector $v$. For instance, the $L_0$ distance corresponds to the number of pixels being modified in the perturbation. The $L_2$ distance measures the standard Euclidean distance between $x$ and $x'$. The $L_\infty$ distance measures the maximum element-wise difference between $x$ and $x'$.
+With full access to model structure and parameters, white-box attacks \textbf{maximize} the loss function  $\mathcal{L}(f(x, \theta), y^*)$ by adding noises to \textbf{ model inputs} $x$, while deep learning models are trained by \textbf{minimizing} the loss function  $\mathcal{L}(f(x, \theta), y^*)$ via updating \textbf{model weights} $\theta$.
 
-The \acrfull{fgsm} \citep{goodfellow2015explaining} generates the adversarial input by:
+\subsubsection{Adversarial Perturbation}
 
-$$ x' = x + \epsilon \cdot sign(\bigtriangledown_x J(\theta, x, y)) $$
+The first gradient based white-box attack is the \acrfull{fgsm} \citep{goodfellow2015explaining} that generates the adversarial input using:
 
-The \acrfull{pgd} \citep{madry2017towards} method transforms the \acrshort{fgsm} into a multi-step attack that takes only a small step at each iteration while keeping the perturbation in a $L_p$ ball:
+\begin{equation}
+x' = x + \eta \cdot \text{sign}(\ \bigtriangledown_x \mathcal{L}(f(x, \theta), y^*)\ )    
+\end{equation} 
 
-$$ x^{t+1} = proj_{L_p}(x^t + \alpha \cdot sign(\bigtriangledown_x J(\theta, x, y))) $$
+where $\text{sign}(\cdot$) calculates the element-wise sign of a given matrix and $\bigtriangledown_x \mathcal{L}(f(x, \theta), y^*)$ is the gradient of the input $x$ with respect to the loss $\mathcal{L}(f(x, \theta), y^*)$.
 
-The Deep Fool \citep{moosavidezfooli2016deepfool} adds the norm of the gradient difference while iterating over each class:
+The \acrshort{fgsm} generates the adversarial example in one step, while the \acrfull{pgd} \citep{madry2017towards} transforms the \acrshort{fgsm} attack into a multi-step attack that updates the perturbation at each iteration while keeping the overall perturbation $x^{'}$ in a $L_p$ ball using the projection function $\texttt{proj}_{p}(\cdot)$:
 
-$$ x^{t+1} = x^t + \frac{|f'_{\hat{l}}|}{||\omega'||^2_2} sign(\omega'_{\hat{l}})$$
+\begin{equation}
+x'_{t+1} = \text{proj}_{p}(x'_t + \eta \cdot \text{sign}(\ \bigtriangledown_x \mathcal{L}(f(x, \theta), y^*)\ ))
+\end{equation}
 
-If we further project the perturbation to $L_p$ ball of radius $\xi$ and centered at 0, we have the Universal Adversarial Perturbation \citep{moosavidezfooli2017universal}:
+% \clearpage
 
-$$\mathcal{P}_{p, \xi}(v) = \arg\ \underset{v'}{\min}||v-v'||_2\ subject\ to\ ||v'||_p\leq\xi$$
+\subsubsection{\acrfull{uap}}
 
-% C\&W JSMA
+The multi-step \acrshort{pgd} attack is further improved by the Deep Fool attack \citep{moosavidezfooli2016deepfool} that adds the norm of the gradient difference while iterating over each class $k$ at each step $t$:
 
-The aforementioned methods intend to generate small perturbations to the entire image while keeping the perturbation small enough to be unnoticeable by human eyes. Under certain scenarios, if we opt for more effective but noticeable perturbation, we can generate an adversarial patch.
+\begin{equation}
+x'_{t+1} = x'_t + \frac{|f_k(x^{'}_{t}, \theta) - f_{k^{*}}(x^{'}_{t}, \theta)|}{||\omega'_{\hat{k}}||^2_2} \text{sign}(\omega'_{\hat{k}})
+\end{equation}
+
+where the $k^*$ is the ground truth class label and $x_0$ is the original input image without adversarial perturbations. $\omega'_k$ is the gradient difference between the gradient calculated using the original image and the adversarial image:  $\omega'_k = \bigtriangledown_x \mathcal{L}(f(x', \theta), y^*) - \bigtriangledown_x \mathcal{L}(f(x_0, \theta), y^*)$.
+
+\textbf{From image-specific attack to image-agnostic attack:} So far, we have only introduced image-specific attacks that generate adversarial perturbation for each input image. As image-specific attacks become more and more effective while keeping human-unperceivable, another research question arises: can we produce an image-agnostic perturbation that can attack all images in a dataset?
+
+Based on the Deep Fool attack, Moosavi-dezfooli et al. generate \acrshort{uap}s, represented with $\textbf{v}$, by further projecting the overall perturbation to $L_p$ ball of radius $\epsilon$ and centered at 0 after iterating over each class $k$ \citep{moosavidezfooli2017universal}:
+
+\begin{equation}
+\text{proj}_p(\textbf{v}, \epsilon)= \arg\ \underset{\textbf{v}_{t+1}}{\min}||\textbf{v}_{t+1} - \textbf{v}_{t}||_2 \quad \text{subject to}\ ||\textbf{v}_{t+1}||_p\leq\epsilon
+\end{equation}
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.5]{figures/chapter_intro/adv_patch.jpg}
-\caption{Perceivable perturbations as a patch}
-\label{fig.adv_patch}
+\includegraphics[width=0.9\textwidth]{figures/chapter_intro/uap.png}
+\caption{The \acrfull{uap} attacks different images using the same perturbation.}
+\label{fig.uap}
 \end{figure}
+
+% \clearpage
+
+\subsubsection{Adversarial Patch (Digital)}
+
+As illustrated in previous sections, adding a small and intentional drift to the input distribution, also known as adversarial perturbations, can substantially decrease the deep neural network's performance. However, the effectiveness of the adversarial perturbation is limited by the maximum allowed perturbation. What if the adversaries prioritize the attack success rate over imperceptibility, which means we can remove the constraint of imperceptibility?
+
+Other than applying a small adversarial perturbation to the entire image, we can also add a human-noticeable patch to a small region of the input image to opt for a more effective (see Fig. \ref{fig:digital_patch}). Besides, the effectiveness of adversarial patches should be position invariant. Digital patches can fool the model without overlapping with target objects \citep{saha2019adversarial}.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/chapter_intro/digital_patch.jpg}
+\caption{The digital patch attacks the image by modifying pixel values.}
+\label{fig.digital_patch}
+\end{figure}
+
 
 % A variant of the Expectation over Transformation (EOT) framework \citep{athalye2018synthesizing} is used to obtain the trained patch. In particular, the patch is trained to optimize the objective function:
 
@@ -204,11 +245,52 @@ The aforementioned methods intend to generate small perturbations to the entire 
 
 % where $X$ is a training set of images, $T$ is a distribution over transformations of the patch, and $L$ is a distribution over locations in the image \citep{brown2018adversarial}.
 
-To design a printable physical patch, Non-Printability Score (NPS) can be used for measuring the error between a printed pixel and its digital counterparts. Sum of NPSs of all pixels in an image can be used to measure the image printability \citep{wang2021daedalus}.
+% \clearpage
 
-$$\hat{p} = \arg \underset{p}{\min}\mathbf{E}_{x \sim X}\mathbf{E}_\phi f_3(x, p, \Phi) + SNPS(p, \beta)$$
+\subsubsection{Adversarial Patch (Physical)}
 
-where SNPS is the Sub-sampled Non-Printability Score of the poster $p$.
+Digital patches apply adversarial perturbations by directly modifying image pixel values. In 2017, Brown et al. brought adversarial examples to the physical world by printing human-noticeable patches on stickers \citep{brown2017adversarial}, posing threats against real-world applications (see Fig. \ref{fig.physical_patch}). The physical patch is trained using 10,000 images from the training set, applying a random translation, scaling, and rotation on the patch in each image.
+
+Later, research interests gradually shifted from digital attacks to physical attacks. In 2019, the digital DPatch \citep{liu2018dpatch} was extended to the physical world \citep{lee2019physical} by adding expectation over transformations.
+
+\begin{equation}
+\hat{p} = \arg \underset{p}{\max}\mathbf{E}_{x \sim X, t \sim T}\ \mathcal{L}[f(A(x', p, t), \theta), y^*]
+\end{equation}
+
+where $A(\cdot)$ is a “patch application function” that transforms the patch
+$p$ with the transformation $t$ sampled from a series of transformations $T$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/chapter_intro/adv_patch.png}
+\caption{Physical Patch: the adversarial patch is printed and placed on the table \citep{brown2017adversarial}.}
+\label{fig.physical_patch}
+\end{figure}
+
+The physical patch can be further improved by adding the \acrfull{nps} as extra constraints to the optimization loss function:
+
+\begin{equation}
+\hat{p} = \arg \underset{p}{\max}\mathbf{E}_{x \sim X, t \sim T}\ \mathcal{L}[f(A(x', p, t), \theta), y^*] + SNPS(p, \beta)
+\end{equation}
+
+where $\beta$ is the sampling rate and the \acrfull{snps} is used to measure the image printability, or in other words, the error between a printed pixel and its digital counterparts \citep{wang2021daedalus}. However, some research generates asterisk and grid-shaped patches \citep{wu2020dpattack} or small patches \citep{huang2021rpattack} to reduce the number of perturbed pixels, making it infeasible to be printed out on physical objects.
+
+The reason that physical patches are visually perceptible by human eyes is that they must be able to be captured by sensors (e.g. cameras). As a result, physical attacks require a substantial intensity of perturbations. In a survey on physical attacks, Wei et al. categorized adversarial patches into meaningful patches and meaningless patches that do not correspond to real-world objects \citep{wei2023visually}. For example, Chindaudom et al. produce meaningful patches by combining patches with QR Codes \citep{chindaudom2020adversarialqr, chindaudom2022surreptitious}. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/chapter_intro/physical_patch.png}
+\caption{The physical patch can either be attached on the target object or does not overlap with target objects.}
+\label{fig.physical_patch_overlap}
+\end{figure}
+
+Physical patches pose great threats against autonomous driving vehicles because they are invariant to input images and thus can inherently achieve real-time attacks \citep{threet2021physical}. For instance, prior research generates stop signs that cannot be recognized by object detection models \citep{song2018physical} \citep{chen2019shapeshifter}, and adversarial posters to vanish pedestrian \citep{thys2019fooling, wang2021towards}. Besides, physical patches do not necessarily need to overlap with target objects (see Fig. \ref{fig.physical_patch_overlap}).
+
+Though most patches are static, Hoory et al. generate and display dynamic patches on a monitor attached to a vehicle \citep{hoory2020dynamic}. However, physical patches can only attack object detection models when the camera is close enough \citep{wang2021daedalus, lu2021scale}.
+
+On the other hand, though most physical attacks are visually perceptible by human eyes, some optical attacks can only be captured by sensors (e.g., rolling shutter attacks) but not by human eyes. Li et al. summarized optical adversarial attacks, including attacks that use high-frequency light, laser, and projector in \citep{li2022survey}.
+
+% Our research will focus on adversarial patches that are noticeable by human eyes. In \cite{sharma2022adversarial}, Sharma et al. surveyed adversarial patch attacks in vision-based tasks that involve three mainstream models: classification, detection, and re-identification \cite{wei2022physical}, and we will focus on adversarial attacks against object detection models.
 
 % \clearpage
 
@@ -216,23 +298,6 @@ where SNPS is the Sub-sampled Non-Printability Score of the poster $p$.
 \label{sec:blackbox_attack}
 
 White-box attacks that rely on gradients can generate adversarial inputs in real-time. However, gradients are not computed in real-world deep learning applications because those applications only perform the inference that does not require gradients. Without access to gradients, white-box attacks become infeasible in the real world.
-
-- Gradient Estimation
-
-- Local Search
-
-Without access to gradients, black-box attacks generate adversarial inputs via querying. The Zeroth Order Optimization (ZOO) Attack amends the C\&W white-box attacks to the black-box setting by modifying the loss function and computing an approximate gradient using a finite difference method \citep{Chen_2017}.
-
-$$f(x,t) = \max \{ {\underset{i \neq t}{\max}\ log[F(x)]_i - log[F(x)]_t, -\kappa } \}$$
-
-The ZOO Attack relies on the output of confidence scores to estimate the gradient, while decision-based attacks can generate adversarial inputs using even less information.
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.45]{figures/chapter_intro/query-efficient.jpg}
-\caption{Decision-based adversarial attacks \citep{brendel2018decisionbased}}
-\label{fig.query}
-\end{figure}
 
 For image classification tasks, decision-based attacks only require access to the predicted class, while score-based attacks require the predicted probability of each class.
 
@@ -243,7 +308,20 @@ For image classification tasks, decision-based attacks only require access to th
 \label{fig.decision}
 \end{figure}
 
-In chapter \ref{chpt:classification}, we present adversarial classification, a black-box attack against cloud services of image classification.
+\subsubsection{Problem Definition}
+
+\subsubsection{Gradient Estimation}
+
+\subsubsection{Local Search}
+
+Without access to gradients, black-box attacks generate adversarial inputs via querying. The Zeroth Order Optimization (ZOO) Attack amends the C\&W white-box attacks to the black-box setting by modifying the loss function and computing an approximate gradient using a finite difference method \citep{Chen_2017}.
+
+\begin{equation}
+f(x,t) = \max \{ {\underset{i \neq t}{\max}\ log[F(x)]_i - log[F(x)]_t, -\kappa } \}
+\end{equation}
+
+The ZOO Attack relies on the output of confidence scores to estimate the gradient, while decision-based attacks can generate adversarial inputs using even less information.
+
 
 \clearpage
 
@@ -264,6 +342,8 @@ How can we benefit from interpretation methods?
 
 To achieve the research objectives set out in Section \ref{sec:research_question}, the remaining of the thesis organized as follows:
 
+% This thesis presents adversarial attacks against mobile robot perception models, such as image classification, object detection, and object tracking. 
+
 \begin{enumerate}
     \item Chapter 2: Real-time adversarial attacks
     \item Chapter 3: Practical hardware attack
@@ -276,8 +356,10 @@ Practical adversarial attacks are introduced in the following three chapters. In
 
 % Since end-to-end deep learning models are computationally expensive, pruning and quantization are commonly used techniques to make large models feasible for embedded systems, but theses techniques could render deep learning models more vulnerable.
 
-In chapter \ref{chpt:defence}, the interpretability of deep learning models and defense methods against adversarial attacks are explored to help robots embrace deep neural networks safely.
-
 In chapter \ref{chpt:driving}, we introduce real-time white-box attacks against autonomous driving systems that that generate unnoticeable full-image perturbation.
 
 In chapter \ref{chpt:detection}, we present real-time white-box attacks against object detection that generate noticeable adversarial patches.
+
+In chapter \ref{chpt:classification}, we present adversarial classification, a black-box attack against cloud services of image classification.
+
+In chapter \ref{chpt:defence}, the interpretability of deep learning models and defense methods against adversarial attacks are explored to help robots embrace deep neural networks safely.

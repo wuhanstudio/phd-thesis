@@ -104,6 +104,14 @@
 
 % \usepackage[style=numeric, defernumbers=true]{biblatex}
 
+\usepackage{afterpage}
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
+
 %%%%%%% UNIVERSITY GUIDELINES
 % PAPER: International A4 (210mm x 297mm) or US Letter size
 % (216mm x 279mm) within range 70 g/m2 to 100 g/m2. No
@@ -323,23 +331,33 @@
 
 \pagenumbering{roman} % start with roman numbering
 
+\afterpage{\blankpage}
+
 %% Acknowledgements.
 \phantomsection
 \addcontentsline{toc}{chapter}{Acknowledgements}
 \include{ch0/acknowledgements}
+
+\afterpage{\blankpage}
 
 % List of Publications
 \phantomsection
 \addcontentsline{toc}{chapter}{List of Publications}
 \include{ch0/publication}
 
+\afterpage{\blankpage}
+
 % ABSTRACT
 \phantomsection
 \addcontentsline{toc}{chapter}{Abstract}
 \include{ch0/abstract}
 
+\afterpage{\blankpage}
+
 %% TABLES OF CONTENTS / FIGURES / TABLES
 \tableofcontents
+
+\afterpage{\blankpage}
 
 \listoffigures
 % \addcontentsline{toc}{chapter}{List of Figures}
@@ -350,8 +368,12 @@
 \listofalgorithms
 % \addcontentsline{toc}{chapter}{List of Algorithms}
 
+\afterpage{\blankpage}
+
 \printglossary[type=\acronymtype, title=List of Abbreviations, toctitle=List of Abbreviations]
 % \addcontentsline{toc}{chapter}{List of Abbreviations}
+
+\afterpage{\blankpage}
 
 % \addtocontents{loa}{\def\string\figurename{Algorithm}}
 

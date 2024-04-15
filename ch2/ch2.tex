@@ -17,7 +17,7 @@ Autonomous driving is one of the most challenging tasks in safety-critical robot
 
 \begin{figure}[tbp]
     \centering
-    \includegraphics[width=0.76 \textwidth]{figures/chapter_driving/overview.png}
+    \includegraphics[width=\textwidth]{figures/chapter_driving/overview.png}
     \caption{Adversarial Driving: The behavior of and end-to-end autonomous driving model can be manipulated by adding unperceivable perturbations to the input image.}
     \label{fig:adv_drv}
 \end{figure} 
@@ -207,7 +207,7 @@ As an example, assume that the attacker wishes to attack the vehicle to the righ
 
 \begin{figure*}[b]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/chapter_driving/architechture.jpg}
+    \includegraphics[width=\textwidth]{figures/chapter_driving/architechture.jpg}
     \caption{The architecture of the Adversarial Driving System. We tested our attacks in three environments: the Udacity Simulator, the ROS Gazebo Simulator, and a real Turtlebot 3.}
     \label{fig:arch}
 \end{figure*}
@@ -299,17 +299,17 @@ To begin with, we demonstrate that applying random noise to the end-to-end drivi
 
 \begin{figure}[tbph]
     \centering
-    \begin{subfigure}[b]{0.8\textwidth}
+    \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/chapter_driving/left.png}
         \caption{The image-specific left attack decreases the steering angle.\label{fig:image-specific-left-attack}}
     \end{subfigure}
-    \begin{subfigure}[b]{0.8\textwidth}
+    \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/chapter_driving/random.png}
         \caption{The random noise perturbation barely deviates $y_{adv}$ from $y_{true}$.}
     \end{subfigure}
-    \begin{subfigure}[b]{0.8\textwidth}
+    \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/chapter_driving/right.png}
         \caption{The image-specific right attack increases the steering angle.\label{fig:image-specific-right-attack}}
@@ -376,13 +376,13 @@ The results are shown in Table \ref{tab:image-agnostic}. Though the image-agnost
 \begin{figure}[t]
     \centering
 
-    \begin{subfigure}[b]{0.8\textwidth}
+    \begin{subfigure}[b]{\textwidth}
         \includegraphics[width=\textwidth]{figures/chapter_driving/alpha.png}
         \caption{Different $\alpha$ with fixed $\epsilon=1, \xi=4$.}
         \label{fig:random}
     \end{subfigure}
 
-    \begin{subfigure}[b]{0.8\textwidth}
+    \begin{subfigure}[b]{\textwidth}
         \includegraphics[width=\textwidth]{figures/chapter_driving/xi.png}
         \caption{Different $\xi$ with fixed $\alpha=0.002$}
         \label{fig:left}
