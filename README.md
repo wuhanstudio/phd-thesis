@@ -5,8 +5,10 @@
 Based on [George's template](https://github.com/georgedeath/University_of_Exeter_Thesis_Template), I added the university logo and header.
 
 ```
-$ sudo apt install texlive-base texlive-fonts-extra texlive-latex-extra texlive-bibtex-extra texlive-science
+$ sudo apt install texlive-base
+$ tlmgr install scheme-full
 $ tlmgr install cm-super
+$ tlmgr path add
 
 > pdflatex Thesis.tex
 > biber Thesis
