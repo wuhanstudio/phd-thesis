@@ -7,7 +7,6 @@ Based on [George's template](https://github.com/georgedeath/University_of_Exeter
 ```
 $ sudo apt install texlive-base
 $ tlmgr install scheme-full
-$ tlmgr install cm-super
 $ tlmgr path add
 
 > pdflatex Thesis.tex
