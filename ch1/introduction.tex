@@ -162,7 +162,7 @@ White-box attacks rely on gradients to fool deep-learning models. Different atta
 \label{fig.adv_perturb}
 \end{figure}
 
-\subsubsection{Problem Definition}
+\subsubsection{Problem Formulation}
 
 Taking image classification models as an example, the deep learning model is denoted as $f(\cdot)$ with input $x$ and prediction $f(x, \theta)$, where $\theta$ is the model weights. The corresponding optimization loss is denoted by $\mathcal{L}(f(x, \theta), y^*)$, where $y^*$ is the ground truth. An adversarial input $x'$ is close to the original input $x$ under a specific distance metric while $f(x', \theta) \neq f(x, \theta)$. Formally, an adversarial example is defined as follows:
 
@@ -297,69 +297,122 @@ On the other hand, though most physical attacks are visually perceptible by huma
 \subsection{Black-Box Attacks}
 \label{sec:blackbox_attack}
 
-White-box attacks that rely on gradients can generate adversarial inputs in real-time. However, gradients are not computed in real-world deep learning applications because those applications only perform the inference that does not require gradients. Without access to gradients, white-box attacks become infeasible in the real world.
+White-box attacks that rely on gradients can generate adversarial examples efficiently. However, gradients are not available for real-world deep learning applications because gradients are essential only for training but not for inference. Real-world applications that only perform the inference do not compute gradients. 
 
-For image classification tasks, decision-based attacks only require access to the predicted class, while score-based attacks require the predicted probability of each class.
+Without access to gradients, white-box attacks become infeasible in the real world. As a result, black-box attacks become promising for attacks against deep learning cloud services.
+
+
+\subsubsection{Problem Formulation}
+
+Taking black-box attacks against image classification models as an example, the adversary has no access to the model structure and model weights and can only generate adversarial perturbations via sending queries to the model (see Fig. \ref{fig.decision}).
+ 
+Given an input image $x$ and the true label $x$, the objective of the adversary is to fool a black-box image classifier $f(x)$ by adding a small perturbation $\delta$ to the original image, and generate an adversarial image $x^{'} = x + \delta$, such that $f(x^{'}) \neq f(x)$. Typically, the perturbation $\delta$ is bounded in the $l_2$ or $l_{\infty}$ norm by some user-defined constant.
+
+Decision-based black-box attacks only require access to the predicted class (hard label), while score-based attacks also require the probability of each predicted class (soft label).  Next, we introduce the two most popular strategies of black-box attacks: gradient estimation and local search.
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.35]{figures/chapter_intro/score-decision.jpg}
-\caption{The difference between score-based and decision-based attacks \citep{chen2020hopskipjumpattack}}
+\includegraphics[width=\textwidth]{figures/chapter_intro/black-box.jpg}
+\caption{The Black-Box Adversarial Attack.}
 \label{fig.decision}
 \end{figure}
 
-\subsubsection{Problem Definition}
+\clearpage
 
 \subsubsection{Gradient Estimation}
 
-\subsubsection{Local Search}
-
-Without access to gradients, black-box attacks generate adversarial inputs via querying. The Zeroth Order Optimization (ZOO) Attack amends the C\&W white-box attacks to the black-box setting by modifying the loss function and computing an approximate gradient using a finite difference method \citep{Chen_2017}.
+Intuitively, if we can estimate gradients using black-box optimization techniques, we can exploit existing white-box attacks to generate adversarial examples. For instance, the \acrfull{zoo} Attack amends the C\&W white-box attacks to the black-box setting by modifying the loss function and computing an approximate gradient using a finite difference method \citep{Chen_2017}. The original C\&W attack generates adversarial examples $x'$ by solving the optimization problem:
 
 \begin{equation}
-f(x,t) = \max \{ {\underset{i \neq t}{\max}\ log[F(x)]_i - log[F(x)]_t, -\kappa } \}
+    \text{minimize}\ ||x'-x||^2_2 + c \cdot F(x', t)
 \end{equation}
 
-The ZOO Attack relies on the output of confidence scores to estimate the gradient, while decision-based attacks can generate adversarial inputs using even less information.
+where $F(x', t)$ is the regularization function and $c>0$ is a regularization parameter. The target class is represented with $t$.
 
+To solve the above optimization problem, we need access to gradients of the regularization function with respect to the input $\bigtriangledown_{x^{'}} F(x^{'}, t)$, which is not available under black-box settings. Thus, the \acrshort{zoo} attack estimates the gradient using a finite difference method rather than backpropagation:
+
+\begin{equation}
+    \frac{\partial F(x)}{\partial x} \approx \frac{F(x+he_i) - F(x-he_i)}{2h}
+\end{equation}
+
+% \begin{equation}
+%     \frac{\partial^2 F(x)}{\partial x^2} \approx \frac{F(x+he_i) - 2F(x) + F(x-he_i)}{h^2}
+% \end{equation}
+
+where $h$ is a small step size (e.g. $h = 0.0001$), and $e_i$ is a standard basis vector with only the i-th component being 1.
+
+Following research tries to improve the sample efficiency by using Natural gradient estimation more efficient sampling.
+
+% \begin{equation}
+% f(x,t) = \max \{ {\underset{i \neq t}{\max}\ log[F(x)]_i - log[F(x)]_t, -\kappa } \}
+% \end{equation}
+
+% The ZOO Attack relies on the output of confidence scores to estimate the gradient, while decision-based attacks can generate adversarial inputs using even less information.
+
+\subsubsection{Local Search}
+
+On the other hand, local search is another popular black-box optimization. The task of generating adversarial inputs can be approached as a problem of selecting what pixels to attack. Thus, we can use existing
+local search methods to search for combinations of pixels to be perturbed. 
 
 \clearpage
+
+Besides gradient estimation and local search, we can also achieve black-box attacks using surrogate model. To train a suggrogate model as the victim using query. but it requires significan amounts of queries and thus is less popular.
+
+Hi
+
+However, we notice some common mistakes in prior research. thereby avoiding mistakes made in prior research that obtained unfair advantages by applying the perturbation before image encoding and pre-processing. We introduce common mistakes and how to accelerate black-box attacks in Chapter \ref{chpt:classification}.
 
 \section{Research Questions}
 \label{sec:research_question}
 
-Can we achieve real-time adversarial attacks?
+Despite rapid progress in generating adversarial examples, there are many important questions arising for practical adversarial attacks.
 
-Hardware attack?
+\vspace{0.5cm}
 
-Versus traditional methods Kalman filter?
+\textbf{Can we achieve real-time online adversarial attacks?}
 
-Is black-box attack practical?
+Much of the current research in adversarial attacks focuses on offline attacks that utilize both input images $x$ and corresponding ground truths $y^*$ to maximize the adversarial loss $\mathcal{L}(f(x, \theta), y^*)$. However, the human-labeled ground truth $y^*$ is unavailable for real-time online attacks. For example, to attack an object detection model deployed on an autonomous driving vehicle, it is impossible to have humans mark the bounding boxes in real time. Can we generate adversarial perturbations without access to the ground truth?
 
-How can we benefit from interpretation methods?
+\vspace{0.5cm}
+
+\textbf{Human-in-the-Middle: Hardware attack?}
+
+Access to the operating system is essential in order to inject adversarial perturbations into input images. However, the operating system (Unix/Linux) where the deep learning model is deployed is highly secure as research in cyber security advances. Although the operating system is highly secure, the sensors that collect the data are exposed directly to the environment to collect the data. Can we exploit the sensor to bypass the operating system?
+
+\vspace{0.5cm}
+
+\textbf{Adversarial Tracking: Versus traditional methods Kalman filter?}
+
+Although deep neural networks are vulnerable to adversarial attacks, traditional algorithms such as the Kalman Filter and the Hungarian algorithm are not. In real-world robotic applications, deep learning models are deployed in combination with traditional algorithms that do not use deep neural networks. Are adversarial attacks still effective under these settings?
+
+\vspace{0.5cm}
+
+\textbf{Is black-box attack practical?}
+
+Much of the current research in the field of SciML is focused on off-line attacks.
+
+\vspace{0.5cm}
+
+\textbf{How can we benefit from interpretation methods?}
+
+Much of the current research in the field of SciML is focused on off-line attacks.
+
+% \clearpage
 
 \section{Thesis Overview}
 
-To achieve the research objectives set out in Section \ref{sec:research_question}, the remaining of the thesis organized as follows:
+To answer the research questions listed in Section \ref{sec:research_question}, the remaining of the thesis organized as follows:
 
 % This thesis presents adversarial attacks against mobile robot perception models, such as image classification, object detection, and object tracking. 
 
-\begin{enumerate}
-    \item Chapter 2: Real-time adversarial attacks
-    \item Chapter 3: Practical hardware attack
-    \item Chapter 4: Adversarial Tracking
-    \item Chapter 5: Black-box attack
-    \item Chapter 6: interpretation
-\end{enumerate}
-
-Practical adversarial attacks are introduced in the following three chapters. In chapter \ref{chpt:classification}, we investigate distributed black-box attacks against image classification models. In chapter \ref{chpt:detection}, we achieve real-time white-box attacks against object detection models. In chapter \ref{chpt:tracking}, we intend to attack object tracking systems, and examine the effect of hardware acceleration on the robustness of deep learning models. 
+\begin{itemize}[label={}]
+    \item \textbf{Chapter \ref{chpt:driving}}: we introduce real-time white-box attacks against autonomous driving systems that that generate unnoticeable full-image perturbation.
+    \item \textbf{Chapter \ref{chpt:detection}}: we achieve real-time white-box attacks against object detection models. we present real-time white-box attacks against object detection that generate noticeable adversarial patches.
+    \item \textbf{Chapter \ref{chpt:tracking}}: we intend to attack object tracking systems,
+    \item \textbf{Chapter \ref{chpt:classification}}: we investigate distributed black-box attacks against image classification models. we present adversarial classification, a black-box attack against cloud services of image classification.
+    \item \textbf{Chapter \ref{chpt:defence}}: the interpretability of deep learning models and defense methods against adversarial attacks are explored to help robots embrace deep neural networks safely.
+    \item \textbf{Chapter \ref{chpt:conclusion}} concludes the thesis. 
+\end{itemize}
 
 % Since end-to-end deep learning models are computationally expensive, pruning and quantization are commonly used techniques to make large models feasible for embedded systems, but theses techniques could render deep learning models more vulnerable.
 
-In chapter \ref{chpt:driving}, we introduce real-time white-box attacks against autonomous driving systems that that generate unnoticeable full-image perturbation.
-
-In chapter \ref{chpt:detection}, we present real-time white-box attacks against object detection that generate noticeable adversarial patches.
-
-In chapter \ref{chpt:classification}, we present adversarial classification, a black-box attack against cloud services of image classification.
-
-In chapter \ref{chpt:defence}, the interpretability of deep learning models and defense methods against adversarial attacks are explored to help robots embrace deep neural networks safely.
