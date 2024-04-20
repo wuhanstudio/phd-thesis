@@ -321,7 +321,7 @@ Decision-based black-box attacks only require access to the predicted class (har
 
 \subsubsection{Gradient Estimation}
 
-Intuitively, if we can estimate gradients using black-box optimization techniques, we can exploit existing white-box attacks to generate adversarial examples. For instance, the \acrfull{zoo} Attack amends the C\&W white-box attacks to the black-box setting by modifying the loss function and computing an approximate gradient using a finite difference method \citep{Chen_2017}. The original C\&W attack generates adversarial examples $x'$ by solving the optimization problem:
+Intuitively, if we can estimate gradients, we can exploit existing white-box attacks to generate adversarial examples. For instance, the \acrfull{zoo} Attack amends the C\&W white-box attacks to the black-box setting by modifying the loss function and computing an approximate gradient using a finite difference method \citep{Chen_2017}. The original C\&W attack generates adversarial examples $x'$ by solving the optimization problem:
 
 \begin{equation}
     \text{minimize}\ ||x'-x||^2_2 + c \cdot F(x', t)
@@ -341,7 +341,7 @@ To solve the above optimization problem, we need access to gradients of the regu
 
 where $h$ is a small step size (e.g. $h = 0.0001$), and $e_i$ is a standard basis vector with only the i-th component being 1.
 
-Following research tries to improve the sample efficiency by using Natural gradient estimation more efficient sampling.
+Query efficiency is a crucial evaluation metric for black-box attacks, and the following research tries to improve the sample efficiency of gradient estimation using gradient priors and natural gradient estimation.
 
 % \begin{equation}
 % f(x,t) = \max \{ {\underset{i \neq t}{\max}\ log[F(x)]_i - log[F(x)]_t, -\kappa } \}
@@ -351,16 +351,15 @@ Following research tries to improve the sample efficiency by using Natural gradi
 
 \subsubsection{Local Search}
 
-On the other hand, local search is another popular black-box optimization. The task of generating adversarial inputs can be approached as a problem of selecting what pixels to attack. Thus, we can use existing
-local search methods to search for combinations of pixels to be perturbed. 
+On the other hand, local search is another popular black-box attack method. The FGSM attack either adds or deducts a small value to each pixel, indicating that adversarial perturbations are combinations of orthogonal vectors. As a result, local search methods use existing local search methods, such as heuristic search, to search for combinations of orthogonal vectors to decide what pixels to attack.
+
+Intuitively, we can add or deduct a small value to one pixel at a time and choose the operation that decreases the probability of the correct label. The attack is known as the \acrfull{simba} \cite{guo2019simple}, a baseline method. However, even for a 32x32 input image, the \acrshort{simba} method takes over 2000 queries, which is inefficient. To reduce the search space, later research finds combinations of vertical and horizontal lines and square patches rather than individual pixels.
 
 \clearpage
 
-Besides gradient estimation and local search, we can also achieve black-box attacks using surrogate model. To train a suggrogate model as the victim using query. but it requires significan amounts of queries and thus is less popular.
+Besides gradient estimation and local search, another approach to produce adversarial examples is to use a surrogate model. Surrogate-based black-box attacks generate adversarial perturbations by transferring from a surrogate model, but their attack success rates are lower than gradient-estimation and search-based methods.
 
-Hi
-
-However, we notice some common mistakes in prior research. thereby avoiding mistakes made in prior research that obtained unfair advantages by applying the perturbation before image encoding and pre-processing. We introduce common mistakes and how to accelerate black-box attacks in Chapter \ref{chpt:classification}.
+Though existing black-box attacks achieve remarkable attack success rates, we notice some common mistakes in prior research that obtain unfair advantages by applying the perturbation before image encoding and pre-processing. We introduce these common mistakes in Chapter \ref{chpt:classification}.
 
 \section{Research Questions}
 \label{sec:research_question}
@@ -375,27 +374,29 @@ Much of the current research in adversarial attacks focuses on offline attacks t
 
 \vspace{0.5cm}
 
-\textbf{Human-in-the-Middle: Hardware attack?}
+\textbf{Can we inject the perturbations without access to the operating system?}
 
 Access to the operating system is essential in order to inject adversarial perturbations into input images. However, the operating system (Unix/Linux) where the deep learning model is deployed is highly secure as research in cyber security advances. Although the operating system is highly secure, the sensors that collect the data are exposed directly to the environment to collect the data. Can we exploit the sensor to bypass the operating system?
 
 \vspace{0.5cm}
 
-\textbf{Adversarial Tracking: Versus traditional methods Kalman filter?}
+\textbf{Can traditional methods mediate the impact of adversarial attacks?}
 
 Although deep neural networks are vulnerable to adversarial attacks, traditional algorithms such as the Kalman Filter and the Hungarian algorithm are not. In real-world robotic applications, deep learning models are deployed in combination with traditional algorithms that do not use deep neural networks. Are adversarial attacks still effective under these settings?
 
 \vspace{0.5cm}
 
-\textbf{Is black-box attack practical?}
+\textbf{Have black-box attacks become a practical threat against cloud APIs?}
 
-Much of the current research in the field of SciML is focused on off-line attacks.
+IoT devices that do not have enough memory and computational resources rely on cloud APIs to achieve computer vision tasks, such as image classification. Have existing black-box attacks become a real threat against cloud APIs?
 
 \vspace{0.5cm}
 
-\textbf{How can we benefit from interpretation methods?}
+\textbf{How can we embrace deep learning models safely?}
 
-Much of the current research in the field of SciML is focused on off-line attacks.
+Deep learning models that achieve high accuracy provide fewer interpretations due to the trade-off between accuracy and interpretability. How can we interpret and safely embrace black-box models, especially for medical applications?
+
+% It is risky to put one's life in the hands of models that medical researchers do not fully understand. 
 
 % \clearpage
 
@@ -406,12 +407,17 @@ To answer the research questions listed in Section \ref{sec:research_question}, 
 % This thesis presents adversarial attacks against mobile robot perception models, such as image classification, object detection, and object tracking. 
 
 \begin{itemize}[label={}]
-    \item \textbf{Chapter \ref{chpt:driving}}: we introduce real-time white-box attacks against autonomous driving systems that that generate unnoticeable full-image perturbation.
-    \item \textbf{Chapter \ref{chpt:detection}}: we achieve real-time white-box attacks against object detection models. we present real-time white-box attacks against object detection that generate noticeable adversarial patches.
-    \item \textbf{Chapter \ref{chpt:tracking}}: we intend to attack object tracking systems,
-    \item \textbf{Chapter \ref{chpt:classification}}: we investigate distributed black-box attacks against image classification models. we present adversarial classification, a black-box attack against cloud services of image classification.
-    \item \textbf{Chapter \ref{chpt:defence}}: the interpretability of deep learning models and defense methods against adversarial attacks are explored to help robots embrace deep neural networks safely.
-    \item \textbf{Chapter \ref{chpt:conclusion}} concludes the thesis. 
+    \item \textbf{Chapter \ref{chpt:driving}} introduces the real-time online white-box attack against the NVIDIA end-to-end driving model. The attack does not require access to the ground truth (\textbf{Published in IEEE Intelligent Vehicle Symposium}).
+    \item \textbf{Chapter \ref{chpt:detection}} further presents real-time online white-box attacks against object detection models (\textbf{Published in IEEE Intelligent Vehicle Symposium}). Besides, we propose a Human-in-the-Middle hardware attack that injects the perturbation into the communication channel between the camera and the detection system (\textbf{IEEE Transactions on AI, minor revision}).
+    \item \textbf{Chapter \ref{chpt:tracking}} attacks the object tracking system.
+
+    To be done.
+
+    To be done.
+
+    \item \textbf{Chapter \ref{chpt:classification}} unveils several common mistakes in prior research and proposes distributed black-box attacks to accelerate attacks against image classification cloud services (\textbf{Under Review}).
+    \item \textbf{Chapter \ref{chpt:defence}} studies the interpretability of machine learning models for medical applications and combines deep neural networks with human knowledge to understand how black-box models make diagnosis (\textbf{Published in IEEE Transactions on AI}).
+    \item \textbf{Chapter \ref{chpt:conclusion}} concludes the thesis and envisions future research directions to understand and safely embrace deep learning models. 
 \end{itemize}
 
 % Since end-to-end deep learning models are computationally expensive, pruning and quantization are commonly used techniques to make large models feasible for embedded systems, but theses techniques could render deep learning models more vulnerable.
