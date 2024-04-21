@@ -5,7 +5,7 @@
 
 In this chapter, we present adversarial attacks against object tracking systems. Unlike object detection systems that only make predictions based on the current input image from the camera, object tracking models combine prior predictions with current inputs to generate trajectories of moving objects, making it more challenging to achieve adversarial attacks.
 
-\section{Adversarial Tracking}
+\section{Introduction}
 \label{sec:adv_track}
 
 As introduced in the first chapter, deep learning models have been widely adopted in autonomous driving for perception tasks. For example, object tracking models are utilized to generate trajectories of moving objects. Under this scenario, we do not have access to gradients, making white-box attacks virtually impossible, neither do we have access to query results that are intermediate results in the internal data path.
@@ -112,6 +112,14 @@ In \citep{ciaparrone2020deep}, Ciaparrone et al. listed the most popular evaluat
 The first adversarial attack against MOT attacks a TBD method that uses YOLOv3 as the object detection model, the Hungarian matching for the data association, and the Kalman filter for noisy measurement.
 
 Most following work attacks SiameseRPN-based trackers for SOT \citep{wu2019sta} \citep{liang2020efficient} \citep{guo2020spark} \citep{chen2020one} \citep{yan2020cooling}. Another research attacks the GOTURN model, which is an efficient end-to-end SOT model \citep{wiyatno2019physical}. We only find one research paper that attacks FairMOT (JDT) \citep{lin2021trasw}. There are many adversarial attacks against 3D Lidar Point Cloud \citep{cheng2021universal} \citep{cheng2022non} \citep{wang2022adversary}.
+
+\section{Methodology}
+
+
+
+\section{Experimental Results}
+
+
 
 \section{Summary}
 
