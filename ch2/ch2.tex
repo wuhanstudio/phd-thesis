@@ -3,9 +3,7 @@
 
 % \newrefsection
 
-This chapter real-time attack
-
-As research in deep neural networks advances, deep convolutional networks become promising for autonomous driving tasks. In particular, there is an emerging trend of employing end-to-end neural network models for autonomous driving. However, previous research has shown that deep neural network classifiers are vulnerable to adversarial attacks. While for regression tasks, the effect of adversarial attacks is not as well understood. In this research, we devise two white-box targeted attacks against end-to-end autonomous driving models. Our attacks manipulate the behavior of the autonomous driving system by perturbing the input image. In an average of 800 attacks with the same attack strength (epsilon=1), the image-specific and image-agnostic attack deviates the steering angle from the original output by 0.478 and 0.111, respectively, which is much stronger than random noises that only perturbs the steering angle by 0.002 (The steering angle ranges from [-1, 1]). Both attacks can be initiated in real-time on CPUs without employing GPUs. 
+As research in deep neural networks advances, deep convolutional networks become promising for autonomous driving tasks. In particular, there is an emerging trend of employing end-to-end neural network models for autonomous driving. However, previous research has shown that deep neural network classifiers are vulnerable to adversarial attacks. While for regression tasks, the effect of adversarial attacks is not as well understood. In this chapter, we devise two white-box targeted attacks against end-to-end autonomous driving models. Our attacks manipulate the behavior of the autonomous driving system by perturbing the input image. In an average of 800 attacks with the same attack strength (epsilon=1), the image-specific and image-agnostic attack deviates the steering angle from the original output by 0.478 and 0.111, respectively, which is much stronger than random noises that only perturbs the steering angle by 0.002 (The steering angle ranges from [-1, 1]). Both attacks can be initiated in real-time on CPUs without employing GPUs. 
 
 % Demo video: \href{https://youtu.be/I0i8uN2oOP0}{https://youtu.be/I0i8uN2oOP0}.
 
@@ -13,19 +11,19 @@ As research in deep neural networks advances, deep convolutional networks become
 
 \section{Introduction}
 
-Autonomous driving is one of the most challenging tasks in safety-critical robotic applications. Most real-world autonomous vehicles employ modular systems that divide the driving task into smaller subtasks. In addition to a perception module that relies on deep learning models to locate and classify objects in the environment, modular systems also include localization, prediction, planning, and control modules. However, researchers are also exploring the potential of end-to-end driving systems. An end-to-end driving system is a monolithic module that directly maps the input to the output, often using deep neural networks. For example, the NVIDIA end-to-end driving model \cite{bojarski2016end} maps raw pixels from the front-facing camera to steering commands. The development of end-to-end driving systems has been facilitated by recent advances in high-performance GPUs and the development of photo-realistic driving simulators, such as the Carla Simulator \cite{Dosovitskiy17} and the Microsoft Airsim Simulator \cite{airsim2017fsr}.  
+Autonomous driving is one of the most challenging tasks in safety-critical robotic applications. Most real-world autonomous vehicles employ modular systems that divide the driving task into smaller subtasks. In addition to a perception module that relies on deep learning models to locate and classify objects in the environment, modular systems also include localization, prediction, planning, and control modules. However, researchers are also exploring the potential of end-to-end driving systems. An end-to-end driving system is a monolithic module that directly maps the input to the output, often using deep neural networks. For example, the NVIDIA end-to-end driving model \citep{bojarski2016end} maps raw pixels from the front-facing camera to steering commands. The development of end-to-end driving systems has been facilitated by recent advances in high-performance GPUs and the development of photo-realistic driving simulators, such as the Carla Simulator \citep{Dosovitskiy17} and the Microsoft Airsim Simulator \citep{airsim2017fsr}.  
 
-\begin{figure}[tbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_driving/overview.png}
     \caption{Adversarial Driving: The behavior of and end-to-end autonomous driving model can be manipulated by adding unperceivable perturbations to the input image.}
     \label{fig:adv_drv}
 \end{figure} 
 
-As demonstrated in multiple contexts, deep neural networks are vulnerable to adversarial attacks. Typically, these attacks fool an image classification model by adding an unperceivable perturbation to the input image \cite{goodfellow2014explaining}. Despite the fact that the number of academic publications discussing end-to-end deep learning models is steadily increasing, their safety in real-world scenarios is still unclear. Though end-to-end models may lead to better performance and smaller systems, the monolithic module is also particularly vulnerable to adversarial attacks. In addition, note that current research on adversarial attacks primarily focuses on classification tasks. The effect of these attacks on regression tasks, however, largely remains unexplored. Our research explores the possibility of achieving real-time attacks against NVIDIA's end-to-end regression model (See Fig. \ref{fig:adv_drv}). However, the attacks may also be applied to the perception module in a modular driving system.
+As demonstrated in multiple contexts, deep neural networks are vulnerable to adversarial attacks. Typically, these attacks fool an image classification model by adding an unperceivable perturbation to the input image \citep{goodfellow2014explaining}. Despite the fact that the number of academic publications discussing end-to-end deep learning models is steadily increasing, their safety in real-world scenarios is still unclear. Though end-to-end models may lead to better performance and smaller systems, the monolithic module is also particularly vulnerable to adversarial attacks. In addition, note that current research on adversarial attacks primarily focuses on classification tasks. The effect of these attacks on regression tasks, however, largely remains unexplored. Our research explores the possibility of achieving real-time attacks against NVIDIA's end-to-end regression model (See Fig. \ref{fig:adv_drv}). However, the attacks may also be applied to the perception module in a modular driving system.
 
 
-The main contributions of this paper are as follows: 
+The main contributions of this chapter are as follows: 
 
 \begin{itemize}
     \item We propose two online white-box adversarial attacks against     an end-to-end regression model for autonomous driving: one strong attack that generates the perturbation for each frame (image-specific), and one stealth attack that produces a universal adversarial perturbation that attacks all frames (image-agnostic).
@@ -73,7 +71,7 @@ In this section, we specify our objective, introduce mathematical notation, and 
 y&=f(\theta, x) \\
 y'&=f(\theta, x')
 \end{align}
-where $y$ is the benign output steering command, $f(\theta, x)$ is the regression model that maps input images to steering commands, $\theta$ is the model parameters, $x$ is the original input image, $y'$ is the adversarial output steering command, and $x'$ is the adversarial input image. Further, we will use $\eta=x-x'$ to denote the adversarial perturbation, $y^{*}$ is the ground truth steering command, and $J(y, y^{*})$ to denote the training loss. Given an input image $x$, the objective of attacking a classifier is to generate a small perturbation $\eta$, such that $y' \neq y^{*}$. However, the objective of attacking a regression model is to generate a small perturbation $\eta$, such that the difference between $y'$ and $y^{*}$ is larger than the average deviation caused by adding random noise to $x$. 
+where $y$ is the benign output steering command, $f(\theta, x)$ is the regression model that maps input images to steering commands, $\theta$ is the model parameters, $x$ is the original input image, $y'$ is the adversarial output steering command, and $x'$ is the adversarial input image. Further, we will use $\eta=x-x'$ to denote the adversarial perturbation, $y^{*}$ is the ground truth steering command, and $\mathcal{L}(y, y^{*})$ to denote the training loss. Given an input image $x$, the objective of attacking a classifier is to generate a small perturbation $\eta$, such that $y' \neq y^{*}$. However, the objective of attacking a regression model is to generate a small perturbation $\eta$, such that the difference between $y'$ and $y^{*}$ is larger than the average deviation caused by adding random noise to $x$. 
 
 We use the $L_2$ norm to quantify the magnitude of the perturbation. The $L_2$ norm of the perturbation $\eta$ should be smaller than 0.03 (8 / 255) for an RGB input image according to the value used in prior research \citep{chow2020adversarial} \citep{ACFH2020square}. In particular, to ensure that the perturbation is unperceivable to human eyes, we require \begin{equation}
 ||x^{'}-x||_{2} = ||\ {\eta}\ ||_{2} \leq \xi
@@ -142,25 +140,25 @@ In this section, we devise two white-box attacks against the driving system: one
 
 \subsection{The Image-specific Attack}
 
-The first adversarial attack against a classifier was an image-specific offline attack that generated one perturbation for every input image \citep{goodfellow2014explaining}. Instead of minimizing the training loss $J(y,\ y^{*})$, Goodfellow et al. maximized the training loss and then used the gradient of the training loss to generate the perturbation. However, online attacks do not have access to the ground truth $y^{*}$, and thus, for online attacks, the training loss $J(y, y^{*})$ cannot be calculated. As a result, we need a new adversarial loss $J(y)$ that only requires the model output $y$ to generate the perturbation.
+The first adversarial attack against a classifier was an image-specific offline attack that generated one perturbation for every input image \citep{goodfellow2014explaining}. Instead of minimizing the training loss $\mathcal{L}(y,\ y^{*})$, Goodfellow et al. maximized the training loss and then used the gradient of the training loss to generate the perturbation. However, online attacks do not have access to the ground truth $y^{*}$, and thus, for online attacks, the training loss $\mathcal{L}(y, y^{*})$ cannot be calculated. As a result, we need a new adversarial loss $\mathcal{L}(y)$ that only requires the model output $y$ to generate the perturbation.
 
 When attacking a regression model, notice that we have the choice to either increase or decrease the output. For example, to attack the end-to-end driving regression model, we can either deviate the vehicle to the left by decreasing the output or to the right by increasing the output. Therefore, in some sense, attacks on regression models can be seen as a special case of attacks on classification models, with the constraint that we only have two choices: increasing or decreasing the output. Accordingly, we will consider the straightforward adversarial loss functions 
 % \begin{equation}
 % \eta=\epsilon \text{sign}(\nabla_{x}J(\theta, x, y)).
 % \end{equation}
 \begin{align}
-    J_{\texttt{left}}(y) &= -y \\
-    J_{\texttt{right}}(y) &= y
+    \mathcal{L}_{\texttt{left}}(y) &= -y \\
+    \mathcal{L}_{\texttt{right}}(y) &= y
 \end{align}
 for the image-specific attack. 
 
-As explained in Section \ref{adversarial_attacks}, the adversarial loss functions $J(y)$ do not include ground truth $y^{*}$, which we do not have access to for online attacks. We can then utilize the Fast Gradient Sign Method (FGSM) to generate perturbations as 
+As explained in Section \ref{adversarial_attacks}, the adversarial loss functions $\mathcal{L}(y)$ do not include ground truth $y^{*}$, which we do not have access to for online attacks. We can then utilize the Fast Gradient Sign Method (FGSM) to generate perturbations as 
 \begin{equation}
-    \eta = \epsilon \ \text{sign}[\nabla_{x}( J(y))]
+    \eta = \epsilon \ \text{sign}[\nabla_{x}( \mathcal{L}(y))]
 \end{equation}
 where $\epsilon$ is a scaling factor that determines the visibility of the perturbation. The image-specific attack is summarized in Algorithm \ref{alg:image-specific-driving}.
 
-\begin{algorithm}[t]
+\begin{algorithm}[H]
     \caption{Image-specific Attack}\label{alg:image-specific-driving}
     \begin{algorithmic}
         \State Input: The regression model $f(\theta, x)$, the input images $\{x_t\}$ where $x_t$ is the image at time step $t$.
@@ -168,12 +166,12 @@ where $\epsilon$ is a scaling factor that determines the visibility of the pertu
         \State Output: Image-specific perturbation $\eta$.
         \For{each time step $t$}
             \State Inference: $y = f(\theta, x)$
-            \State Perturbation: $\eta = \epsilon \ \text{sign}[\nabla_{x}( J(y))]$
+            \State Perturbation: $\eta = \epsilon \ \text{sign}[\nabla_{x}( \mathcal{L}(y))]$
         \EndFor
     \end{algorithmic}
 \end{algorithm}
 
-As an example, assume that the attacker wishes to attack the vehicle to the right side. In this case, the objective is to increase the model output. We can then use the adversarial loss $J_{right}(y)$ to generate the perturbation. $\nabla_{x}( J(y))$ represents the gradient of the adversarial loss over the input. The gradient gives us information regarding how changes in the adversarial loss $y$ will back-propagate to the input.
+As an example, assume that the attacker wishes to attack the vehicle to the right side. In this case, the objective is to increase the model output. We can then use the adversarial loss $J_{right}(y)$ to generate the perturbation. $\nabla_{x}( \mathcal{L}(y))$ represents the gradient of the adversarial loss over the input. The gradient gives us information regarding how changes in the adversarial loss $y$ will back-propagate to the input.
 
 %Our experimental results show that the image-specific attack is a strong attack that deviates the vehicle to the outside of the lane in several seconds.
 
@@ -192,7 +190,7 @@ As an example, assume that the attacker wishes to attack the vehicle to the righ
                     \State $x^{'} = x + \eta$
                     \State $\eta_{t} \leftarrow 0$
                     \While{$\text{sign}(y) \neq I$}
-                        \State Gradients: $\nabla = \frac{\partial J(y)}{\partial x'}$
+                        \State Gradients: $\nabla = \frac{\partial \mathcal{L}(y)}{\partial x'}$
                         \State Perturbation: $\eta_{t} = \eta_{t} + proj_{2}(\nabla,\ \xi)$
                         \State Inference: $y = f(\theta, x + \eta_t)$
                     \EndWhile
@@ -205,18 +203,11 @@ As an example, assume that the attacker wishes to attack the vehicle to the righ
 
 \subsection{The Image-agnostic Attack}
 
-\begin{figure*}[b]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_driving/architechture.jpg}
-    \caption{The architecture of the Adversarial Driving System. We tested our attacks in three environments: the Udacity Simulator, the ROS Gazebo Simulator, and a real Turtlebot 3.}
-    \label{fig:arch}
-\end{figure*}
-
 Even small deviations may cause traffic accidents. A small deviation in the steering angle may, for example, result in a failure to steer around a sharp corner. In other words, even if the attack is not as strong as the image-specific attack it could still be perilous if applied at critical time points. Therefore, we introduce a white-box attack that generates a universal adversarial perturbation (UAP) \citep{moosavi2017universal} which can be used to attack all input images at different time steps. The image-agnostic attack combines the idea of DeepFool \citep{moosavi2016deepfool} and Projected Gradient Descent (PGD) \citep{madry2017towards}. The attack consists of two procedures: training and deployment. We first generate a UAP online or via a driving record and then deploy the UAP.
 
 We first decide our target direction, that is, whether to attack the vehicle to the left ($y < 0$) or to the right ($y > 0$), and then choose the corresponding adversarial loss function ($J_{\texttt{left}}(y)$ or $J_{\texttt{right}}(y)$). The perturbation is initialized as zero. For each input image at each timestep, if the direction of the model output is not the same as the desired direction, we find the minimum perturbation that changes the sign of the model output to the desired direction. 
 
-To change the direction of the model output with the minimum perturbation, we calculate the gradient of the adversarial loss $J(y)$ and then project the gradient to the $L_2$ ball. The closed-form solution to the optimization problem $\arg \min \ ||\ \eta - \eta^{'} \ ||_{2}$ with the constraint $||\ \eta^{'} \ || \leq \xi$ is given by
+To change the direction of the model output with the minimum perturbation, we calculate the gradient of the adversarial loss $\mathcal{L}(y)$ and then project the gradient to the $L_2$ ball. The closed-form solution to the optimization problem $\arg \min \ ||\ \eta - \eta^{'} \ ||_{2}$ with the constraint $||\ \eta^{'} \ || \leq \xi$ is given by
 \begin{equation}
     proj_{2}(\eta,\  \xi) = \frac{\eta}{\max\{1, \frac{||\ \eta\ ||}{\xi}\}} =  \eta \min\{1, \frac{\xi}{||\ \eta\ ||} \}
 \end{equation}
@@ -239,8 +230,17 @@ After applying the temporary perturbation $\eta_{t}$ at timestep $t$, if the dir
 The Robot Operating System (ROS) \citep{ros} is the most popular software framework in robotic research and applications. One example of an attack that
 injects malicious data into a running ROS application is the Stealth Publisher Attack \citep{dieber2020penetration}. We exploit the same vulnerability to inject adversarial perturbations into a running end-to-end driving ROS application.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_driving/architechture.jpg}
+    \caption{The architecture of the Adversarial Driving System. We tested our attacks in three environments: the Udacity Simulator, the ROS Gazebo Simulator, and a real Turtlebot 3.}
+    \label{fig:arch}
+\end{figure}
+
 We design an adversarial system to attack the end-to-end autonomous driving system (See Fig. \ref{fig:arch}). The system consists of three key components: the simulator, the server, and the Web User Interface (UI). The simulator publishes the image captured by the front camera to the server. Meanwhile, it accepts steering commands from the server to manipulate the vehicle. The modular design pattern makes it possible to conveniently replace the simulator with a real Turtlebot without breaking the whole system. The server receives input images from the simulator via WebSocket connections and then sends back the control commands. Meanwhile, it receives attack commands from the web browser and then injects the adversarial perturbation into the input image. The end-to-end driving model is deployed on the server as well. We use a website as a front-end where the attacker can monitor the status of the simulator and choose different attacks.
 The experimental results are presented in the next section.
+
+
 
 % \clearpage
 
@@ -322,7 +322,7 @@ In Fig. \ref{fig:image-specific-online}, we applied three different attacks that
 
 The image-specific attack achieved 20-30 FPS on an Intel i7-8665U CPU and 600-700 FPS on an NVIDIA RTX 2080Ti GPU. Since the CPU and GPU are also utilized for Udacity Simulator, the attack performance varies depending on the hardware temperature.
 
-Further, we measured the MAD of the steering angle over 800 attacks. The results are shown in Table \ref{tab:image-specific}. As can be seen, even the weakest image-specific attack ($\epsilon=0.1$) is much stronger than the strongest random noise attack ($\epsilon=8$). When $\epsilon = 4$ and $\epsilon = 8$, we can even deviate the steering angle outside of the range $[-1, 1]$. In other words, the image-specific attack is very strong. However, its weakness is that it needs to calculate the gradients of each individual input image. In a real-world scenario, we may not have access to the input image and gradients. Thus, we propose the image-agnostic attack that trains the perturbation using driving records and does not need access to the input and gradients during the deployment.
+Further, we measured the \acrshort{mad} of the steering angle over 800 attacks. The results are shown in Table \ref{tab:image-specific}. As can be seen, even the weakest image-specific attack ($\epsilon=0.1$) is much stronger than the strongest random noise attack ($\epsilon=8$). When $\epsilon = 4$ and $\epsilon = 8$, we can even deviate the steering angle outside of the range $[-1, 1]$. In other words, the image-specific attack is very strong. However, its weakness is that it needs to calculate the gradients of each individual input image. In a real-world scenario, we may not have access to the input image and gradients. Thus, we propose the image-agnostic attack that trains the perturbation using driving records and does not need access to the input and gradients during the deployment.
 
 \begin{table}[H]
     \centering
@@ -337,11 +337,64 @@ Further, we measured the MAD of the steering angle over 800 attacks. The results
     \ $\epsilon=8$      & 0.0278    & 2.4469 \\
     \hline
     \end{tabular}
-    \caption{The mean absolute deviation of the steering angle over 800 image-specific attacks.}
+    \caption{The \acrfull{mad} of the steering angle over 800 image-specific attacks.}
     \label{tab:image-specific}
 \end{table}
 
 % \pagebreak
+
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H]
+    \centering
+
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/chapter_driving/alpha.png}
+        \caption{Different $\alpha$ with fixed $\epsilon=1, \xi=4$.}
+        \label{fig:random}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/chapter_driving/xi.png}
+        \caption{Different $\xi$ with fixed $\alpha=0.002$}
+        \label{fig:left}
+    \end{subfigure}
+
+    \caption{The mean deviation of the steering angle during the training process with different hyperparameters.\label{figure_hyperparameters}}
+\end{figure}
+
+\vfill
+
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/chapter_driving/uni_left.png}
+        \caption{The image-agnostic Left Attack decreases the model output ($y_{adv}<0$), making it difficult to turn right. ($\epsilon=1)$}
+        \label{fig:uni_left}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/chapter_driving/uni_random.png}
+        \caption{The random noises barely deviates $y_{adv}$ from $y_{true}$.}
+        \label{fig:uni_random}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/chapter_driving/uni_right.png}
+        \caption{The image-agnostic Right Attack increases the model output ($y_{adv}>0$), making it difficult to turn left. ($\epsilon=1)$}
+        \label{fig:uni_right}
+    \end{subfigure}
+    \caption{The Image-Agnostic attack ($\alpha=0.002$, $\xi=4$, $n=500$) and random noises with the same strength ($\epsilon = 1$).}
+    \label{fig:image-agnostic-online}
+\end{figure}
+
+\vfill
 
 \subsection{The Image-Agnostic Attack}
 
@@ -361,7 +414,7 @@ The results are shown in Table \ref{tab:image-agnostic}. Though the image-agnost
     \ $\epsilon=8$      & 0.0278    & 0.1275 \\
     \hline
     \end{tabular}
-    \caption{The mean absolute deviation of the steering angle over 800 image-agnostic attacks ($\alpha=0.002,\ \xi=4$, $n=500$).}
+    \caption{The \acrfull{mad} of the steering angle over 800 image-agnostic attacks ($\alpha=0.002,\ \xi=4$, $n=500$).}
     \label{tab:image-agnostic}
 \end{table}
 
@@ -373,25 +426,7 @@ The results are shown in Table \ref{tab:image-agnostic}. Though the image-agnost
 
 % \clearpage
 
-\begin{figure}[t]
-    \centering
-
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\textwidth]{figures/chapter_driving/alpha.png}
-        \caption{Different $\alpha$ with fixed $\epsilon=1, \xi=4$.}
-        \label{fig:random}
-    \end{subfigure}
-
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\textwidth]{figures/chapter_driving/xi.png}
-        \caption{Different $\xi$ with fixed $\alpha=0.002$}
-        \label{fig:left}
-    \end{subfigure}
-
-    \caption{The mean deviation of the steering angle during the training process with different hyperparameters.\label{figure_hyperparameters}}
-\end{figure}
-
-As seen in Table \ref{tab:image-agnostic}, the strength of the image-agnostic attack does not improve after $\epsilon > 2$. This is due to the limited generalizability of the perturbation. Increasing the strength of the attack further may increase the model output for some inputs but may equally well decrease the model for other inputs. Therefore, increasing $\epsilon$ further adds more variation to the model prediction while the MAD remains stable.
+As seen in Table \ref{tab:image-agnostic}, the strength of the image-agnostic attack does not improve after $\epsilon > 2$. This is due to the limited generalizability of the perturbation. Increasing the strength of the attack further may increase the model output for some inputs but may equally well decrease the model for other inputs. Therefore, increasing $\epsilon$ further adds more variation to the model prediction while the \acrshort{mad} remains stable.
 
 We also investigated the effect of the learning rate $\alpha$ and the step size $\xi$ on the training process (See Fig. \ref{figure_hyperparameters}). The learning rate $\alpha$ controls the variation of the perturbation during the whole iteration. We tested different $\alpha$ with fixed parameters $\epsilon=1$ and $\xi=4$. As $\alpha$ increases, the mean deviation increases faster. However, the iteration process also becomes more variable, and the mean deviation decreases after 100 steps when $\alpha>0.01$. 
 
@@ -403,28 +438,7 @@ In addition, the image-agnostic attack applies the same perturbation to all fram
 
 % \pagebreak
 
-\begin{figure}[tb]
-    \centering
-    \begin{subfigure}[b]{0.8\textwidth}
-        \includegraphics[width=\textwidth]{figures/chapter_driving/uni_left.png}
-        \caption{The image-agnostic Left Attack decreases the model output ($y_{adv}<0$), making it difficult to turn right. ($\epsilon=1)$}
-        \label{fig:uni_left}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.8\textwidth}
-        \includegraphics[width=\textwidth]{figures/chapter_driving/uni_random.png}
-        \caption{The random noises barely deviates $y_{adv}$ from $y_{true}$.}
-        \label{fig:uni_random}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.8\textwidth}
-        \includegraphics[width=\textwidth]{figures/chapter_driving/uni_right.png}
-        \caption{The image-agnostic Right Attack increases the model output ($y_{adv}>0$), making it difficult to turn left. ($\epsilon=1)$}
-        \label{fig:uni_right}
-    \end{subfigure}
-    \caption{The Image-Agnostic attack ($\alpha=0.002$, $\xi=4$, $n=500$) and random noises with the same strength ($\epsilon = 1$).}
-    \label{fig:image-agnostic-online}
-\end{figure}
-
-\addtolength{\textheight}{-2cm}
+% \addtolength{\textheight}{-2cm}
 
 % \clearpage
 

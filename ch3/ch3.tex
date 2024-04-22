@@ -3,11 +3,13 @@
 
 % \newrefsection
 
-In this chapter, we focus on adversarial attacks against object detection systems. The task of object detection consists of object localization and object classification. The object detection model locates the position of each object, as well as classifies which category the object belongs to. Besides attacking the classification task, we need to deviate localization results as well. Thus, it's more challenging than adversarial attacks against image classification.
+In this chapter, we focus on adversarial attacks against object detection systems. The task of object detection consists of object localization and object classification. The object detection model locates the position of each object and classifies which category the object belongs to. Besides attacking the classification task, we also need to deviate localization results. Thus, it's more challenging than adversarial attacks against image classification models.
 
-Another challenge is where and how we apply the adversarial perturbation. Unlike image classification which receives static images as input, object detection systems usually receive a real-time video stream from the camera. Though we may have various ways to generate the perturbation, if we cannot apply the perturbation in real-time, it won't affect real-world applications.
+Another challenge is where and how we apply the adversarial perturbation. Unlike image classification task that receives static images as input, object detection systems usually process a real-time video stream from the camera. Though we have various approaches to generate the perturbation, it won't pose a threat against real-world applications if we cannot apply the perturbation in real-time.
 
-Starting with an introduction to existing object detection models and related white-box adversarial attacks, then we try to achieve an online attack that generates the perturbation in real-time. Thereafter, we explore the possibility of generating a single universal perturbation that could attack all the frames received from a camera. Lastly, we introduce the WHite-box Adversarial Toolbox (WHAT) that integrates our attacks into an open-source toolbox, and how we optimize our attacks so that the perturbation can be applied in real-time.
+Starting with an introduction to existing object detection models and related white-box adversarial attacks, we then try to achieve an online attack that generates the perturbation in real-time. Besides, we explore the possibility of producing a single \acrfull{uap} that could attack all the frames received from a camera and inject the perturbation via a Human-in-the-Middle hardware attack.
+
+% Lastly, we introduce the WHite-box Adversarial Toolbox (WHAT) that integrates our attacks into an open-source toolbox.
 
 % \section{Introduction}
 
@@ -138,17 +140,13 @@ Starting with an introduction to existing object detection models and related wh
 \section{Real-time White-box Attacks in ROS}
 \label{sec:adv_detect}
 
-Intelligent robots rely on object detection models to perceive the environment. Following advances in deep learning security it has been revealed that object detection models are vulnerable to adversarial attacks. However, prior research primarily focuses on attacking static images or offline videos. Therefore, it is still unclear if such attacks could jeopardize real-world robotic applications in dynamic environments. This paper bridges this gap by presenting the first real-time online attack against object detection models. We devise three attacks that fabricate bounding boxes for nonexistent objects at desired locations. The attacks achieve a success rate of about 90\% within about 20 iterations. The demo video is available at \href{https://youtu.be/zJZ1aNlXsMU}{https://youtu.be/zJZ1aNlXsMU}.
+Intelligent robots rely on object detection models to perceive the environment. Following advances in deep learning security it has been revealed that object detection models are vulnerable to adversarial attacks. However, prior research primarily focuses on attacking static images or offline videos. Therefore, it is still unclear if such attacks could jeopardize real-world robotic applications in dynamic environments. This project bridges this gap by presenting the first real-time online attack against object detection models. We devise three attacks that fabricate bounding boxes for nonexistent objects at desired locations. The attacks achieve a success rate of about 90\% within about 20 iterations. 
+
+% The demo video is available at \href{https://youtu.be/zJZ1aNlXsMU}{https://youtu.be/zJZ1aNlXsMU}.
 
 % Our objective is to fool the YOLOv3 \citep{redmon2018yolov3}, and YOLOv4 \citep{bochkovskiy2020yolov4} object detection models to mistakenly detect objects at locations where there is no object. We generate adversarial overlays by combining the imperceptibility of adversarial filters with the localizability of adversarial patches.
 
-\subsection{Introduction}
-
-Reliable object detection is crucial for multiple safety-critical robotic applications. For example, an autonomous driving system relies on object detection models to perceive the environment and take action on it. While advances in deep neural networks have rapidly increased the availability of high-accuracy object detection models, this breakthrough has also revealed several potential vulnerabilities. The first adversarial attacks fooled image classification models by adding imperceptible perturbations to the input image \cite{goodfellow2014explaining}. Later research removed the restriction to imperceptible perturbations and instead designed an adversarial patch that can be printed in the physical world \cite{brown2017patch}. The physical patch fooled an image classification model to misclassify the most salient object in the image. However, attacks against image classification models cannot fool object detection models. Therefore, in 2018, Liu et al. introduced the DPatch, a digital patch that fools object detection models \cite{liu2018dpatch}, and Lee et al. later extended the attack to physical patches \cite{lee2019physical}.
-
-The generation of adversarial patches for attacking real-time robotic applications is still a rather challenging task. The generation process itself is often very computationally expensive. In addition, the efficiency of the physical patch is conditioned on strict requirements on the relative distance and orientation of the camera and the patch \cite{wang2021daedalus} \cite{9762099}. These requirements are often difficult to satisfy for real-world robotic applications deployed in dynamic environments.
-
-\begin{figure}[tbp]
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{\textwidth}
         \includegraphics[width=\linewidth]{figures/chapter_detection/detection/one.jpg}
@@ -165,9 +163,15 @@ The generation of adversarial patches for attacking real-time robotic applicatio
     \label{fig:detection.overview}
 \end{figure}
 
-Recent research in penetration tests against the Robot Operating System (ROS) has shown that it is possible to inject digital patches into the ROS message that contains the camera image \cite{dieber2020penetration}. In particular, Dieber et al. succeeded in isolating a ROS node so that they could intercept and manipulate the ROS message that contains sensor data while the victim node is unaware of the attack. In this paper, we generate digital overlays (unperceivable digital patches) at desired locations in real time and then exploit the vulnerability to inject the digital overlays into the input image. Overall, this paper makes the following contributions:
+\subsection{Introduction}
+
+Reliable object detection is crucial for multiple safety-critical robotic applications. For example, an autonomous driving system relies on object detection models to perceive the environment and take action on it. While advances in deep neural networks have rapidly increased the availability of high-accuracy object detection models, this breakthrough has also revealed several potential vulnerabilities. The first adversarial attacks fooled image classification models by adding imperceptible perturbations to the input image \citep{goodfellow2014explaining}. Later research removed the restriction to imperceptible perturbations and instead designed an adversarial patch that can be printed in the physical world \citep{brown2017patch}. The physical patch fooled an image classification model to misclassify the most salient object in the image. However, attacks against image classification models cannot fool object detection models. Therefore, in 2018, Liu et al. introduced the DPatch, a digital patch that fools object detection models \citep{liu2018dpatch}, and Lee et al. later extended the attack to physical patches \citep{lee2019physical}.
+
+The generation of adversarial patches for attacking real-time robotic applications is still a rather challenging task. The generation process itself is often very computationally expensive. In addition, the efficiency of the physical patch is conditioned on strict requirements on the relative distance and orientation of the camera and the patch \citep{wang2021daedalus} \citep{9762099}. These requirements are often difficult to satisfy for real-world robotic applications deployed in dynamic environments.
+
+Recent research in penetration tests against the Robot Operating System (ROS) has shown that it is possible to inject digital patches into the ROS message that contains the camera image \citep{dieber2020penetration}. In particular, Dieber et al. succeeded in isolating a ROS node so that they could intercept and manipulate the ROS message that contains sensor data while the victim node is unaware of the attack. In this paper, we generate digital overlays (unperceivable digital patches) at desired locations in real time and then exploit the vulnerability to inject the digital overlays into the input image. Overall, this paper makes the following contributions:
 \begin{itemize}
-    \item We devise three adversarial attacks that can generate digital overlays of different shapes at specified locations in real time (see Fig. \ref{fig:overview}). This extends previous research that primarily has focused on square patches.
+    \item We devise three adversarial attacks that can generate digital overlays of different shapes at specified locations in real time (see Fig. \ref{fig:detection.overview}). This extends previous research that primarily has focused on square patches.
     \item 
     Investigating the effect of various digital overlays it is found that the size of the overlay is critical for the 
     success of the attack, whereas the attack performance is independent of the aspect ratio.
@@ -181,51 +185,15 @@ Recent research in penetration tests against the Robot Operating System (ROS) ha
 
 This section clarifies the differences between adversarial filters and adversarial patches. Following this, we describe how prior research applies these filters and patches in the digital and physical world. Our research focuses on applying adversarial patches in the digital world.
 
-\begin{figure}[b]
-    \centering
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/digital_filter.jpg}
-        \caption{Digital filters apply the perturbation to the entire input image in the digital world \citep{wang2021daedalus}.}
-        \label{fig:digital_filter}
-    \end{subfigure}
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/physical_filter.jpg}
-        \caption{Physical filters apply the perturbation by attacking the camera using, e.g., a translucent film attached to the camera lens \citep{li2019adversarial}.}
-        \label{fig:physical_filter}
-    \end{subfigure}
-    \caption{Adversarial filters perturb the entire image.}
-    \label{fig:filter}
-\end{figure}
-
 \subsubsection{The Adversarial Filter}
 
 An adversarial filter refers to a perturbation added to the entire image. Thus, the adversarial filter is of the same size as the input image and is unperceivable by human eyes. Based on where we apply the perturbation, adversarial filters can be categorized as digital or physical filters.
 
-\textbf{Digital Filter} (Fig. \ref{fig:digital_filter})
+\textbf{Digital Filter} (Fig. \ref{fig:digital_filter}): The first adversarial attack against image classification models was a digital filter that added a small perturbation to the entire input image \citep{goodfellow2014explaining}. The perturbation can be generated using either gradient-based methods \citep{madryMSTV18} \citep{kurakin2018adversarial} \citep{wong2019wasserstein} \citep{croce2020reliable} or optimization-based methods \citep{papernot2016transferability} \citep{carlini2017towards} \citep{qin2019imperceptible}. Prior research uses the $l_1$, $l_2$, and $l_{\infty}$ norms to measure the human perceptual distance between the adversarial and the original input image \citep{miyato2015distributional} \citep{sabour2015adversarial} \citep{chen2018ead}. While the digital filter first proved the existence of adversarial examples, it is limited in practical scenarios since it is not always possible to assume access to the input image.
 
-The first adversarial attack against image classification models was a digital filter that added a small perturbation to the entire input image \citep{goodfellow2014explaining}. The perturbation can be generated using either gradient-based methods \citep{madryMSTV18} \citep{kurakin2018adversarial} \citep{wong2019wasserstein} \citep{croce2020reliable} or optimization-based methods \citep{papernot2016transferability} \citep{carlini2017towards} \citep{qin2019imperceptible}. Prior research uses the $l_1$, $l_2$, and $l_{\infty}$ norms to measure the human perceptual distance between the adversarial and the original input image \citep{miyato2015distributional} \citep{sabour2015adversarial} \citep{chen2018ead}. While the digital filter first proved the existence of adversarial examples, it is limited in practical scenarios since it is not always possible to assume access to the input image.
-
-\textbf{Physical Filter} (Fig. \ref{fig:physical_filter})
-
-Physical filters attach a translucent film to the camera lens to perturb the entire image \citep{li2019adversarial}. While physical filters do not require access to the input image, they do require physical access to the camera. One big challenge with physical filters is the difficulty of manufacturing a film that precisely replicates the adversarial perturbation. Thus, the practical applicability of adversarial filters in the physical world is still rather limited. In addition, to the best of our knowledge, physical filters has so far only been used to attack image classification models, not object detection models. 
+\textbf{Physical Filter} (Fig. \ref{fig:physical_filter}): Physical filters attach a translucent film to the camera lens to perturb the entire image \citep{li2019adversarial}. While physical filters do not require access to the input image, they do require physical access to the camera. One big challenge with physical filters is the difficulty of manufacturing a film that precisely replicates the adversarial perturbation. Thus, the practical applicability of adversarial filters in the physical world is still rather limited. In addition, to the best of our knowledge, physical filters has so far only been used to attack image classification models, not object detection models. 
 
 % \pagebreak
-
-\begin{figure}[b]
-    \centering
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/digital_patch.jpg}
-        \caption{Digital patches replace a part of the input image with the adversarial patch (left top corner) \citep{liu2018dpatch}.}
-        \label{fig:digital_patch}
-    \end{subfigure}
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/physical_patch.jpg}
-        \caption{Physical patches print the adversarial patch on a physical object, e.g., on a poster \citep{lee2019physical}.}
-        \label{fig:physical_patch}
-    \end{subfigure}
-    \caption{Adversarial patches perturb part of the image.}
-    \label{fig:patch}
-\end{figure}
 
 \subsubsection{The Adversarial Patch}
 
@@ -243,9 +211,43 @@ Contrary to filters, these patches are limited in size and only perturb part of 
 
 % \clearpage
 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/digital_filter.jpg}
+        \caption{Digital filters apply the perturbation to the entire input image in the digital world \citep{wang2021daedalus}.}
+        \label{fig:digital_filter}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/physical_filter.jpg}
+        \caption{Physical filters apply the perturbation by attacking the camera using, e.g., a translucent film attached to the camera lens \citep{li2019adversarial}.}
+        \label{fig:physical_filter}
+    \end{subfigure}
+    \caption{Adversarial filters perturb the entire image.}
+    \label{fig:filter}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/digital_patch.jpg}
+        \caption{Digital patches replace a part of the input image with the adversarial patch (left top corner) \citep{liu2018dpatch}.}
+        \label{fig:digital_patch}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/physical_patch.jpg}
+        \caption{Physical patches print the adversarial patch on a physical object, e.g., on a poster \citep{lee2019physical}.}
+        \label{fig:physical_patch}
+    \end{subfigure}
+    \caption{Adversarial patches perturb part of the image.}
+    \label{fig:patch}
+\end{figure}
+
+% \clearpage
+
 \subsection{Problem Formulation} 
 
-Our objective is to fool the YOLOv3 \cite{redmon2018yolov3}, and YOLOv4 \cite{bochkovskiy2020yolov4} object detection models to mistakenly detect objects at locations where there is no object. We generate adversarial overlays by combining the imperceptibility of adversarial filters with the localizability of adversarial patches.
+Our objective is to fool the YOLOv3 \citep{redmon2018yolov3}, and YOLOv4 \citep{bochkovskiy2020yolov4} object detection models to mistakenly detect objects at locations where there is no object. We generate adversarial overlays by combining the imperceptibility of adversarial filters with the localizability of adversarial patches.
 
 The YOLO object detection model splits the input image into $S$x$S$ grids and makes predictions for each grid. For example, the input shape of YOLO is 416x416x3 (height, width, and channel). If $S=13$, we divide each channel into 13x13 grids, and each grid is 32x32 pixels. To detect objects of different sizes, YOLO makes predictions at three different scales (see Fig. \ref{fig.grid}). The first, second, and third output layer contains 13x13, 26x26, and 52x52 grids, respectively. The first output layer detects larger objects, and the third output layer detects smaller objects. In addition, YOLO pre-defines three anchor boxes ($B=3$) at each scale to detect objects of different aspect ratios. Thus, we have 9 pre-defined anchor boxes for 3 scales. Lastly, each output contains the shape and location of the bounding box, the confidence value, and the probability vector for each class (see Fig. \ref{fig.grid}). For example, if the model is pretrained on the MS COCO dataset \citep{mscoco2014} \citep{moore2020fiftyone} that contains 80 classes ($K=80$), each output contains 85 values consisting of four dimensions ($b_x, b_y, b_w, b_h$), one confidence value ($c$), and 80 probabilities $(p_1, p_2, ..., p_{80})$ for each class.
 
@@ -257,7 +259,7 @@ for $K$ classes. For example, the shape of the first output layer is $(S_1,\ S_1
 
 \begin{figure}[b]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/chapter_detection/detection/grid.jpg}
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/grid.jpg}
     \caption{The YOLO object detection model makes predictions at three scales.}
     \label{fig.grid}
 \end{figure}
@@ -311,39 +313,12 @@ Here, the function $\sigma (x)$ represents the sigmoid function.
 
 \textbf{The multi-targeted attack} (Eq. \ref{eq:multi-targeted}) generates multiple overlays that contain target objects $t \in [0, K]$ by maximizing the sum of $\sigma(c^i) * \sigma(p^i_t)$ for the target class.
 
-\textbf{The multi-untargeted attack} (Eq. \ref{eq:multi-untargeted}) generates multiple overlays that contain different objects by maximizing the sum of $\sigma(c^i) * \sigma(p^i_t)$ for all classes.
+\clearpage
 
-Note that it is also possible to generate monochrome greyscale overlays. Greyscale overlays add the same value to each channel, making the perturbation less conspicuous. We can generate monochrome overlays using the average of the red, green, and blue channels or from a single channel since human eyes are most sensitive to the green channel.
+\null
+\vfill
 
-The perturbation is computed using gradients. At the end of each iteration, we clip the value of the perturbation so that it does not exceed the pre-defined boundary. The adversarial image of the original DPatch \citep{liu2018dpatch} contains invalid negative pixel values. Thus, we also clip the value of the adversarial image to make sure it is still a valid image. The adversarial overlay attack is summarized in Algorithm \ref{alg:adv-overlay}.
-
-\begin{figure*}[b]
-\centering
-\begin{subfigure}[b]{0.31\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/gazebo.jpg}
-    \caption{The Adversarial Overlay in Gazebo.}
-    \label{fig:gazebo}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.31\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/pc.png}
-    \caption{The Adversarial Overlay on a Laptop.}
-    \label{fig:pc}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.31\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/turtlebot.jpg}
-    \caption{The Adversarial Overlay on Turtlebot3.}
-    \label{fig:turtlebot}
-\end{subfigure}
-\caption{We tested our attack in three environments. Here we made the overlay visible for illustration purposes.}
-\label{fig.adv_detect_demo}
-\end{figure*}
-
-\begin{algorithm}[t]
+\begin{algorithm}[H]
     \caption{The Adversarial Overlay Attack}\label{alg:adv-overlay}
     \begin{algorithmic}
         \State Input: The object detection model $f(\theta, x)$, a mask $m$.
@@ -378,6 +353,16 @@ The perturbation is computed using gradients. At the end of each iteration, we c
     \end{algorithmic}
 \end{algorithm}
 
+\vfill
+
+\clearpage
+
+\textbf{The multi-untargeted attack} (Eq. \ref{eq:multi-untargeted}) generates multiple overlays that contain different objects by maximizing the sum of $\sigma(c^i) * \sigma(p^i_t)$ for all classes.
+
+Note that it is also possible to generate monochrome greyscale overlays. Greyscale overlays add the same value to each channel, making the perturbation less conspicuous. We can generate monochrome overlays using the average of the red, green, and blue channels or from a single channel since human eyes are most sensitive to the green channel.
+
+The perturbation is computed using gradients. At the end of each iteration, we clip the value of the perturbation so that it does not exceed the pre-defined boundary. The adversarial image of the original DPatch \citep{liu2018dpatch} contains invalid negative pixel values. Thus, we also clip the value of the adversarial image to make sure it is still a valid image. The adversarial overlay attack is summarized in Algorithm \ref{alg:adv-overlay}.
+
 % \pagebreak
 
 % \begin{figure}[th]
@@ -399,75 +384,50 @@ This papers presents an adversarial detection system to attack the YOLO object d
 
 % We present our experimental results in the next section.
 
+% \clearpage
+
+\null
+\vfill
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/gazebo.jpg}
+    \caption{The Adversarial Overlay in Gazebo.}
+    \label{fig:gazebo}
+\end{subfigure}
+\begin{subfigure}[b]{0.75\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/turtlebot.jpg}
+    \caption{The Adversarial Overlay on Turtlebot3.}
+    \label{fig:turtlebot}
+\end{subfigure}
+\begin{subfigure}[b]{0.85\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/pc.png}
+    \caption{The Adversarial Overlay on a Laptop.}
+    \label{fig:pc}
+\end{subfigure}
+\caption{We tested our attack in three environments. Here we made the overlay visible for illustration purposes.}
+\label{fig.adv_detect_demo}
+\end{figure}
+
+\vfill
+
 \clearpage
 
 \subsection{Experimental Results}
 
 We used YOLO object detection models pre-trained on the MS COCO dataset for the PC environment. Moreover, we trained two traffic sign detection models using YOLO for the ROS Gazebo and the ROS Turtlebot environment. 
 
-\begin{figure*}[t]
-\centering
-\begin{subfigure}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_xi_success.png}
-    \caption{Different $\xi$ with $\alpha=2$, box size$=64$.}
-    \label{fig:xi_suc}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_lr_success.png}
-    \caption{Different $\alpha$ with $\xi=8$, box size $=64$.}
-    \label{fig:alpha_suc}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_box_success.png}
-    \caption{Different box sizes with $\xi=8, \alpha=2$.}
-    \label{fig:box_suc}
-\end{subfigure}
-\caption{The success rate of the multi-untargeted attack with different $\xi$, $\alpha$, and box sizes.}
-\label{fig.hyper_suc}
-\end{figure*}
-
-\begin{figure*}[t]
-\centering
-\begin{subfigure}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_xi_box.png}
-    \caption{Different $\xi$ with $\alpha=2$, box size$=64$.}
-    \label{fig:xi_box}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_lr_box.png}
-    \caption{Different $\alpha$ with $\xi=8$, box size $=64$.}
-    \label{fig:alpha_box}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_box_box.png}
-    \caption{Different box sizes with $\xi=8, \alpha=2$.}
-    \label{fig:box_box}
-\end{subfigure}
-\caption{The average box number increase of the multi-untargeted attack with different $\xi$, $\alpha$, and box sizes}
-\label{fig.hyper_box}
-\end{figure*}
-
 \subsubsection{Evaluation Metrics}
 
 Prior research have used the Mean Average Precision (mAP) \citep{map2018} to evaluate the accuracy of object detection models. However, the objective of our attack is to fabricate new bounding boxes, not to decrease the accuracy of existing objects. Therefore, the evaluation metrics need to reflect the efficiency of generating new bounding boxes in real time, something which mAP cannot do. In addition, the mAP evaluation metric requires access to the ground truth, that is, human-labeled bounding boxes. The online attack that fools the object detection system in real time does not have any such ground truth since it is impossible for humans to label the video stream in real time. Thus, we use the following two evaluation metrics that evaluate the efficiency of generating new objects and do not require ground truth labels.
 
-\textbf{Success Rate}
+\textbf{Success Rate}: The success rate measures the percentage of images we successfully fabricate at least one object within a limited number iterations. For a real-time online attack, we need to achieve a satisfying success rate within a limited number of iterations.
 
-The success rate measures the percentage of images we successfully fabricate at least one object within a limited number iterations. For a real-time online attack, we need to achieve a satisfying success rate within a limited number of iterations.
-
-\textbf{Mean Box Number Increase}
-
-We measure the number of new bounding boxes generated compared to the benign output. The more bounding boxes we generate, the stronger the perturbation is. However, to fabricate more objects we also need a larger number of iterations.
+\textbf{Mean Box Number Increase}: We measure the number of new bounding boxes generated compared to the benign output. The more bounding boxes we generate, the stronger the perturbation is. However, to fabricate more objects we also need a larger number of iterations.
 
 In general, we will attempt to find the minimum number of iterations required to achieve a satisfying success rate and fabricate enough bounding boxes. The PASCAL VOC-2012 validation set is used in the following experiments.
 
@@ -476,58 +436,100 @@ In general, we will attempt to find the minimum number of iterations required to
 
 Three hyper-parameters are crucial for the attack: the attack strength $\xi$, the step size $\alpha$, and the box size. Since monochrome overlays can be generated in a less conspicuous way, we also investigated the effect of using gradients from different channels. In addition, we examined if the adversarial perturbation is sensitive to the aspect ratio.
 
-\textbf{The Attack Strength}
+\textbf{The Attack Strength}: The attack strength $\xi$ sets a boundary on the maximum perturbation added to each pixel. A larger $\xi$ makes the attack stronger but also results in a more conspicuous perturbation. In Fig. \ref{fig:xi_suc}, $\xi \in \{8, 10\}$ results in a much higher success rates than $\xi \in \{2, 4\}$ after 100 iterations. Though $\xi=8$ and $\xi=10$ share similar success rates, $\xi=10$ generates more bounding boxes than $\xi=8$ (see Fig. \ref{fig:xi_box}). For a real-time attack, we aim to generate at least one bounding box in 30 iterations, a requirement which is satisfied with both $\xi=8$ and $\xi=10$. $\xi=8$, in particular, finds a good balance between the attack strength and the impermeability of the perturbation.
 
-The attack strength $\xi$ sets a boundary on the maximum perturbation added to each pixel. A larger $\xi$ makes the attack stronger but also results in a more conspicuous perturbation. In Fig. \ref{fig:xi_suc}, $\xi \in \{8, 10\}$ results in a much higher success rates than $\xi \in \{2, 4\}$ after 100 iterations. Though $\xi=8$ and $\xi=10$ share similar success rates, $\xi=10$ generates more bounding boxes than $\xi=8$ (see Fig. \ref{fig:xi_box}). For a real-time attack, we aim to generate at least one bounding box in 30 iterations, a requirement which is satisfied with both $\xi=8$ and $\xi=10$. $\xi=8$, in particular, finds a good balance between the attack strength and the impermeability of the perturbation.
+\textbf{The Step Size}: The step size $\alpha$ controls how fast we update the perturbation in each iteration. A larger $\alpha$ would make it possible to fabricate bounding boxes in fewer iterations but make the update more unstable. In Fig. \ref{fig:alpha_suc}, both $\alpha=1$ and $\alpha=2$ achieve a success rate of more than 90\% after just 30 iterations, whereas $\alpha > 4$ produces a worse the success rate. In Fig. \ref{fig:alpha_box}, $\alpha=1$ eventually generates more bounding boxes than $\alpha=2$, but for a real-time online attack, it's more important to have a fast attack.
 
-\textbf{The Step Size}
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.65\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_xi_success.png}
+    \caption{Different $\xi$ with $\alpha=2$, box size$=64$.}
+    \label{fig:xi_suc}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.65\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_lr_success.png}
+    \caption{Different $\alpha$ with $\xi=8$, box size $=64$.}
+    \label{fig:alpha_suc}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.65\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_box_success.png}
+    \caption{Different box sizes with $\xi=8, \alpha=2$.}
+    \label{fig:box_suc}
+\end{subfigure}
+\caption{The success rate of the multi-untargeted attack with different $\xi$, $\alpha$, and box sizes.}
+\label{fig.hyper_suc}
+\end{figure}
 
-The step size $\alpha$ controls how fast we update the perturbation in each iteration. A larger $\alpha$ would make it possible to fabricate bounding boxes in fewer iterations but make the update more unstable. In Fig. \ref{fig:alpha_suc}, both $\alpha=1$ and $\alpha=2$ achieve a success rate of more than 90\% after just 30 iterations, whereas $\alpha > 4$ produces a worse the success rate. In Fig. \ref{fig:alpha_box}, $\alpha=1$ eventually generates more bounding boxes than $\alpha=2$, but for a real-time online attack, it's more important to have a fast attack.
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.65\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_xi_box.png}
+    \caption{Different $\xi$ with $\alpha=2$, box size$=64$.}
+    \label{fig:xi_box}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.65\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_lr_box.png}
+    \caption{Different $\alpha$ with $\xi=8$, box size $=64$.}
+    \label{fig:alpha_box}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.65\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_box_box.png}
+    \caption{Different box sizes with $\xi=8, \alpha=2$.}
+    \label{fig:box_box}
+\end{subfigure}
+\caption{The average box number increase of the multi-untargeted attack with different $\xi$, $\alpha$, and box sizes}
+\label{fig.hyper_box}
+\end{figure}
 
 % \clearpage
 
-\begin{figure*}[t]
+\begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{subfigure}[b]{0.55\textwidth}
         \includegraphics[width=\linewidth]{figures/chapter_detection/detection/multi_untargeted_mono_success.png}
         \caption{Different channels (Red, Green, Blue).}
          \label{fig:mono_suc}
     \end{subfigure}
-    \begin{subfigure}[b]{0.6\textwidth}
-        \includegraphics[width=1\linewidth]{figures/chapter_detection/detection/multi_untargeted_aspect_success.png}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/multi_untargeted_aspect_success.png}
         \caption{Different aspect ratios (left $1:n$, right: $n:1$).}
          \label{fig:aspect_suc}
     \end{subfigure}
     \caption{The success rate of the multi-untargeted attack with different channels and aspect ratios.}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[t]
+\begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{subfigure}[b]{0.55\textwidth}
         \includegraphics[width=\linewidth]{figures/chapter_detection/detection/multi_untargeted_mono_box.png}
         \caption{Different channels (Red, Green, Blue).}
          \label{fig:mono_box}
     \end{subfigure}
-    \begin{subfigure}[b]{0.6\textwidth}
+    \begin{subfigure}[b]{\textwidth}
         \includegraphics[width=1\linewidth]{figures/chapter_detection/detection/multi_untargeted_aspect_box.png}
         \caption{Different aspect ratios (left $1:n$, right: $n:1$).}
          \label{fig:aspect_box}
     \end{subfigure}
 
     \caption{The average box number increase of the multi-untargeted attack different channels and aspect ratios.}
-\end{figure*}
+\end{figure}
 
-\textbf{The Box Size}
+\textbf{The Box Size}: The box size determines the total number of pixels we can perturb. The more pixels we can manipulate, the easier it is to deviate the model output. We need to find the minimum box size for our attack. In Fig. \ref{fig:box_suc}, the box sizes of both 64x64 and 128x128 achieve a success rate of 90\% after just 30 iterations, while the box size of 32x32 struggles to achieve successful attacks. Moreover, with box size smaller than 16x16 we are unable to attack the model with $\xi=8$ and $\alpha=2$. In addition, as expected, the larger the box size is, the more bounding boxes the attack can generate (see Fig. \ref{fig:box_box}). For a real-time online attack, we suggest the overlay box size to be at least 64x64.
 
-The box size determines the total number of pixels we can perturb. The more pixels we can manipulate, the easier it is to deviate the model output. We need to find the minimum box size for our attack. In Fig. \ref{fig:box_suc}, the box sizes of both 64x64 and 128x128 achieve a success rate of 90\% after just 30 iterations, while the box size of 32x32 struggles to achieve successful attacks. Moreover, with box size smaller than 16x16 we are unable to attack the model with $\xi=8$ and $\alpha=2$. In addition, as expected, the larger the box size is, the more bounding boxes the attack can generate (see Fig. \ref{fig:box_box}). For a real-time online attack, we suggest the overlay box size to be at least 64x64.
+\textbf{The Monochrome Channel}: For the attack that generates a polychrome overlay, we update each channel of the perturbation using the gradients of each channel. While for the monochrome overlay, we decide which color channel to prioritize. Interestingly, the experimental results (see Fig. \ref{fig:mono_suc} and Fig. \ref{fig:mono_box}) show that the object detection model is the most sensitive to the green channel. Using the average gradient of RGB channels, we achieve the highest success rate and generate the most number of boxes.
 
-\textbf{The Monochrome Channel}
-
-For the attack that generates a polychrome overlay, we update each channel of the perturbation using the gradients of each channel. While for the monochrome overlay, we decide which color channel to prioritize. Interestingly, the experimental results (see Fig. \ref{fig:mono_suc} and Fig. \ref{fig:mono_box}) show that the object detection model is the most sensitive to the green channel. Using the average gradient of RGB channels, we achieve the highest success rate and generate the most number of boxes.
-
-\textbf{The Aspect Ratio}
-
-Our attack can generate adversarial overlays of arbitrary shapes. Thus, we can study if the object detection model is more susceptible to adversarial overlays of specific aspect ratios, e.g., wide (1:n) or long (n:1) boxes. For a fair comparison, overlay boxes of different aspect ratios have the same number of pixels perturbed. In Fig. \ref{fig:aspect_suc}, different aspect ratios do not cause observable dissimilarities in success rates. Although the aspect ratio $1:3$ generates more bounding boxes than $1:1.5$ after 100 iterations (see Fig. \ref{fig:aspect_box}), this attributes to a slightly more number of boxes perturbed ($1:3 \rightarrow 37 \times 111 = 4108$, $1:1.5 \rightarrow 52 \times 78 = 4056$). Thus, we cannot conclude that the aspect ratio has any discernible impact on the attack. As a result, we use $\xi=8$, $\alpha=2$, and a box size of 64x64 as default values for our attack, and the monochrome overlay uses the average of gradients from RGB channels.
+\textbf{The Aspect Ratio}: Our attack can generate adversarial overlays of arbitrary shapes. Thus, we can study if the object detection model is more susceptible to adversarial overlays of specific aspect ratios, e.g., wide (1:n) or long (n:1) boxes. For a fair comparison, overlay boxes of different aspect ratios have the same number of pixels perturbed. In Fig. \ref{fig:aspect_suc}, different aspect ratios do not cause observable dissimilarities in success rates. Although the aspect ratio $1:3$ generates more bounding boxes than $1:1.5$ after 100 iterations (see Fig. \ref{fig:aspect_box}), this attributes to a slightly more number of boxes perturbed ($1:3 \rightarrow 37 \times 111 = 4108$, $1:1.5 \rightarrow 52 \times 78 = 4056$). Thus, we cannot conclude that the aspect ratio has any discernible impact on the attack. As a result, we use $\xi=8$, $\alpha=2$, and a box size of 64x64 as default values for our attack, and the monochrome overlay uses the average of gradients from RGB channels.
 
 \subsubsection{The Attack Performance}
 
@@ -577,6 +579,8 @@ This paper has demonstrated that it is possible to attack an object detection sy
 
 In the future, we plan to investigate the effect of the attack on modular autonomous driving systems that rely on object detection models to perceive the environment. In addition, we will explore how to detect adversarial attacks so that we can embrace deep learning models in safety-critical robotic applications in a safe way.
 
+\clearpage
+
 \section{The Human-in-the-Middle Attack}
 
 The last section introduces how we generate and apply digital patches in ROS. This attack requires access to ROS topics and online gradients, which means different perturbations are computed at different time steps. Can we generate a single universal perturbation that attacks all the frames, and is it possible to attack an object detection system without access to the internal system? 
@@ -601,15 +605,15 @@ Advancements in deep neural networks have ushered in a new era of robotics, char
 
 \subsection{Introduction}
 
-The development of deep neural networks has enabled the creation of intelligent robots that possess a more comprehensive perception of the environment than traditional robots. However, this shift towards intelligent robots has also brought with it an increasing risk of adversarial attacks, especially in safety-critical applications.  It has been a decade since the existence of adversarial examples was first identified by Biggio et al. \cite{biggio2013evasion}, and Szegedy et al. \cite{szegedy2013intriguing}, in which they fooled an image classification model by adding a small perturbation to the input image.  Although the perturbation was imperceptible to humans, it caused the deep learning model to produce erroneous classification results. The attack was later extended from classification models to detection models \cite{han2023detection, LuSFF17}. 
+The development of deep neural networks has enabled the creation of intelligent robots that possess a more comprehensive perception of the environment than traditional robots. However, this shift towards intelligent robots has also brought with it an increasing risk of adversarial attacks, especially in safety-critical applications.  It has been a decade since the existence of adversarial examples was first identified by Biggio et al. \citep{biggio2013evasion}, and Szegedy et al. \citep{szegedy2013intriguing}, in which they fooled an image classification model by adding a small perturbation to the input image.  Although the perturbation was imperceptible to humans, it caused the deep learning model to produce erroneous classification results. The attack was later extended from classification models to detection models \citep{han2023detection, LuSFF17}. 
 
 %Despite substantial research efforts to understand adversarial attacks, it is still unclear how they could affect real-world systems, such as object detection models deployed in autonomous driving systems.  
 
-Adversarial attacks against deep learning models can be divided into two categories: digital attacks and physical attacks. Digital attacks directly apply perturbations to the digital input image by modifying pixel values \cite{han2023driving}, while physical attacks involve printing the perturbation on physical objects such as posters \cite{lee2019physical} or T-shirts \cite{xu2020adversarial}.
+Adversarial attacks against deep learning models can be divided into two categories: digital attacks and physical attacks. Digital attacks directly apply perturbations to the digital input image by modifying pixel values \citep{han2023driving}, while physical attacks involve printing the perturbation on physical objects such as posters \citep{lee2019physical} or T-shirts \citep{xu2020adversarial}.
 
-However, both digital and physical attacks have their limitations. Digital perturbation requires access to the detection system, making it difficult to apply in real-world scenarios such as hacking into a self-driving car. Physical attacks, on the other hand, are sensitive to position and angle variations. For instance, experiments in \cite{LuSFF17} showed that an autonomous vehicle only misclassified traffic signs placed within 0.5 meters of the camera and viewed from specific angles. Moreover, these attacks lack flexibility, as once the adversarial object is printed, it can only be changed through reprinting. The trial-and-error process of finding a successful attack object can take a long time and require significant amounts of printing.
+However, both digital and physical attacks have their limitations. Digital perturbation requires access to the detection system, making it difficult to apply in real-world scenarios such as hacking into a self-driving car. Physical attacks, on the other hand, are sensitive to position and angle variations. For instance, experiments in \citep{LuSFF17} showed that an autonomous vehicle only misclassified traffic signs placed within 0.5 meters of the camera and viewed from specific angles. Moreover, these attacks lack flexibility, as once the adversarial object is printed, it can only be changed through reprinting. The trial-and-error process of finding a successful attack object can take a long time and require significant amounts of printing.
 
-\begin{figure}[tpb]
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{\linewidth}
         \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/mitm.png}
@@ -653,7 +657,7 @@ The key contributions of this research are summarized as follows:
 
 \subsubsection{Object Detection Models}
 
-The task of object detection aims to locate the position and classify the category of each object in an image. Therefore, the task consists of two distinct problems: localization and classification. Existing object detection models can be categorized into two types, one-stage and two-stage methods, based on whether these two problems are solved together or separately \cite{Zhao2019}. Two of the most widely deployed one-stage models are YOLO \cite{redmon2016you, redmon2018yolov3, bochkovskiy2020yolov4} and SSD \cite{liu2016ssd}, which can achieve real-time performance on CPUs without GPUs. Faster RCNN \cite{ren2015faster} and Mask RCNN \cite{he2017mask} are two well-known two-stage models. 
+The task of object detection aims to locate the position and classify the category of each object in an image. Therefore, the task consists of two distinct problems: localization and classification. Existing object detection models can be categorized into two types, one-stage and two-stage methods, based on whether these two problems are solved together or separately \citep{Zhao2019}. Two of the most widely deployed one-stage models are YOLO \citep{redmon2016you, redmon2018yolov3, bochkovskiy2020yolov4} and SSD \citep{liu2016ssd}, which can achieve real-time performance on CPUs without GPUs. Faster RCNN \citep{ren2015faster} and Mask RCNN \citep{he2017mask} are two well-known two-stage models. 
 
 % Mask RCNN is capable of solving the image segmentation task by assigning labels to each pixel instead of just outputting bounding boxes.
 
@@ -672,20 +676,20 @@ In robotic applications, one-stage models are generally preferred due to their s
 
 \subsubsection{Adversarial Attacks}
 
- The Fast Gradient Sign Method (FGSM) \cite{GoodfellowSS14} was the first adversarial attack against classification models that uses gradients of deep neural networks to generate image-specific perturbations, which is more efficient than optimization-based methods proposed by Biggio et al. \cite{biggio2013evasion}, and Szegedy et al. \cite{szegedy2013intriguing}. 
+ The Fast Gradient Sign Method (FGSM) \citep{GoodfellowSS14} was the first adversarial attack against classification models that uses gradients of deep neural networks to generate image-specific perturbations, which is more efficient than optimization-based methods proposed by Biggio et al. \citep{biggio2013evasion}, and Szegedy et al. \citep{szegedy2013intriguing}. 
 
-However, for real-world robotic applications, it is more practical to use Universal Adversarial Perturbations (UAPs) \cite{moosavi2017universal, li2021universal, wu2023adversariald}, which are image-agnostic. UAPs demonstrated the ability to fool classification models on most images in a dataset using a single perturbation. Adversarial attacks have since been extended from image classification to detection models \cite{gurbaxani2018traits, han2023detection}.
+However, for real-world robotic applications, it is more practical to use Universal Adversarial Perturbations (UAPs) \citep{moosavi2017universal, li2021universal, wu2023adversariald}, which are image-agnostic. UAPs demonstrated the ability to fool classification models on most images in a dataset using a single perturbation. Adversarial attacks have since been extended from image classification to detection models \citep{gurbaxani2018traits, han2023detection}.
 
-In addition to image-specific and image-agnostic methods, it is also possible to classify adversarial attacks into data-driven and data-independent approaches.  Data-driven approaches require access to the input image, while data-independent methods do not need access to the input data. Both approaches may need access to the parameters and the architecture of the target model, depending on whether they are white-box attacks or black-box attacks.  Generally, data-driven approaches achieve a higher fooling rate as they have more information at their disposal. Data-driven methods include gradient-based methods \cite{chow2020adversarial,li2021universal, xie2017adversarial, wu2023adversarial}, methods using Generative Adversarial Networks (GANs) \cite{hashemi2020transferable,Wei2019}, and optimization-based methods \cite{carlini2017towards,liao2021transferable}. 
+In addition to image-specific and image-agnostic methods, it is also possible to classify adversarial attacks into data-driven and data-independent approaches.  Data-driven approaches require access to the input image, while data-independent methods do not need access to the input data. Both approaches may need access to the parameters and the architecture of the target model, depending on whether they are white-box attacks or black-box attacks.  Generally, data-driven approaches achieve a higher fooling rate as they have more information at their disposal. Data-driven methods include gradient-based methods \citep{chow2020adversarial,li2021universal, xie2017adversarial, wu2023adversarial}, methods using Generative Adversarial Networks (GANs) \citep{hashemi2020transferable,Wei2019}, and optimization-based methods \citep{carlini2017towards,liao2021transferable}. 
 
 To deploy the UAPs generated using the aforementioned methods, Wang et al. categorized existing physical attacks into invasive attacks and
-non-invasive attacks \cite{wang2022survey}. Invasive attacks deploy the perturbation by attaching a patch \cite{lee2019physical, xu2020adversarial, hu2021naturalistic, thys2019fooling} or changing the texture \cite{wang2021dual, wang2022fca} of the target object. For example, by adding extra constraints, such as the Sub-sampled Non-Printability Score (SNPS), to the loss function of data-driven methods, we can generate physical perturbations that preserve the adversarial effect if printed out on a poster \cite{lee2019physical}. On the other hand, non-invasive attacks perform physical attacks by changing the environment rather than the target object. For example, Gnanasambandam et al. fool classification models by changing the illumination of the environment using a low-cost projector \cite{gnanasambandam2021optical}, and Zhong et al. exploit the shadow to fool deep learning models \cite{zhong2022shadows}.
+non-invasive attacks \citep{wang2022survey}. Invasive attacks deploy the perturbation by attaching a patch \citep{lee2019physical, xu2020adversarial, hu2021naturalistic, thys2019fooling} or changing the texture \citep{wang2021dual, wang2022fca} of the target object. For example, by adding extra constraints, such as the Sub-sampled Non-Printability Score (SNPS), to the loss function of data-driven methods, we can generate physical perturbations that preserve the adversarial effect if printed out on a poster \citep{lee2019physical}. On the other hand, non-invasive attacks perform physical attacks by changing the environment rather than the target object. For example, Gnanasambandam et al. fool classification models by changing the illumination of the environment using a low-cost projector \citep{gnanasambandam2021optical}, and Zhong et al. exploit the shadow to fool deep learning models \citep{zhong2022shadows}.
 
 % The Non-Printability Score (NPS) measures the error between a printed pixel and its digital counterpart. 
 
 % Methods for generating and applying perturbations are summarized in Fig. \ref{fig:attack}.
 
-We propose a novel Human-in-the-Middle (HitM)  hardware attack that neither modifies the target object (invasive attacks) nor changes the illumination or shadow of the environment (non-invasive attacks). Instead, our attack injects the perturbation into the physical communication channel, combining the advantages of digital and physical attacks. Wang et al. propose a Main-in-the-Middle attack against Machine-Learning-as-a-service applications that exploit vulnerabilities in networking to stealthy manipulate the submitted data, which is a traditional network attack \cite{wang2020man}. In a parallel research endeavor, Liu et al. focus on local-search-based black-box attacks against image classification models and inject adversarial strips to a MIPI camera using an FPGA \cite{liu2022practical}. On the other hand, we focus on gradient-based white-box attacks against object detection models and inject universal adversarial perturbations to a USB camera via an ARM Linux board, as depicted in Fig. \ref{fig:attack}. Due to hardware limitations, Liu's method can only inject monochrome adversarial strips, while we can inject polychrome adversarial perturbations. 
+We propose a novel Human-in-the-Middle (HitM)  hardware attack that neither modifies the target object (invasive attacks) nor changes the illumination or shadow of the environment (non-invasive attacks). Instead, our attack injects the perturbation into the physical communication channel, combining the advantages of digital and physical attacks. Wang et al. propose a Main-in-the-Middle attack against Machine-Learning-as-a-service applications that exploit vulnerabilities in networking to stealthy manipulate the submitted data, which is a traditional network attack \citep{wang2020man}. In a parallel research endeavor, Liu et al. focus on local-search-based black-box attacks against image classification models and inject adversarial strips to a MIPI camera using an FPGA \citep{liu2022practical}. On the other hand, we focus on gradient-based white-box attacks against object detection models and inject universal adversarial perturbations to a USB camera via an ARM Linux board, as depicted in Fig. \ref{fig:attack}. Due to hardware limitations, Liu's method can only inject monochrome adversarial strips, while we can inject polychrome adversarial perturbations. 
 
 % Both methods are data driven.
 
@@ -725,7 +729,7 @@ In Section II, we discussed that object detection models can be categorized into
     \item $p_i$: The softmax probability vector of the $i_{th}$ candidate box. $p_i=(p^1_i, p^2_i, ..., p^K_i)$ for $K$ classes and $\sum{p_i}=1$.
 \end{itemize}
 
-Given an input image $x$, the object detection model outputs $N$ candidate bounding boxes $\mathcal{O}(x) = \{o_1, o_2, o_3, ..., o_N\}$. Each candidate box $o_i=(b_i, c_i, p_i)$ contains $b_i=(b^x_i, b^y_i, b^w_i, b^h_i)$ that represents the location and dimension of the box, the confidence value $c_i \in [0, 1]$ that represents how probable it is that the the candidate box represents an object, and the softmax probability vector, $p_i=(p^1_i, p^2_i, ..., K_i)$ for $K$ classes. The raw outputs from the detection model $\mathcal{O}(x)$ may contain several thousand candidate bounding boxes. We then use the Non-maximum Suppression (NMS) method \cite{bodla2017soft} to filter out bounding boxes with low confidence values, and high Intersection over Union (IoU) to generate final detection results.
+Given an input image $x$, the object detection model outputs $N$ candidate bounding boxes $\mathcal{O}(x) = \{o_1, o_2, o_3, ..., o_N\}$. Each candidate box $o_i=(b_i, c_i, p_i)$ contains $b_i=(b^x_i, b^y_i, b^w_i, b^h_i)$ that represents the location and dimension of the box, the confidence value $c_i \in [0, 1]$ that represents how probable it is that the the candidate box represents an object, and the softmax probability vector, $p_i=(p^1_i, p^2_i, ..., K_i)$ for $K$ classes. The raw outputs from the detection model $\mathcal{O}(x)$ may contain several thousand candidate bounding boxes. We then use the Non-maximum Suppression (NMS) method \citep{bodla2017soft} to filter out bounding boxes with low confidence values, and high Intersection over Union (IoU) to generate final detection results.
 
 % An adversarial example $x^{'} = x + \delta$ aims to fool the detection model so that it outputs candidate boxes $\mathcal{O}(x^{'}) \neq \mathcal{O}(x)$. For example, the adversarial output $\mathcal{O}(x^{'})$ may detect more false positive objects after the NMS. Next, we will describe how to generate the perturbation $\delta$.
 
@@ -763,7 +767,7 @@ where $\sigma(\cdot)$ is the sigmoid function.
 
 By maximizing the adversarial loss ( $\mathcal{L}_{PCB}(x)$ and $\mathcal{L}_{PC}(x)$), we generate large amounts of incorrect bounding boxes (fabrication attack). By minimizing the loss, we remove bounding boxes (vanishing attack).  Using $\mathcal{L}_{PCB}(x)$ gives smaller bounding boxes, while $\mathcal{L}_{PC}(x)$ gives larger ones .
 
-The optimization of \eqref{eq_adversarial_opt} is performed by first zero-initializing the perturbation $\delta$, and then using Projected Gradient Descent (PGD) \cite{madry2017towards} with learning rate decay  in every iteration $t$ , so that 
+The optimization of \eqref{eq_adversarial_opt} is performed by first zero-initializing the perturbation $\delta$, and then using Projected Gradient Descent (PGD) \citep{madry2017towards} with learning rate decay  in every iteration $t$ , so that 
 \begin{equation}
 \delta_{t+1} = proj_p(\delta_{t} + \alpha sign(\frac{\partial L_{adv}(x'_{t};O^*)}{\partial x'_{t}} )).
 \end{equation}
@@ -812,12 +816,12 @@ $\texttt{proj}_{\infty}(\delta,\epsilon)$ is the projection function $\min(\delt
 
 \begin{figure*}[bthp]
     \centering
-    \begin{subfigure}[b]{0.46\textwidth}
+    \begin{subfigure}[b]{\textwidth}
         \includegraphics[width=0.9\linewidth]{figures/chapter_detection/hardware/design.jpg}
         \caption{The Design of the Embedded System.}
         \label{fig:design}
     \end{subfigure}
-    \begin{subfigure}[b]{0.46\textwidth}
+    \begin{subfigure}[b]{\textwidth}
         \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/minm_attack.jpg}
         \caption{The Physical Attack, Hardware Attack and Digital Attack.}
         \label{fig:comparison} 
@@ -876,14 +880,14 @@ To implement the hardware attack, specialized hardware such as Raspberry Pi Zero
 
 \begin{figure}[bp]
     \centering
-    \begin{subfigure}[b]{0.46\textwidth}
+    \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/fabrication.jpg}
         \caption{The mAP cannot distinguish between fabrication and vanishing attacks (both \text{mAP}=0). %The fabrication attack (left) generates more objects, and the vanishing attack (right) clears detection results. None of them matches the ground truth. Thus, different attacks result in the same low mAP.
         }
         \label{fig:fabrication} 
     \end{subfigure}
-    \begin{subfigure}[b]{0.46\textwidth}
+    \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/mislabel.jpg}
         \caption{The mAP does not consider confidence values (both \text{mAP}=0). 
@@ -897,20 +901,20 @@ To implement the hardware attack, specialized hardware such as Raspberry Pi Zero
 
 \begin{figure*}[btph]
     \centering
-    \includegraphics[width=0.80\linewidth]{figures/chapter_detection/hardware/init.png}
+    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/init.png}
     \caption{The image-specific  PCB fabrication attack using different initialization methods.}
     \label{fig:init}
 \end{figure*}
 
 \subsection{Experimental Evaluation}
 
-This section aims to provide insight into why the Mean Average Precision (mAP) not suitable for evaluating adversarial attacks. For adversarial attacks, the choice of the adversarial loss function determines the type of attack to be conducted (e.g., fabrication or vanishing), whereas the strength of the attack is determined by the iterative optimization process. In this study, we employ our novel evaluation metrics to investigate the  iterative optimization process  and achieve more efficient attacks against a one-stage detection model, namely YOLO, on the VOC2012 \cite{pascal-voc-2012} and CARLA \cite{deschaud2021kitticarla} dataset.
+This section aims to provide insight into why the Mean Average Precision (mAP) not suitable for evaluating adversarial attacks. For adversarial attacks, the choice of the adversarial loss function determines the type of attack to be conducted (e.g., fabrication or vanishing), whereas the strength of the attack is determined by the iterative optimization process. In this study, we employ our novel evaluation metrics to investigate the  iterative optimization process  and achieve more efficient attacks against a one-stage detection model, namely YOLO, on the VOC2012 \citep{pascal-voc-2012} and CARLA \citep{deschaud2021kitticarla} dataset.
 
 % In addition to this, we compare different initialization methods and adversarial loss functions, and investigate the effectiveness of using learning rate decay to enhance the performance of the attack.
 
 \subsubsection{Evaluation Metrics}
 
-The mAP \cite{cartucho2018} is typically used to both to measure the accuracy of object detection models and to evaluate the strength of adversarial attacks. However, it can be noticed that the mAP cannot distinguish between different attacks. 
+The mAP \citep{cartucho2018} is typically used to both to measure the accuracy of object detection models and to evaluate the strength of adversarial attacks. However, it can be noticed that the mAP cannot distinguish between different attacks. 
 
 For example, both the fabrication and vanishing attacks result in an mAP $\approx$ 0, even though they serve different attacking purposes (see Fig. \ref{fig:fabrication}). Similarly, while an attacker will prefer a stronger attack (Dog 99\%) over a weaker attack (Dog 60\%), mAP does not reflect the strength of an attack (see Fig. \ref{fig:mislabel}).
 In addition, note that the overall detection error 
@@ -929,7 +933,7 @@ Therefore, we devise three new evaluation metrics.
     \item Relative Box Variation: After each iteration, the position of false positive bounding boxes fluctuates. This metric measures the percentage of consistent bounding boxes (bounding boxes that have the same position as in the previous step) at the current step and can be expressed as $\frac{|\texttt{NMS}(\mathcal{O}(x_t^{'}))| + |\texttt{NMS}(\mathcal{O}(x_{t-1}^{'}))| - |\texttt{NMS}(\mathcal{O}(x_{t}^{'}),\ \mathcal{O}(x_{t-1}^{'}))|}{|\texttt{NMS}(\mathcal{O}(x_t^{'}))|}$.
 \end{enumerate}
 
-Further, we compare our attack with the TOG attack \cite{chow2020adversarial}, which is also a gradient-based attack that updates the adversarial perturbation using the gradient of input with respect to the adversarial loss function. The main difference is that the TOG attack uses uniform initialization and updates the perturbation with a constant learning rate (no learning rate decay). Besides, the TOG attack uses the YOLO training loss \cite{redmon2018yolov3, bochkovskiy2020yolov4} as the adversarial loss function. We study the effect of these factors in the following sections, respectively.
+Further, we compare our attack with the TOG attack \citep{chow2020adversarial}, which is also a gradient-based attack that updates the adversarial perturbation using the gradient of input with respect to the adversarial loss function. The main difference is that the TOG attack uses uniform initialization and updates the perturbation with a constant learning rate (no learning rate decay). Besides, the TOG attack uses the YOLO training loss \citep{redmon2018yolov3, bochkovskiy2020yolov4} as the adversarial loss function. We study the effect of these factors in the following sections, respectively.
 
 % \begin{equation}
 % \mathcal{L}_{TOG}(x) = \frac{\sum{(\sigma(c_i) * \sigma(p_i)}}{\sum{[\sigma(w_i) * \sigma(h_i)]^2}}.
@@ -958,39 +962,39 @@ Further, we compare our attack with the TOG attack \cite{chow2020adversarial}, w
 
 \begin{figure*}[btph]
     \centering
-    \includegraphics[width=0.80\linewidth]{figures/chapter_detection/hardware/lr.png}
+    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/lr.png}
     \caption{The  image-specific  PCB fabrication attack with different learning rate decays.}
     \label{fig:decay}
 \end{figure*}
 
 \begin{figure*}[btph]
     \centering
-    \includegraphics[width=0.80\linewidth]{figures/chapter_detection/hardware/loss.png}
+    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/loss.png}
     \caption{Different adversarial loss functions of the  image-specific  fabrication attack.}
     \label{fig:loss}
 \end{figure*}
 
 \begin{figure*}[tbp]
     \centering
-    \begin{subfigure}[b]{0.22\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/clear_noon_city.png}
         \caption{Clear Noon (City)}
         \label{fig:clear_noon} 
     \end{subfigure}
-    \begin{subfigure}[b]{0.22\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/clear_noon_urban.png}
         \caption{Clear Noon (Suburban)}
         \label{fig:clear_noon_suburban}
     \end{subfigure}
-    \begin{subfigure}[b]{0.22\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/hard_rain_city.png}
         \caption{Hard Rain Sunset (City)}
         \label{fig:hard_rain} 
     \end{subfigure}
-    \begin{subfigure}[b]{0.22\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/wet_cloudy_city.png}
         \caption{Wet Cloudy Night (City)}
@@ -1002,7 +1006,7 @@ Further, we compare our attack with the TOG attack \cite{chow2020adversarial}, w
 
 \subsubsection{Initialization Methods}
 
-The TOG attack employs uniform initialization as noted in \cite{chow2020adversarial}. In contrast, other attacks use zero initialization, including \cite{fischer2017adversarial,li2021universal,madry2017towards}. Gradient-based attacks rely on gradients to iterate from the original image to an adversarial input. The uniform initialization may impede the initial gradient at the first iteration, potentially limiting the attack's effectiveness. To investigate this hypothesis, we conducted 10 runs of the attack with uniform initialization and compared the results with zero initialization using the mean confidence variation, number of boxes, and relative box variation.
+The TOG attack employs uniform initialization as noted in \citep{chow2020adversarial}. In contrast, other attacks use zero initialization, including \citep{fischer2017adversarial,li2021universal,madry2017towards}. Gradient-based attacks rely on gradients to iterate from the original image to an adversarial input. The uniform initialization may impede the initial gradient at the first iteration, potentially limiting the attack's effectiveness. To investigate this hypothesis, we conducted 10 runs of the attack with uniform initialization and compared the results with zero initialization using the mean confidence variation, number of boxes, and relative box variation.
 
 Our results showed that, for the first two evaluation metrics, only two out of ten runs with uniform initialization resulted in a more effective attack than zero initialization. This supports our hypothesis that uniform initialization can impede the initial gradient and hinder the attack's effectiveness. Regarding the third evaluation metric, relative box variation, we observed convergence to 1 for both initialization methods, indicating that all false positive bounding boxes were stable, and the convergence speed was similar for both initialization methods.
 
@@ -1170,7 +1174,7 @@ In contrast, both the TOG and PCB attacks converge faster and perform better tha
 
 \subsubsection{The Attack Performance and Transferability}
 
-We used an autonomous driving dataset collected from the CARLA simulator \cite{deschaud2021kitticarla}. The dataset includes driving records from 7 maps, including different areas (city, rural, urban, highway), daytime (noon, sunset, night), and weather (clear, cloudy, soft rain, and hard rain) (see Fig. \ref{fig:carla}). A 30-second driving video was collected from each map, sampling at 10 FPS, which is the same as the KITTI autonomous vehicle. 
+We used an autonomous driving dataset collected from the CARLA simulator \citep{deschaud2021kitticarla}. The dataset includes driving records from 7 maps, including different areas (city, rural, urban, highway), daytime (noon, sunset, night), and weather (clear, cloudy, soft rain, and hard rain) (see Fig. \ref{fig:carla}). A 30-second driving video was collected from each map, sampling at 10 FPS, which is the same as the KITTI autonomous vehicle. 
 
 For the image-specific PCB attack, we measured the performance of the attack on an NVIDIA RTX 2080Ti GPU. The image-specific attack achieved 12.44 FPS, faster than the 10 FPS sampling rate of the KITTI autonomous vehicle, thus achieving a real-time attack.
 
@@ -1219,37 +1223,37 @@ This paper presents a novel hardware attack that reveals a previously unknown vu
 
 % \clearpage
 
-\section{The WHite-box Adversarial Toolbox (WHAT)}
-\label{sec:what}
+% \section{The WHite-box Adversarial Toolbox (WHAT)}
+% \label{sec:what}
 
-There have been a lot of publications about adversarial attacks, but they are developed individually by different research groups. We would like to develop a toolbox that integrates existing attack methods and provide benchmark results to compare various attack methods, making it more accessible to achive practical adversarial attacks against object detection systems.
+% There have been a lot of publications about adversarial attacks, but they are developed individually by different research groups. We would like to develop a toolbox that integrates existing attack methods and provide benchmark results to compare various attack methods, making it more accessible to achive practical adversarial attacks against object detection systems.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.4]{figures/chapter_detection/what.png}
-    \caption{The WHite-box Adversarial Toolbox.}
-    \label{fig:what}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[scale=0.4]{figures/chapter_detection/what.png}
+%     \caption{The WHite-box Adversarial Toolbox.}
+%     \label{fig:what}
+% \end{figure}
 
-The WHite-box Adversarial Toolbox (WHAT) focuses on white-box adversarial attacks against object detection systems. We can use gradient-based methods to generate a universal adversarial perturbation that could attack all the frames in a video.
+% The WHite-box Adversarial Toolbox (WHAT) focuses on white-box adversarial attacks against object detection systems. We can use gradient-based methods to generate a universal adversarial perturbation that could attack all the frames in a video.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{figures/chapter_detection/what-attack.png}
-    \caption{Universal perturbation that vanishes objects}
-    \label{fig:what_attack}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{figures/chapter_detection/what-attack.png}
+%     \caption{Universal perturbation that vanishes objects}
+%     \label{fig:what_attack}
+% \end{figure}
 
-Besides, a web application for the toolbox is developed where we can upload videos or images, choose different attack methods, then the server generates the perturbation as a numpy array. Finally, we may apply the perturbation to a real-world detection system using Man-in-the-Middle attack.
+% Besides, a web application for the toolbox is developed where we can upload videos or images, choose different attack methods, then the server generates the perturbation as a numpy array. Finally, we may apply the perturbation to a real-world detection system using Man-in-the-Middle attack.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{figures/chapter_detection/what-app.png}
-    \caption{The demo application of the WHite-box Adversarial Toolbox.}
-    \label{fig:what_app}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{figures/chapter_detection/what-app.png}
+%     \caption{The demo application of the WHite-box Adversarial Toolbox.}
+%     \label{fig:what_app}
+% \end{figure}
 
-In conclusion, the objective of the toolbox is to provide a platform that integrates existing attack methods, and make it more accessible to test if a detection system is vulnerable to these attacks.
+% In conclusion, the objective of the toolbox is to provide a platform that integrates existing attack methods, and make it more accessible to test if a detection system is vulnerable to these attacks.
 
 % \clearpage
 
