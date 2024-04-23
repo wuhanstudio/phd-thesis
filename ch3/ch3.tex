@@ -257,7 +257,7 @@ Putting things together: Given an input image $x$, the object detection model ou
 \end{equation}
 for $K$ classes. For example, the shape of the first output layer is $(S_1,\ S_1,\ B,\ K + 5) = (13,\ 13,\ 3,\ 85)$. The image is divided into 13x13 grids, and the model makes predictions for 3 anchor boxes. Each prediction contains 85 values (85 = 4 + 1 + 80). The adversarial attack aims to generate an adversarial perturbation $\delta \in [-1, 1]^{whc}$ such that the adversarial output $\mathcal{O}(x^{'})$ is different from the original output $\mathcal{O}(x)$.
 
-\begin{figure}[b]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_detection/detection/grid.jpg}
     \caption{The YOLO object detection model makes predictions at three scales.}
@@ -269,18 +269,21 @@ for $K$ classes. For example, the shape of the first output layer is $(S_1,\ S_1
 \subsubsection{The Adversarial Overlay}
 
 As described in Section \ref{section_preliminaries}, adversarial filters are imperceptible to human eyes but do not allow us to control exactly where in an image that we fabricate objects. Adversarial patches, 
-on the other hand, are pinpointable but conspicuous. We propose a new method, the adversarial overlay, that applies an imperceptible perturbation to part of an image. Thereby, the adversarial overlay combines the strengths of adversarial filters and patches. The perturbations applied in filters, patches, and overlays can be contrasted as 
+on the other hand, are pinpointable but conspicuous. We propose a new method, the adversarial overlay, that applies an imperceptible perturbation to part of an image. Thereby, the adversarial overlay combines the strengths of adversarial filters and patches and they can be contrasted as: 
 \begin{subequations}
 \label{eq_perturbations}
 \begin{align}
     x^{'}_{filter} &= x + \delta, \\
-    x^{'}_{patch} &= (\mathbb{1}-m) \odot x + m \odot \delta, \\
+    x^{'}_{patch} &= (\mathds{1}-m) \odot x + m \odot \delta, \\
     x^{'}_{overlay} &= x + m \odot \delta.
 \end{align}
 \end{subequations}
-Here, the perturbation $\delta$ is applied via a binary mask $m \in \{0, 1\}^{wh}$, and $\odot$ is the Hadamard operator performing element-wise multiplication. As seen in equation \eqref{eq_perturbations}, the adversarial filter $x^{'}_{filter}$ applies the perturbation to the entire image without the mask $m$, the adversarial patch $x^{'}_{patch}$ uses the mask to replace part of the image, and the adversarial overlay $x^{'}_{overlay}$ applies the mask to the perturbation and adds it as an overlay to the image.
 
-Now, note that the confidence value and the probability vector collectively determine whether or not a bounding box is drawn on the output image. Thus, by maximizing the product of confidence and probability vector, we can fabricate objects at desired locations. This leads us to propose three adversarial loss functions $L_{adv}$ for generating perturbations in real time: one loss function for one-targeted attacks
+Here, the perturbation $\delta$ is applied via a binary mask $m \in \{0, 1\}^{wh}$, and $\odot$ is the Hadamard operator performing element-wise multiplication. 
+
+In equation \eqref{eq_perturbations}, the adversarial filter $x^{'}_{filter}$ applies the perturbation to the entire image without the mask $m$, the adversarial patch $x^{'}_{patch}$ uses the mask to replace part of the image, and the adversarial overlay $x^{'}_{overlay}$ applies the mask to the perturbation and adds it as an overlay to the image.
+
+Now, note that the confidence value and the probability vector collectively determine whether or not a bounding box is drawn on the output image. Thus, by maximizing the product of confidence and probability vector, we can fabricate objects at desired locations. This leads us to three adversarial loss functions $L_{adv}$ for generating perturbations in real time: one loss function for one-targeted attacks
 \setcounter{equation}{2}
 \begin{equation}
 \max_{1 \leq i \leq |\mathcal{O}|}\ [\sigma(c^i) * \sigma(p^i_t)] \label{eq:one-targeted},
@@ -293,7 +296,6 @@ and one loss function for multi-untargeted attack
 \begin{equation}
 \sum^{|\mathcal{O}|}_{i = 1} \sum_{j=1}^{K}\ [\sigma(c^i) *\sigma(p^i_j)] \label{eq:multi-untargeted}.    
 \end{equation}
-Here, the function $\sigma (x)$ represents the sigmoid function.
 
 % \begin{align*}
 % One\ Targeted:\ \mathcal{L}_{adv}^{1}(\mathbfcal{O}) &= \sum^S \max_{1 \leq i \leq |\mathcal{O}|}\ [\sigma(c^i) * \sigma(p^i_t)] \\ 
@@ -309,14 +311,13 @@ Here, the function $\sigma (x)$ represents the sigmoid function.
 
 % where $|\mathcal{O}|$ represents the length of the output that equals to the total number of bounding boxes.
 
-\textbf{The one-targeted attack} (Eq. \ref{eq:one-targeted}) generates one overlay that contains the target object $t \in \{1,\dots,K\}$ by finding the bounding box with the maximum value of $\sigma(c^i) * \sigma(p^i_t)$. This method generates only one overlay that contains target objects because we increase the confidence and probability of the maximum one in all candidate bounding boxes.
+\textbf{The one-targeted attack} (Eq. \ref{eq:one-targeted}) generates the overlay that contains the target object $t \in \{1,\dots,K\}$ by finding the bounding box with the maximum value of $\sigma(c^i) * \sigma(p^i_t)$. It only contains one target object because we increase the confidence and probability of the maximum one in all candidate bounding boxes. 
 
 \textbf{The multi-targeted attack} (Eq. \ref{eq:multi-targeted}) generates multiple overlays that contain target objects $t \in [0, K]$ by maximizing the sum of $\sigma(c^i) * \sigma(p^i_t)$ for the target class.
 
-\clearpage
+\textbf{The multi-untargeted attack} (Eq. \ref{eq:multi-untargeted}) generates multiple overlays that contain different objects by maximizing the sum of $\sigma(c^i) * \sigma(p^i_t)$ for all classes.
 
-\null
-\vfill
+\clearpage
 
 \begin{algorithm}[H]
     \caption{The Adversarial Overlay Attack}\label{alg:adv-overlay}
@@ -353,15 +354,11 @@ Here, the function $\sigma (x)$ represents the sigmoid function.
     \end{algorithmic}
 \end{algorithm}
 
-\vfill
+The function $\sigma (x)$ in the above equations represents the sigmoid function.
 
-\clearpage
+Note that it is possible to generate monochrome overlays. Monochrome overlays add the same value to each channel, making the perturbation less conspicuous. We can add the average of the red, green, and blue channels or a single channel since human eyes are most sensitive to the green channel.
 
-\textbf{The multi-untargeted attack} (Eq. \ref{eq:multi-untargeted}) generates multiple overlays that contain different objects by maximizing the sum of $\sigma(c^i) * \sigma(p^i_t)$ for all classes.
-
-Note that it is also possible to generate monochrome greyscale overlays. Greyscale overlays add the same value to each channel, making the perturbation less conspicuous. We can generate monochrome overlays using the average of the red, green, and blue channels or from a single channel since human eyes are most sensitive to the green channel.
-
-The perturbation is computed using gradients. At the end of each iteration, we clip the value of the perturbation so that it does not exceed the pre-defined boundary. The adversarial image of the original DPatch \citep{liu2018dpatch} contains invalid negative pixel values. Thus, we also clip the value of the adversarial image to make sure it is still a valid image. The adversarial overlay attack is summarized in Algorithm \ref{alg:adv-overlay}.
+The perturbation is computed using gradients. At the end of each iteration, we clip the value of the perturbation so that it does not exceed the pre-defined boundary. The adversarial image of the original DPatch \citep{liu2018dpatch} contains invalid negative pixel values. Thus, we clip the value of the adversarial image to make sure it is still a valid image. The adversarial overlay attack is summarized in Algorithm \ref{alg:adv-overlay}.
 
 % \pagebreak
 
@@ -374,36 +371,28 @@ The perturbation is computed using gradients. At the end of each iteration, we c
 
 \subsection{System Architecture}
 
-This papers presents an adversarial detection system to attack the YOLO object detection model. The system adopts a modular design pattern so that we can test our attacks in different environments (see Fig. \ref{fig.adv_detect_demo}) using the same architecture. The system consists of three components: the Data Source, the Server, and the Control Panel.
-
-\textbf{The Data Source}: The data source publishes the input image to the server. We can publish the image from different sources, including a PC camera, the ROS Gazebo Simulator, and a real Turtlebot 3.
-
-\textbf{The Server}: The server receives the input image stream from the data source via WebSocket connections. Meanwhile, it obtains the adversarial mask from the control plane. The server then generates and injects the adversarial overlay into the input image. In addition, the YOLO object detection model is deployed on the server.
-
-\textbf{The Control Plane}: The control plane is a website where the attacker can draw the mask at arbitrary locations. Then, the browser sends the mask to the server via Websocket connections.
+To attack the YOLO object detection model, the adversarial detection system adopts a modular design pattern so that we can test our attacks in different environments (see Fig. \ref{fig.adv_detect_demo}) using the same architecture. The system consists of three components: the Data Source, the Server, and the Control Panel.
 
 % We present our experimental results in the next section.
 
-% \clearpage
-
-\null
-\vfill
-
 \begin{figure}[H]
 \centering
-\begin{subfigure}[b]{0.75\textwidth}
+\begin{subfigure}[b]{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_detection/detection/gazebo.jpg}
     \caption{The Adversarial Overlay in Gazebo.}
     \label{fig:gazebo}
 \end{subfigure}
-\begin{subfigure}[b]{0.75\textwidth}
+\begin{subfigure}[b]{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_detection/detection/turtlebot.jpg}
     \caption{The Adversarial Overlay on Turtlebot3.}
     \label{fig:turtlebot}
 \end{subfigure}
-\begin{subfigure}[b]{0.85\textwidth}
+\end{figure}
+\begin{figure}[H]\ContinuedFloat
+\centering
+\begin{subfigure}[b]{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_detection/detection/pc.png}
     \caption{The Adversarial Overlay on a Laptop.}
@@ -413,9 +402,11 @@ This papers presents an adversarial detection system to attack the YOLO object d
 \label{fig.adv_detect_demo}
 \end{figure}
 
-\vfill
+\textbf{The Data Source}: The data source publishes the input image to the server. We can publish the image from different sources, including a PC camera, the ROS Gazebo Simulator, and a real Turtlebot 3.
 
-\clearpage
+\textbf{The Server}: The server receives the input image stream from the data source via WebSocket connections. Meanwhile, it obtains the adversarial mask from the control plane. The server then generates and injects the adversarial overlay into the input image. In addition, the YOLO object detection model is deployed on the server.
+
+\textbf{The Control Plane}: The control plane is a website where the attacker can draw the mask at arbitrary locations. Then, the browser sends the mask to the server via Websocket connections.
 
 \subsection{Experimental Results}
 
@@ -434,74 +425,22 @@ In general, we will attempt to find the minimum number of iterations required to
 \subsubsection{Hyper-parameters}
 \label{sec:hyper}
 
-Three hyper-parameters are crucial for the attack: the attack strength $\xi$, the step size $\alpha$, and the box size. Since monochrome overlays can be generated in a less conspicuous way, we also investigated the effect of using gradients from different channels. In addition, we examined if the adversarial perturbation is sensitive to the aspect ratio.
+Three hyper-parameters are crucial for the attack: the attack strength $\xi$, the step size $\alpha$, and the box size. For monochrome overlays, we investigated the effect of using gradients from different channels. In addition, we examined if the adversarial perturbation is sensitive to the aspect ratio.
 
 \textbf{The Attack Strength}: The attack strength $\xi$ sets a boundary on the maximum perturbation added to each pixel. A larger $\xi$ makes the attack stronger but also results in a more conspicuous perturbation. In Fig. \ref{fig:xi_suc}, $\xi \in \{8, 10\}$ results in a much higher success rates than $\xi \in \{2, 4\}$ after 100 iterations. Though $\xi=8$ and $\xi=10$ share similar success rates, $\xi=10$ generates more bounding boxes than $\xi=8$ (see Fig. \ref{fig:xi_box}). For a real-time attack, we aim to generate at least one bounding box in 30 iterations, a requirement which is satisfied with both $\xi=8$ and $\xi=10$. $\xi=8$, in particular, finds a good balance between the attack strength and the impermeability of the perturbation.
 
-\textbf{The Step Size}: The step size $\alpha$ controls how fast we update the perturbation in each iteration. A larger $\alpha$ would make it possible to fabricate bounding boxes in fewer iterations but make the update more unstable. In Fig. \ref{fig:alpha_suc}, both $\alpha=1$ and $\alpha=2$ achieve a success rate of more than 90\% after just 30 iterations, whereas $\alpha > 4$ produces a worse the success rate. In Fig. \ref{fig:alpha_box}, $\alpha=1$ eventually generates more bounding boxes than $\alpha=2$, but for a real-time online attack, it's more important to have a fast attack.
+\textbf{The Step Size}: The step size $\alpha$ controls how fast we update the perturbation in each iteration. A larger $\alpha$ would make it possible to fabricate bounding boxes in fewer iterations but make the update more unstable. In Fig. \ref{fig:alpha_suc}, both $\alpha=1$ and $\alpha=2$ achieve a success rate of more than 90\% after just 30 iterations, whereas $\alpha > 4$ produces a worse the success rate. In Fig. \ref{fig:alpha_box}, though $\alpha=1$ eventually generates more bounding boxes than $\alpha=2$, it is preferable to have a faster attack.
 
-\begin{figure}[H]
-\centering
-\begin{subfigure}[b]{0.65\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_xi_success.png}
-    \caption{Different $\xi$ with $\alpha=2$, box size$=64$.}
-    \label{fig:xi_suc}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.65\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_lr_success.png}
-    \caption{Different $\alpha$ with $\xi=8$, box size $=64$.}
-    \label{fig:alpha_suc}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.65\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_box_success.png}
-    \caption{Different box sizes with $\xi=8, \alpha=2$.}
-    \label{fig:box_suc}
-\end{subfigure}
-\caption{The success rate of the multi-untargeted attack with different $\xi$, $\alpha$, and box sizes.}
-\label{fig.hyper_suc}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[b]{0.65\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_xi_box.png}
-    \caption{Different $\xi$ with $\alpha=2$, box size$=64$.}
-    \label{fig:xi_box}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.65\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_lr_box.png}
-    \caption{Different $\alpha$ with $\xi=8$, box size $=64$.}
-    \label{fig:alpha_box}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.65\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_box_box.png}
-    \caption{Different box sizes with $\xi=8, \alpha=2$.}
-    \label{fig:box_box}
-\end{subfigure}
-\caption{The average box number increase of the multi-untargeted attack with different $\xi$, $\alpha$, and box sizes}
-\label{fig.hyper_box}
-\end{figure}
-
-% \clearpage
+\textbf{The Box Size}: The box size determines the total number of pixels we can perturb. The more pixels we can manipulate, the easier it is to deviate the model output. We need to find the minimum box size for our attack. In Fig. \ref{fig:box_suc}, the box sizes of both 64x64 and 128x128 achieve a success rate of 90\% after just 30 iterations, while the box size of 32x32 struggles to achieve successful attacks. Moreover, with box size smaller than 16x16 we are unable to attack the model with $\xi=8$ and $\alpha=2$. In addition, as expected, the larger the box size is, the more bounding boxes the attack can generate (see Fig. \ref{fig:box_box}). For a real-time online attack, we suggest the overlay box size to be at least 64x64.
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.55\textwidth}
+    \begin{subfigure}[b]{0.5\textwidth}
         \includegraphics[width=\linewidth]{figures/chapter_detection/detection/multi_untargeted_mono_success.png}
         \caption{Different channels (Red, Green, Blue).}
          \label{fig:mono_suc}
     \end{subfigure}
-    \begin{subfigure}[b]{\textwidth}
+    \begin{subfigure}[b]{0.9\textwidth}
         \includegraphics[width=\linewidth]{figures/chapter_detection/detection/multi_untargeted_aspect_success.png}
         \caption{Different aspect ratios (left $1:n$, right: $n:1$).}
          \label{fig:aspect_suc}
@@ -511,12 +450,12 @@ Three hyper-parameters are crucial for the attack: the attack strength $\xi$, th
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.55\textwidth}
+    \begin{subfigure}[b]{0.5\textwidth}
         \includegraphics[width=\linewidth]{figures/chapter_detection/detection/multi_untargeted_mono_box.png}
         \caption{Different channels (Red, Green, Blue).}
          \label{fig:mono_box}
     \end{subfigure}
-    \begin{subfigure}[b]{\textwidth}
+    \begin{subfigure}[b]{0.9\textwidth}
         \includegraphics[width=1\linewidth]{figures/chapter_detection/detection/multi_untargeted_aspect_box.png}
         \caption{Different aspect ratios (left $1:n$, right: $n:1$).}
          \label{fig:aspect_box}
@@ -524,8 +463,6 @@ Three hyper-parameters are crucial for the attack: the attack strength $\xi$, th
 
     \caption{The average box number increase of the multi-untargeted attack different channels and aspect ratios.}
 \end{figure}
-
-\textbf{The Box Size}: The box size determines the total number of pixels we can perturb. The more pixels we can manipulate, the easier it is to deviate the model output. We need to find the minimum box size for our attack. In Fig. \ref{fig:box_suc}, the box sizes of both 64x64 and 128x128 achieve a success rate of 90\% after just 30 iterations, while the box size of 32x32 struggles to achieve successful attacks. Moreover, with box size smaller than 16x16 we are unable to attack the model with $\xi=8$ and $\alpha=2$. In addition, as expected, the larger the box size is, the more bounding boxes the attack can generate (see Fig. \ref{fig:box_box}). For a real-time online attack, we suggest the overlay box size to be at least 64x64.
 
 \textbf{The Monochrome Channel}: For the attack that generates a polychrome overlay, we update each channel of the perturbation using the gradients of each channel. While for the monochrome overlay, we decide which color channel to prioritize. Interestingly, the experimental results (see Fig. \ref{fig:mono_suc} and Fig. \ref{fig:mono_box}) show that the object detection model is the most sensitive to the green channel. Using the average gradient of RGB channels, we achieve the highest success rate and generate the most number of boxes.
 
@@ -573,13 +510,72 @@ As illustrated in Table \ref{tab:fix-box}, on average, the attack requires only 
 
 For an online attack, the attack can be even more efficient. It is unnecessary to re-generate the adversarial overlay from scratch for every input video frame since there is a high correlation between consecutive video frames and iterations \citep{ilyas2018prior}. As a result, we can save computations by reusing the overlay generated in the previous timestep. In the demo video, the attack achieved near real-time performance on an Intel i7-8665U CPU.
 
+\clearpage
+\vfill
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.65\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_xi_success.png}
+    \caption{Different $\xi$ with $\alpha=2$, box size$=64$.}
+    \label{fig:xi_suc}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.65\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_lr_success.png}
+    \caption{Different $\alpha$ with $\xi=8$, box size $=64$.}
+    \label{fig:alpha_suc}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.65\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_box_success.png}
+    \caption{Different box sizes with $\xi=8, \alpha=2$.}
+    \label{fig:box_suc}
+\end{subfigure}
+\caption{The success rate of the multi-untargeted attack with different $\xi$, $\alpha$, and box sizes.}
+\label{fig.hyper_suc}
+\end{figure}
+
+\vfill
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.65\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_xi_box.png}
+    \caption{Different $\xi$ with $\alpha=2$, box size$=64$.}
+    \label{fig:xi_box}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.65\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_lr_box.png}
+    \caption{Different $\alpha$ with $\xi=8$, box size $=64$.}
+    \label{fig:alpha_box}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.65\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_box_box.png}
+    \caption{Different box sizes with $\xi=8, \alpha=2$.}
+    \label{fig:box_box}
+\end{subfigure}
+\caption{The average box number increase of the multi-untargeted attack with different $\xi$, $\alpha$, and box sizes}
+\label{fig.hyper_box}
+\end{figure}
+
+\clearpage
+
 \subsection{Conclusions}
 
-This paper has demonstrated that it is possible to attack an object detection system in real time. We generate human unperceivable adversarial overlays of arbitrary shapes to fabricate bounding boxes at desired locations. This attack could be a threat to the areas of traffic sign recognition and the autonomous driving field as a whole.
+This research demonstrates that it is possible to attack an object detection system in real time. We generate human unperceivable adversarial overlays of arbitrary shapes to fabricate bounding boxes at desired locations. This attack could be a threat to the areas of traffic sign recognition and the autonomous driving field as a whole.
 
 In the future, we plan to investigate the effect of the attack on modular autonomous driving systems that rely on object detection models to perceive the environment. In addition, we will explore how to detect adversarial attacks so that we can embrace deep learning models in safety-critical robotic applications in a safe way.
 
-\clearpage
+% \clearpage
 
 \section{The Human-in-the-Middle Attack}
 
@@ -592,7 +588,7 @@ Object detection systems using deep learning models have become increasingly pop
 % \end{abstract}
 
 % \begin{IEEEImpStatement}
-Advancements in deep neural networks have ushered in a new era of robotics, characterized by intelligent robots with a comprehensive understanding of the environment, thanks to deep learning models. However, it is no more a secret that deep learning models are vulnerable to adversarial attacks. Besides existing digital and physical attacks, we introduce a novel 'Human-in-the-Middle' hardware attack that injects digital perturbation into the physical sensor. Our research opens up new possibilities for adversarial attacks, and we hope to embrace deep learning models securely for robotic applications.
+% Advancements in deep neural networks have ushered in a new era of robotics, characterized by intelligent robots with a comprehensive understanding of the environment, thanks to deep learning models. However, it is no more a secret that deep learning models are vulnerable to adversarial attacks. Besides existing digital and physical attacks, we introduce a novel 'Human-in-the-Middle' hardware attack that injects digital perturbation into the physical sensor. Our research opens up new possibilities for adversarial attacks, and we hope to embrace deep learning models securely for robotic applications.
 
 % It is no more a secret that deep learning models are vulnerable to adversarial attacks. However, how to apply adversarial perturbations practically remains an open challenge. Digital attacks that inject perturbations into the input image can be challenging due to the lack of access to the internal system. Physical attacks that print perturbations on physical objects, such as posters, are sensitive to position and angle variations. Our novel man-in-the-middle hardware attack injects digital perturbation into the physical sensor, opening up new possibilities for applying adversarial attacks. 
 
@@ -612,6 +608,20 @@ The development of deep neural networks has enabled the creation of intelligent 
 Adversarial attacks against deep learning models can be divided into two categories: digital attacks and physical attacks. Digital attacks directly apply perturbations to the digital input image by modifying pixel values \citep{han2023driving}, while physical attacks involve printing the perturbation on physical objects such as posters \citep{lee2019physical} or T-shirts \citep{xu2020adversarial}.
 
 However, both digital and physical attacks have their limitations. Digital perturbation requires access to the detection system, making it difficult to apply in real-world scenarios such as hacking into a self-driving car. Physical attacks, on the other hand, are sensitive to position and angle variations. For instance, experiments in \citep{LuSFF17} showed that an autonomous vehicle only misclassified traffic signs placed within 0.5 meters of the camera and viewed from specific angles. Moreover, these attacks lack flexibility, as once the adversarial object is printed, it can only be changed through reprinting. The trial-and-error process of finding a successful attack object can take a long time and require significant amounts of printing.
+
+\subsection{Contributions}
+
+This paper presents a novel hardware attack that combines the flexibility of physical attacks with the efficiency of digital attacks, inspired by Man-in-the-Middle Attacks in network security (refer to Fig. \ref{fig:mitm}). In this attack, the adversary intercepts and manipulates the image data transmitted between a USB camera and a detection system (refer to Figs. \ref{fig:minm} and \ref{fig:demo}). 
+
+The key contributions of this research are summarized as follows:
+
+\begin{enumerate}
+    \item We present a novel hardware attack, called Human-in-the-Middle  attack, that offers both efficiency and ease of deployment for adversarial attacks\footnote{The source code of the hardware attack is available on GitHub: \url{https://github.com/wuhanstudio/adversarial-camera}}. By utilizing learning rate decay during the generation of the perturbation, our attack is capable of generating more bounding boxes than competing attack methods.
+    \item We introduce three new evaluation metrics that offer a more nuanced approach to evaluating adversarial attacks. Unlike existing metrics that make a binary decision for each bounding box, our metrics consider the confidence value and probability vector in a linear fashion.
+    \item We devise and open source the white-box adversarial toolbox\footnote{The source code of the toolbox is available on GitHub: \url{https://github.com/wuhanstudio/whitebox-adversarial-toolbox}} that simplifies the process of generating adversarial perturbations. The toolbox focuses on real-time white-box attacks against object detection models.
+\end{enumerate}
+
+% \clearpage
 
 \begin{figure}[H]
     \centering
@@ -636,18 +646,6 @@ However, both digital and physical attacks have their limitations. Digital pertu
   \caption{The Human-in-the-Middle (HitM)  hardware attack.}
   \label{fig:overview}
 \end{figure}
-
-\subsection{Contributions}
-
-This paper presents a novel hardware attack that combines the flexibility of physical attacks with the efficiency of digital attacks, inspired by Man-in-the-Middle Attacks in network security (refer to Fig. \ref{fig:mitm}). In this attack, the adversary intercepts and manipulates the image data transmitted between a USB camera and a detection system (refer to Figs. \ref{fig:minm} and \ref{fig:demo}). 
-
-The key contributions of this research are summarized as follows:
-
-\begin{enumerate}
-    \item We present a novel hardware attack, called Human-in-the-Middle  attack, that offers both efficiency and ease of deployment for adversarial attacks\footnote{The source code of the hardware attack is available on GitHub: \url{https://github.com/wuhanstudio/adversarial-camera}}. By utilizing learning rate decay during the generation of the perturbation, our attack is capable of generating more bounding boxes than competing attack methods.
-    \item We introduce three new evaluation metrics that offer a more nuanced approach to evaluating adversarial attacks. Unlike existing metrics that make a binary decision for each bounding box, our metrics consider the confidence value and probability vector in a linear fashion.
-    \item We devise and open source the white-box adversarial toolbox\footnote{The source code of the toolbox is available on GitHub: \url{https://github.com/wuhanstudio/whitebox-adversarial-toolbox}} that simplifies the process of generating adversarial perturbations. The toolbox focuses on real-time white-box attacks against object detection models.
-\end{enumerate}
 
 % \clearpage
 
@@ -689,6 +687,13 @@ non-invasive attacks \citep{wang2022survey}. Invasive attacks deploy the perturb
 
 % Methods for generating and applying perturbations are summarized in Fig. \ref{fig:attack}.
 
+\begin{figure}[bt]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/chapter_detection/hardware/attack.jpg}
+    \caption{Our approach to generate and apply adversarial perturbations in bold.}
+    \label{fig:attack}
+\end{figure}
+
 We propose a novel Human-in-the-Middle (HitM)  hardware attack that neither modifies the target object (invasive attacks) nor changes the illumination or shadow of the environment (non-invasive attacks). Instead, our attack injects the perturbation into the physical communication channel, combining the advantages of digital and physical attacks. Wang et al. propose a Main-in-the-Middle attack against Machine-Learning-as-a-service applications that exploit vulnerabilities in networking to stealthy manipulate the submitted data, which is a traditional network attack \citep{wang2020man}. In a parallel research endeavor, Liu et al. focus on local-search-based black-box attacks against image classification models and inject adversarial strips to a MIPI camera using an FPGA \citep{liu2022practical}. On the other hand, we focus on gradient-based white-box attacks against object detection models and inject universal adversarial perturbations to a USB camera via an ARM Linux board, as depicted in Fig. \ref{fig:attack}. Due to hardware limitations, Liu's method can only inject monochrome adversarial strips, while we can inject polychrome adversarial perturbations. 
 
 % Both methods are data driven.
@@ -696,13 +701,6 @@ We propose a novel Human-in-the-Middle (HitM)  hardware attack that neither modi
 % In summary, our proposed method is a gradient-based data-driven approach that generates image-agnostic Universal Adversarial Perturbations (UAPs) and applies them via a Man-in-the-Middle hardware attack, as depicted in Fig. \ref{fig:attack}.
 
 % Besides, our proposed method is a gradient-based data-driven approach while Liu et al local search
-
-\begin{figure}[bt]
-    \centering
-    \includegraphics[width=0.9\linewidth]{figures/chapter_detection/hardware/attack.jpg}
-    \caption{Our approach to generate and apply adversarial perturbations in bold.}
-    \label{fig:attack}
-\end{figure}
 
 % \clearpage
 
@@ -774,7 +772,7 @@ The optimization of \eqref{eq_adversarial_opt} is performed by first zero-initia
 The image-specific PCB attack is summarized in Algorithm \ref{alg:image-specific}, where 
 $\texttt{proj}_{\infty}(\delta,\epsilon)$ is the projection function $\min(\delta,\epsilon)$  using $l_{\infty}$ norm , and $\texttt{clip}(-1, 1)$ is the unit clip function.
 
-\begin{algorithm}
+\begin{algorithm}[H]
     \caption{Image-specific PCB Attack}\label{alg:image-specific}
     \begin{algorithmic}[1]
         \State Input: The target model, the input image $x$.
@@ -793,7 +791,7 @@ $\texttt{proj}_{\infty}(\delta,\epsilon)$ is the projection function $\min(\delt
     \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
+\begin{algorithm}[H]
     \caption{Image-agnostic PCB Attack (UAP)}\label{alg:image-agnostic}
     \begin{algorithmic}[1]
         \State Input: The target model, the sample images $X_S$.
@@ -814,22 +812,6 @@ $\texttt{proj}_{\infty}(\delta,\epsilon)$ is the projection function $\min(\delt
     \end{algorithmic}
 \end{algorithm}
 
-\begin{figure*}[bthp]
-    \centering
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=0.9\linewidth]{figures/chapter_detection/hardware/design.jpg}
-        \caption{The Design of the Embedded System.}
-        \label{fig:design}
-    \end{subfigure}
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/minm_attack.jpg}
-        \caption{The Physical Attack, Hardware Attack and Digital Attack.}
-        \label{fig:comparison} 
-    \end{subfigure}
-  \caption{The architecture of the Human-in-the-Middle  hardware attack and its differences from physical and digital attacks.}
-  \label{fig:hardware}
-\end{figure*}
-
 \subsubsection{\textbf{Image-agnostic PCB Attack}}
 
 % We can extend the method to an image-agnostic attack by iterating over a collection of images $X_{s}$, representing all available images to the attacker. $X_{s}$ can be thought of as the training set or a video clip from the target scene. In each iteration, we iterate the perturbation $\delta$ over $X_{s}$. The learning rate $\alpha$ should be relatively small compared to the image-specific PCB attack. We summarize the image-agnostic PCB attack in the algorithm \ref{alg:image-agnostic} and discuss how we choose hyper-parameters in the next section.
@@ -848,7 +830,25 @@ In Section I, we mentioned that conducting digital attacks can be challenging du
 
 To address this problem, the Human-in-the-Middle  hardware attack was developed. By eavesdropping and manipulating the image data before it reaches the detection system, the perturbation can be applied without access to the operating system.  Unlike physical attacks, the hardware attack is robust to position and angle variations because the perturbation is injected by directly modifying pixel values. Thus, the perturbation won't be sheared when viewing from different angles.
 
-To implement the hardware attack, specialized hardware such as Raspberry Pi Zero/4 or I.MX6UL is required, which can read raw images from the USB camera and then inject the perturbation (see Fig. \ref{fig:hardware}). To conceal the attack from the operating system, a virtual camera needs to be simulated to the detection system. This requires a Linux kernel that supports the V4L2 driver, the USB gadget framework, and configfs.
+To implement the hardware attack, specialized hardware such as Raspberry Pi Zero/4 or I.MX6UL is required, which can read raw images from the USB camera and then inject the perturbation (see Fig. \ref{fig:hardware}). To conceal the attack from the operating system, a virtual camera needs to be simulated via the USB port. This requires a Linux kernel that supports the V4L2 driver, the USB gadget, and configfs.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+    \centering
+        \includegraphics[width=0.8\linewidth]{figures/chapter_detection/hardware/design.jpg}
+        \caption{The Design of the Embedded System.}
+        \label{fig:design}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=0.9\linewidth]{figures/chapter_detection/hardware/minm_attack.jpg}
+        \caption{The Physical Attack, Hardware Attack and Digital Attack.}
+        \label{fig:comparison} 
+    \end{subfigure}
+  \caption{The architecture of the Human-in-the-Middle  hardware attack and its differences from physical and digital attacks.}
+  \label{fig:hardware}
+\end{figure}
 
 % \begin{figure*}
 %     \centering
@@ -877,34 +877,6 @@ To implement the hardware attack, specialized hardware such as Raspberry Pi Zero
 % Besides, the implementation of OpenCV keeps the boundary, which is a little different from the original bilinear interpolation. As a result, we cannot construct the same adversarial input after moving the perturbation from the inside to the outside of the system. The good news is that experimental results demonstrate that the adversarial perturbation is still valid after resizing twice.
 
 % \clearpage
-
-\begin{figure}[bp]
-    \centering
-    \begin{subfigure}[b]{\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/fabrication.jpg}
-        \caption{The mAP cannot distinguish between fabrication and vanishing attacks (both \text{mAP}=0). %The fabrication attack (left) generates more objects, and the vanishing attack (right) clears detection results. None of them matches the ground truth. Thus, different attacks result in the same low mAP.
-        }
-        \label{fig:fabrication} 
-    \end{subfigure}
-    \begin{subfigure}[b]{\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/mislabel.jpg}
-        \caption{The mAP does not consider confidence values (both \text{mAP}=0). 
-        %Both strong (left) and weak (right) attacks produce an incorrect bounding box. The attacker prefers a strong attack (Dog 99\%) over a weak attack (Dog 60\%), but the mAP does not reflect the attack strength.
-        }
-        \label{fig:mislabel}
-    \end{subfigure}
-  \caption{The limitations of Mean Average Precision (mAP).}
-  \label{fig:map}
-\end{figure}
-
-\begin{figure*}[btph]
-    \centering
-    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/init.png}
-    \caption{The image-specific  PCB fabrication attack using different initialization methods.}
-    \label{fig:init}
-\end{figure*}
 
 \subsection{Experimental Evaluation}
 
@@ -935,6 +907,27 @@ Therefore, we devise three new evaluation metrics.
 
 Further, we compare our attack with the TOG attack \citep{chow2020adversarial}, which is also a gradient-based attack that updates the adversarial perturbation using the gradient of input with respect to the adversarial loss function. The main difference is that the TOG attack uses uniform initialization and updates the perturbation with a constant learning rate (no learning rate decay). Besides, the TOG attack uses the YOLO training loss \citep{redmon2018yolov3, bochkovskiy2020yolov4} as the adversarial loss function. We study the effect of these factors in the following sections, respectively.
 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/fabrication.jpg}
+        \caption{The mAP cannot distinguish between fabrication and vanishing attacks (both \text{mAP}=0). %The fabrication attack (left) generates more objects, and the vanishing attack (right) clears detection results. None of them matches the ground truth. Thus, different attacks result in the same low mAP.
+        }
+        \label{fig:fabrication} 
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/mislabel.jpg}
+        \caption{The mAP does not consider confidence values (both \text{mAP}=0). 
+        %Both strong (left) and weak (right) attacks produce an incorrect bounding box. The attacker prefers a strong attack (Dog 99\%) over a weak attack (Dog 60\%), but the mAP does not reflect the attack strength.
+        }
+        \label{fig:mislabel}
+    \end{subfigure}
+  \caption{The limitations of Mean Average Precision (mAP).}
+  \label{fig:map}
+\end{figure}
+
 % \begin{equation}
 % \mathcal{L}_{TOG}(x) = \frac{\sum{(\sigma(c_i) * \sigma(p_i)}}{\sum{[\sigma(w_i) * \sigma(h_i)]^2}}.
 % \end{equation}
@@ -958,52 +951,6 @@ Further, we compare our attack with the TOG attack \citep{chow2020adversarial}, 
 %     \label{fig:mislabel}
 % \end{figure}
 
-% \clearpage
-
-\begin{figure*}[btph]
-    \centering
-    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/lr.png}
-    \caption{The  image-specific  PCB fabrication attack with different learning rate decays.}
-    \label{fig:decay}
-\end{figure*}
-
-\begin{figure*}[btph]
-    \centering
-    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/loss.png}
-    \caption{Different adversarial loss functions of the  image-specific  fabrication attack.}
-    \label{fig:loss}
-\end{figure*}
-
-\begin{figure*}[tbp]
-    \centering
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/clear_noon_city.png}
-        \caption{Clear Noon (City)}
-        \label{fig:clear_noon} 
-    \end{subfigure}
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/clear_noon_urban.png}
-        \caption{Clear Noon (Suburban)}
-        \label{fig:clear_noon_suburban}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/hard_rain_city.png}
-        \caption{Hard Rain Sunset (City)}
-        \label{fig:hard_rain} 
-    \end{subfigure}
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/wet_cloudy_city.png}
-        \caption{Wet Cloudy Night (City)}
-        \label{fig:wet_cloudy}
-    \end{subfigure}
-  \caption{The UAP generalizes to different daytime, weathers and maps.}
-  \label{fig:carla}
-\end{figure*}
-
 \subsubsection{Initialization Methods}
 
 The TOG attack employs uniform initialization as noted in \citep{chow2020adversarial}. In contrast, other attacks use zero initialization, including \citep{fischer2017adversarial,li2021universal,madry2017towards}. Gradient-based attacks rely on gradients to iterate from the original image to an adversarial input. The uniform initialization may impede the initial gradient at the first iteration, potentially limiting the attack's effectiveness. To investigate this hypothesis, we conducted 10 runs of the attack with uniform initialization and compared the results with zero initialization using the mean confidence variation, number of boxes, and relative box variation.
@@ -1016,6 +963,13 @@ Our results showed that, for the first two evaluation metrics, only two out of t
 
 % Different initialization methods result in similar convergence speeds. The first and second evaluation metrics, mean confidence variation and number of boxes, measure the strength of the attack. Only one in five runs of uniform initialization results in a more efficient attack than zero initialization, which confirms our hypothesis that uniform initialization counteracts the initial gradients. The third evaluation metric, relative box variation, converges to 1, indicating that all false positive bounding boxes are stable. 
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/init.png}
+    \caption{The image-specific  PCB fabrication attack using different initialization methods.}
+    \label{fig:init}
+\end{figure}
+
 \subsubsection{Learning Rate Decay}
 
 To achieve a stable and efficient adversarial attack, it is necessary to avoid gradient counteraction, which can cause the attack to vary significantly over iterations. The PCB attack addresses this issue by introducing the learning rate decay factor $k$ to stabilize the attack over different iterations.
@@ -1025,6 +979,13 @@ Neither the original PGD attack nor the TOG attack uses the learning rate decay 
 Using our new evaluation metrics, we can observe the complete iteration process (as depicted in Fig. \ref{fig:decay}). As the learning rate decay factor $k$ decreases from 0.99 to 0.90, more iterations are required before the two evaluation metrics, the mean confidence variation and the number of boxes, converge. However, both metrics converge at higher values when $k$ decreases, indicating a more efficient attack. 
 
 % Thus, we can conclude that learning rate decay is an effective technique for achieving efficient adversarial attacks.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/lr.png}
+    \caption{The  image-specific  PCB fabrication attack with different learning rate decays.}
+    \label{fig:decay}
+\end{figure}
 
 % \clearpage
 
@@ -1040,72 +1001,12 @@ In contrast, both the TOG and PCB attacks converge faster and perform better tha
 
 % On the other hand, the TOG and the PCB attack prevail over the PC attack when $k=0.90$, and they converge faster. Therefore, we cannot conclude that a single method prevails over the others. Instead, the newly proposed evaluation metrics are good references for decision-making.
 
-\begin{table*}[tpbh]
-    \begin{subtable}[t]{\textwidth}
-        \centering
-        \begin{tabular}{lccca|ccca}
-        \hline
-        & \multicolumn{4}{c}{PCB Attack ($k=0.98$)} & \multicolumn{4}{c}{TOG Attack ($k=1.00$)}\\
-        Iteration & 1 it & 10 it & 50 it & 100 it & 1 it & 10 it & 50 it & 100 it \\ 
-        \hline
-        \ \textbf{Map 01 (train)}  & \textbf{5.62} & \textbf{6.68} & \textbf{6.99} & \textbf{7.10} & \textbf{3.04} & \textbf{3.12} & \textbf{3.71} & \textbf{2.66} \\
-        \ Map 02  & 2.09 & 3.23 & 3.65 & 3.82 & 0.84 & 0.76 & 1.04 & 0.75 \\
-        \ Map 03  & 2.75 & 3.97 & 4.49 & 4.68 & 1.74 & 1.57 & 1.83 & 1.36 \\
-        \ Map 04  & 4.30 & 5.37 & 5.85 & 6.05 & 2.71 & 2.40 & 2.75 & 2.23 \\
-        \ Map 05  & 4.12 & 5.27 & 5.60 & 5.73 & 2.28 & 1.99 & 2.27 & 1.69 \\
-        \ Map 06  & 4.48 & 5.63 & 6.04 & 6.18 & 2.76 & 2.55 & 2.95 & 2.47 \\
-        \ Map 07  & 3.00 & 3.97 & 4.39 & 4.55 & 2.04 & 1.87 & 2.31 & 1.88 \\
-        \hline
-        \end{tabular}
-        \caption{The mean confidence variation.}
-        \label{tab:trans_conf}
-        \vspace{0.05in}
-    \end{subtable}
-\hspace{\fill}
-    \begin{subtable}[t]{\textwidth}
-        \centering
-        \begin{tabular}{lccca|ccca}
-        \hline
-        & \multicolumn{4}{c}{PCB Attack ($k=0.98$)} & \multicolumn{4}{c}{TOG Attack ($k=1.00$)}\\
-        Iteration & 1 it & 10 it & 50 it & 100 it & 1 it & 10 it & 50 it & 100 it \\ 
-        \hline
-        \ \textbf{Map 01 (train)}  & \textbf{165.83} & \textbf{280.85} & \textbf{323.39} & \textbf{346.00} & \textbf{3.88} & \textbf{1.71} & \textbf{1.99} & \textbf{2.70} \\
-        \ Map 02  & 1.89 & 21.72 & 49.71 & 63.54 & 1.61 & 1.47 & 1.61 & 1.63 \\
-        \ Map 03  & 4.68 & 10.47 & 18.45 & 24.78 & 2.20 & 2.05 & 2.18 & 2.16 \\
-        \ Map 04  & 32.29 & 74.44 & 87.96 & 100.46 & 0.78 & 0.71 & 1.32 & 0.74 \\
-        \ Map 05  & 1.66 & 38.44 & 59.73 & 70.03 & 1.08 & 1.10 & 1.20 & 0.98 \\
-        \ Map 06  & 12.80 & 41.05 & 52.57 & 66.79 & 3.41 & 3.02 & 3.47 & 3.17 \\
-        \ Map 07  & 6.25 & 27.53 & 30.61 & 35.16 & 0.69 & 0.66 & 0.77 & 0.70 \\
-        \hline
-        \end{tabular}
-        \caption{The average number of boxes.}
-        \label{tab:trans_box}
-        \vspace{0.05in}
-    \end{subtable}
-\hspace{\fill}
-    \begin{subtable}[t]{\textwidth}
-        \centering
-        \begin{tabular}{lccca|ccca}
-        \hline
-        & \multicolumn{4}{c}{PCB Attack ($k=0.98$)} & \multicolumn{4}{c}{TOG Attack ($k=1.00$)}\\
-        Iteration & 1 it & 10 it & 50 it & 100 it & 1 it & 10 it & 50 it & 100 it \\ 
-        \hline
-        \ \textbf{Map 01 (train)}  & \textbf{0.19\%} & \textbf{0.11\%} & \textbf{0.09\%} & \textbf{0.08\%} & \textbf{36.43\%} & \textbf{43.23\%} & \textbf{32.32\%} & \textbf{43.33\%} \\
-        \ Map 02  & 60.65\% & 6.40\% & 2.27\% & 1.46\% & 80.37\% & 81.92\% & 86.92\% & 83.50\% \\
-        \ Map 03  & 63.88\% & 24.64\% & 14.34\% & 11.16\% & 87.34\% & 86.02\% & 85.99\% & 87.41\% \\
-        \ Map 04  & 2.60\% & 0.54\% & 0.44\% & 0.31\% & 68.17\% & 66.50\% & 54.42\% & 64.89\% \\
-        \ Map 05  & 51.92\% & 1.30\% & 0.47\% & 0.30\% & 81.33\% & 76.89\% & 85.33\% & 76.00\% \\
-        \ Map 06  & 24.90\% & 4.30\% & 2.37\% & 1.50\% & 95.29\% & 96.59\% & 96.79\% & 96.61\% \\
-        \ Map 07  & 32.55\% & 1.87\% & 1.38\% & 0.98\% & 75.14\% & 73.78\% & 74.89\% & 76.72\% \\
-        \hline
-        \end{tabular}
-        \caption{The relative box variation (the percentage of consistent bounding boxes).}
-        \label{tab:trans_rela_box}
-    \end{subtable}
-\hspace{\fill}
-    \caption{Evaluation results of the image-agnostic attack tested on the CARLA dataset ($\epsilon=8$).}
-    \label{tab:trans}
-\end{table*}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/loss.png}
+    \caption{Different adversarial loss functions of the  image-specific  fabrication attack.}
+    \label{fig:loss}
+\end{figure}
 
 % \begin{table*}[tpbh]
 %     \centering
@@ -1169,12 +1070,42 @@ In contrast, both the TOG and PCB attacks converge faster and perform better tha
 %     \label{tab:maps_conf}
 % \end{table}
 
-% \pagebreak
-
+\clearpage
 
 \subsubsection{The Attack Performance and Transferability}
 
 We used an autonomous driving dataset collected from the CARLA simulator \citep{deschaud2021kitticarla}. The dataset includes driving records from 7 maps, including different areas (city, rural, urban, highway), daytime (noon, sunset, night), and weather (clear, cloudy, soft rain, and hard rain) (see Fig. \ref{fig:carla}). A 30-second driving video was collected from each map, sampling at 10 FPS, which is the same as the KITTI autonomous vehicle. 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/clear_noon_city.png}
+        \caption{Clear Noon (City)}
+        \label{fig:clear_noon} 
+    \end{subfigure}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/clear_noon_urban.png}
+        \caption{Clear Noon (Suburban)}
+        \label{fig:clear_noon_suburban}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/hard_rain_city.png}
+        \caption{Hard Rain Sunset (City)}
+        \label{fig:hard_rain} 
+    \end{subfigure}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/wet_cloudy_city.png}
+        \caption{Wet Cloudy Night (City)}
+        \label{fig:wet_cloudy}
+    \end{subfigure}
+  \caption{The UAP generalizes to different daytime, weathers and maps.}
+  \label{fig:carla}
+\end{figure}
+
 
 For the image-specific PCB attack, we measured the performance of the attack on an NVIDIA RTX 2080Ti GPU. The image-specific attack achieved 12.44 FPS, faster than the 10 FPS sampling rate of the KITTI autonomous vehicle, thus achieving a real-time attack.
 
@@ -1190,20 +1121,99 @@ For the image-agnostic attack, we trained the UAPs using Map 01. The same attack
     \item The relative box variation computes the percentage of consistent bounding boxes. During the UAP training process, as the UAP becomes stable, this metric converges to 100\%, meaning all bounding boxes are consistent. However, to measure the final attack performance, a high value (100\%) indicates the model generates the same bounding boxes before and after applying the UAP. Thus, a successful attack has a low value (0\%), indicating none of the bounding boxes are the same as the ones predicted without applying the UAP.
 \end{enumerate}
 
+We also measured the transferability of the UAPs across maps (100 iterations, $k=0.98, \epsilon=8$). The image-agnostic PCB attack achieves the best performance on the training map but also generalizes to other maps (see Fig. \ref{fig:cor}). In summary, experimental results using our evaluation metrics demonstrate the importance of learning rate decay for UAP training.
 
+% The PCB attack generates significantly higher mean confidence variation, more number of boxes, and less consistent bounding boxes than the original TOG attack. 
 
-\begin{figure}[tbhp]
+\begin{table}[H]
+    \centering
+    \begin{subtable}[t]{\textwidth}
+        \centering
+        \begin{tabular}{lccca|ccca}
+        \hline
+        & \multicolumn{4}{c}{PCB Attack ($k=0.98$)} & \multicolumn{4}{c}{TOG Attack ($k=1.00$)}\\
+        Iteration & 1 it & 10 it & 50 it & 100 it & 1 it & 10 it & 50 it & 100 it \\ 
+        \hline
+        \ \textbf{Map 01 (train)}  & \textbf{5.62} & \textbf{6.68} & \textbf{6.99} & \textbf{7.10} & \textbf{3.04} & \textbf{3.12} & \textbf{3.71} & \textbf{2.66} \\
+        \ Map 02  & 2.09 & 3.23 & 3.65 & 3.82 & 0.84 & 0.76 & 1.04 & 0.75 \\
+        \ Map 03  & 2.75 & 3.97 & 4.49 & 4.68 & 1.74 & 1.57 & 1.83 & 1.36 \\
+        \ Map 04  & 4.30 & 5.37 & 5.85 & 6.05 & 2.71 & 2.40 & 2.75 & 2.23 \\
+        \ Map 05  & 4.12 & 5.27 & 5.60 & 5.73 & 2.28 & 1.99 & 2.27 & 1.69 \\
+        \ Map 06  & 4.48 & 5.63 & 6.04 & 6.18 & 2.76 & 2.55 & 2.95 & 2.47 \\
+        \ Map 07  & 3.00 & 3.97 & 4.39 & 4.55 & 2.04 & 1.87 & 2.31 & 1.88 \\
+        \hline
+        \end{tabular}
+        \caption{The mean confidence variation.}
+        \label{tab:trans_conf}
+        \vspace{0.05in}
+    \end{subtable}
+\hspace{\fill}
+\vfill
+    \begin{subtable}[t]{\textwidth}
+        \centering
+        \begin{tabular}{lccca|ccca}
+        \hline
+        & \multicolumn{4}{c}{PCB Attack ($k=0.98$)} & \multicolumn{4}{c}{TOG Attack ($k=1.00$)}\\
+        Iteration & 1 it & 10 it & 50 it & 100 it & 1 it & 10 it & 50 it & 100 it \\ 
+        \hline
+        \ \textbf{Map 01 (train)}  & \textbf{165.83} & \textbf{280.85} & \textbf{323.39} & \textbf{346.00} & \textbf{3.88} & \textbf{1.71} & \textbf{1.99} & \textbf{2.70} \\
+        \ Map 02  & 1.89 & 21.72 & 49.71 & 63.54 & 1.61 & 1.47 & 1.61 & 1.63 \\
+        \ Map 03  & 4.68 & 10.47 & 18.45 & 24.78 & 2.20 & 2.05 & 2.18 & 2.16 \\
+        \ Map 04  & 32.29 & 74.44 & 87.96 & 100.46 & 0.78 & 0.71 & 1.32 & 0.74 \\
+        \ Map 05  & 1.66 & 38.44 & 59.73 & 70.03 & 1.08 & 1.10 & 1.20 & 0.98 \\
+        \ Map 06  & 12.80 & 41.05 & 52.57 & 66.79 & 3.41 & 3.02 & 3.47 & 3.17 \\
+        \ Map 07  & 6.25 & 27.53 & 30.61 & 35.16 & 0.69 & 0.66 & 0.77 & 0.70 \\
+        \hline
+        \end{tabular}
+        \caption{The average number of boxes.}
+        \label{tab:trans_box}
+        \vspace{0.05in}
+    \end{subtable}
+\hspace{\fill}
+\vfill
+    \begin{subtable}[t]{\textwidth}
+        \centering
+        \begin{tabular}{lccca}
+        \hline
+        \multicolumn{5}{c}{PCB Attack ($k=0.98$)}\\
+        Iteration & 1 it & 10 it & 50 it & 100 it  \\ 
+        \hline
+        \ \textbf{Map 01 (train)}  & \textbf{0.19\%} & \textbf{0.11\%} & \textbf{0.09\%} & \textbf{0.08\%} \\
+        \ Map 02  & 60.65\% & 6.40\% & 2.27\% & 1.46\% \\
+        \ Map 03  & 63.88\% & 24.64\% & 14.34\% & 11.16\% \\
+        \ Map 04  & 2.60\% & 0.54\% & 0.44\% & 0.31\% \\
+        \ Map 05  & 51.92\% & 1.30\% & 0.47\% & 0.30\% \\
+        \ Map 06  & 24.90\% & 4.30\% & 2.37\% & 1.50\% \\
+        \ Map 07  & 32.55\% & 1.87\% & 1.38\% & 0.98\% \\
+        \hline
+        \multicolumn{5}{c}{TOG Attack ($k=1.00$)}\\
+        Iteration & 1 it & 10 it & 50 it & 100 it  \\ 
+        \hline
+        \ \textbf{Map 01 (train)}  & \textbf{36.43\%} & \textbf{43.23\%} & \textbf{32.32\%} & \textbf{43.33\%} \\
+        \ Map 02 & 80.37\% & 81.92\% & 86.92\% & 83.50\% \\
+        \ Map 03 & 87.34\% & 86.02\% & 85.99\% & 87.41\% \\
+        \ Map 04 & 68.17\% & 66.50\% & 54.42\% & 64.89\% \\
+        \ Map 05 & 81.33\% & 76.89\% & 85.33\% & 76.00\% \\
+        \ Map 06 & 95.29\% & 96.59\% & 96.79\% & 96.61\% \\
+        \ Map 07 & 75.14\% & 73.78\% & 74.89\% & 76.72\% \\
+        \hline
+        \end{tabular}
+        \caption{The relative box variation (the percentage of consistent bounding boxes).}
+        \label{tab:trans_rela_box}
+    \end{subtable}
+\hspace{\fill}
+    \caption{Evaluation results of the image-agnostic attack tested on the CARLA dataset ($\epsilon=8$).}
+    \label{tab:trans}
+\end{table}
+
+\clearpage
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/cor.png}
   \caption{The heatmap of UAPs trained on seven maps.}
   \label{fig:cor}
 \end{figure}
-
-
-
-We also measured the transferability of the UAPs across maps (100 iterations, $k=0.98, \epsilon=8$). The image-agnostic PCB attack achieves the best performance on the training map but also generalizes to other maps (see Fig. \ref{fig:cor}). In summary, experimental results using our evaluation metrics demonstrate the importance of learning rate decay for UAP training.
-
-% The PCB attack generates significantly higher mean confidence variation, more number of boxes, and less consistent bounding boxes than the original TOG attack. 
 
 \subsection{Discussion}
 
@@ -1219,7 +1229,7 @@ In real-world applications, the operating system that deploys the deep learning 
 
 % Take-home messages
 
-This paper presents a novel hardware attack that reveals a previously unknown vulnerability of deep learning object detection systems, posing serious threats to safety-critical applications. Unlike existing attack frameworks, our approach does not rely on any assumption about access to the object detection system, but rather leverages perturbations injected at the hardware level. Our experiments on the VOC2012 dataset, the CARLA dataset, and the YOLO detection model demonstrate the high efficiency of our attack. Further research may explore the extension of the attack to other tasks beyond object detection, or to other sensors, such as Lidar.
+This research presents a novel hardware attack that reveals a previously unknown vulnerability of deep learning object detection systems, posing serious threats to safety-critical applications. Unlike existing attack frameworks, our approach does not rely on any assumption about access to the object detection system, but rather leverages perturbations injected at the hardware level. Our experiments on the VOC2012 dataset, the CARLA dataset, and the YOLO detection model demonstrate the high efficiency of our attack. Further research may explore the extension of the attack to other tasks beyond object detection, or to other sensors, such as Lidar.
 
 % \clearpage
 

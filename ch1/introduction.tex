@@ -167,10 +167,10 @@ White-box attacks rely on gradients to fool deep-learning models. Different atta
 Taking image classification models as an example, the deep learning model is denoted as $f(\cdot)$ with input $x$ and prediction $f(x, \theta)$, where $\theta$ is the model weights. The corresponding optimization loss is denoted by $\mathcal{L}(f(x, \theta), y^*)$, where $y^*$ is the ground truth. An adversarial input $x'$ is close to the original input $x$ under a specific distance metric while $f(x', \theta) \neq f(x, \theta)$. Formally, an adversarial example is defined as follows:
 
 \begin{equation}
-x^{'}: ||x - x^{'}|| < \eta, f(x', \theta) \neq f(x, \theta)
+x^{'}: ||x - x^{'}|| < \xi, f(x', \theta) \neq f(x, \theta)
 \end{equation}
 
-where $ \eta $ is a predefined distance constraint on the maximum allowed perturbation. The most commonly used distance metric is the $L_p$ distance metric. The distance between $x$ and $x'$ is denoted as $||x-x'||_{p}$, where $||\cdot||_p$ is defined as follows:
+where $ \xi$ is a predefined distance constraint on the maximum allowed perturbation. The most commonly used distance metric is the $L_p$ distance metric. The distance between $x$ and $x'$ is denoted as $||x-x'||_{p}$, where $||\cdot||_p$ is defined as follows:
 
 \begin{equation}
  ||\textbf{v}||_p = (|v_1|^p + |v_2|^p + \dots + |v_d|^p)^{1/p}
@@ -184,7 +184,7 @@ With full access to model structure and parameters, white-box attacks \textbf{ma
 The first gradient based white-box attack is the \acrfull{fgsm} \citep{goodfellow2015explaining} that generates the adversarial input using:
 
 \begin{equation}
-x' = x + \eta \cdot \text{sign}(\ \bigtriangledown_x \mathcal{L}(f(x, \theta), y^*)\ )    
+x' = x + \xi \cdot \text{sign}(\ \bigtriangledown_x \mathcal{L}(f(x, \theta), y^*)\ )    
 \end{equation} 
 
 where $\text{sign}(\cdot$) calculates the element-wise sign of a given matrix and $\bigtriangledown_x \mathcal{L}(f(x, \theta), y^*)$ is the gradient of the input $x$ with respect to the loss $\mathcal{L}(f(x, \theta), y^*)$.
@@ -192,7 +192,7 @@ where $\text{sign}(\cdot$) calculates the element-wise sign of a given matrix an
 The \acrshort{fgsm} generates the adversarial example in one step, while the \acrfull{pgd} \citep{madry2017towards} transforms the \acrshort{fgsm} attack into a multi-step attack that updates the perturbation at each iteration while keeping the overall perturbation $x^{'}$ in a $L_p$ ball using the projection function $\texttt{proj}_{p}(\cdot)$:
 
 \begin{equation}
-x'_{t+1} = \text{proj}_{p}(x'_t + \eta \cdot \text{sign}(\ \bigtriangledown_x \mathcal{L}(f(x, \theta), y^*)\ ))
+x'_{t+1} = \text{proj}_{p}(x'_t + \xi \cdot \text{sign}(\ \bigtriangledown_x \mathcal{L}(f(x, \theta), y^*)\ ))
 \end{equation}
 
 % \clearpage
@@ -209,10 +209,10 @@ where the $k^*$ is the ground truth class label and $x_0$ is the original input 
 
 \textbf{From image-specific attack to image-agnostic attack:} So far, we have only introduced image-specific attacks that generate adversarial perturbation for each input image. As image-specific attacks become more and more effective while keeping human-unperceivable, another research question arises: can we produce an image-agnostic perturbation that can attack all images in a dataset?
 
-Based on the Deep Fool attack, Moosavi-dezfooli et al. generate \acrshort{uap}s, represented with $\textbf{v}$, by further projecting the overall perturbation to $L_p$ ball of radius $\epsilon$ and centered at 0 after iterating over each class $k$ \citep{moosavidezfooli2017universal}:
+Based on the Deep Fool attack, Moosavi-dezfooli et al. generate \acrshort{uap}s, represented with $\textbf{v}$, by further projecting the overall perturbation to $L_p$ ball of radius $\xi$ and centered at 0 after iterating over each class $k$ \citep{moosavidezfooli2017universal}:
 
 \begin{equation}
-\text{proj}_p(\textbf{v}, \epsilon)= \arg\ \underset{\textbf{v}_{t+1}}{\min}||\textbf{v}_{t+1} - \textbf{v}_{t}||_2 \quad \text{subject to}\ ||\textbf{v}_{t+1}||_p\leq\epsilon
+\text{proj}_p(\textbf{v}, \epsilon)= \arg\ \underset{\textbf{v}_{t+1}}{\min}||\textbf{v}_{t+1} - \textbf{v}_{t}||_2 \quad \text{subject to}\ ||\textbf{v}_{t+1}||_p\leq\xi
 \end{equation}
 
 \begin{figure}[H]

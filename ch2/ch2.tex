@@ -26,7 +26,7 @@ As demonstrated in multiple contexts, deep neural networks are vulnerable to adv
 The main contributions of this chapter are as follows: 
 
 \begin{itemize}
-    \item We propose two online white-box adversarial attacks against     an end-to-end regression model for autonomous driving: one strong attack that generates the perturbation for each frame (image-specific), and one stealth attack that produces a universal adversarial perturbation that attacks all frames (image-agnostic).
+    \item We propose two online white-box adversarial attacks against an end-to-end regression model for autonomous driving: one strong attack that generates the perturbation for each frame (image-specific), and one stealth attack that produces a universal adversarial perturbation that attacks all frames (image-agnostic).
     \item The robustness of the attacks is illustrated using experiments conducted in Udacity Simulator. 
     The experiments demonstrate that it only takes the attack a few seconds to deviate the vehicle to outside of the lane.
     \item To facilitate future extensions and benchmark comparisons, our attack is open-sourced on Github\footnote{The code is available on Github: \url{https://github.com/wuhanstudio/adversarial-driving}}. As far as the authors are aware, this is the first open-source real-time attack on regressional driving models.
@@ -74,8 +74,9 @@ y'&=f(\theta, x')
 where $y$ is the benign output steering command, $f(\theta, x)$ is the regression model that maps input images to steering commands, $\theta$ is the model parameters, $x$ is the original input image, $y'$ is the adversarial output steering command, and $x'$ is the adversarial input image. Further, we will use $\eta=x-x'$ to denote the adversarial perturbation, $y^{*}$ is the ground truth steering command, and $\mathcal{L}(y, y^{*})$ to denote the training loss. Given an input image $x$, the objective of attacking a classifier is to generate a small perturbation $\eta$, such that $y' \neq y^{*}$. However, the objective of attacking a regression model is to generate a small perturbation $\eta$, such that the difference between $y'$ and $y^{*}$ is larger than the average deviation caused by adding random noise to $x$. 
 
 We use the $L_2$ norm to quantify the magnitude of the perturbation. The $L_2$ norm of the perturbation $\eta$ should be smaller than 0.03 (8 / 255) for an RGB input image according to the value used in prior research \citep{chow2020adversarial} \citep{ACFH2020square}. In particular, to ensure that the perturbation is unperceivable to human eyes, we require \begin{equation}
-||x^{'}-x||_{2} = ||\ {\eta}\ ||_{2} \leq \xi
+||x^{'}-x||_{2} = ||\ {\eta}\ ||_{2} \leq \xi %,\ \xi = 0.03
 \end{equation}
+
 where $\xi = 0.03$.
 
 Our target model is the NVIDIA end-to-end driving model \citep{bojarski2016end}. The input shape of the model is (160, 320, 3), which represents (height, width, channel) respectively. The output steering angle is in the range of $[-1, 1]$ on all our (unperturbed) collected images. An output of $-1$ represents steering to the left, and an output of 1 means steering to the right. The input image is captured by the front camera, and we then apply predefined preprocessing methods before feeding the image to the model. Refer to \citep{bojarski2016end} for details on these preprocessing methods, including cropping, resizing, and RGB to YUV. 
@@ -136,7 +137,9 @@ Our target model is the NVIDIA end-to-end driving model \citep{bojarski2016end}.
 
 \section{Adversarial Attacks} 
 
-In this section, we devise two white-box attacks against the driving system: one image-specific attack and one image-agnostic attack. Then, we present the system architecture.
+In this section, we devise two white-box attacks against the driving system: one image-specific attack and one image-agnostic attack, and the system architecture. 
+
+% Then, we present the system architecture.
 
 \subsection{The Image-specific Attack}
 
@@ -146,6 +149,7 @@ When attacking a regression model, notice that we have the choice to either incr
 % \begin{equation}
 % \eta=\epsilon \text{sign}(\nabla_{x}J(\theta, x, y)).
 % \end{equation}
+
 \begin{align}
     \mathcal{L}_{\texttt{left}}(y) &= -y \\
     \mathcal{L}_{\texttt{right}}(y) &= y
@@ -238,15 +242,11 @@ injects malicious data into a running ROS application is the Stealth Publisher A
 \end{figure}
 
 We design an adversarial system to attack the end-to-end autonomous driving system (See Fig. \ref{fig:arch}). The system consists of three key components: the simulator, the server, and the Web User Interface (UI). The simulator publishes the image captured by the front camera to the server. Meanwhile, it accepts steering commands from the server to manipulate the vehicle. The modular design pattern makes it possible to conveniently replace the simulator with a real Turtlebot without breaking the whole system. The server receives input images from the simulator via WebSocket connections and then sends back the control commands. Meanwhile, it receives attack commands from the web browser and then injects the adversarial perturbation into the input image. The end-to-end driving model is deployed on the server as well. We use a website as a front-end where the attacker can monitor the status of the simulator and choose different attacks.
-The experimental results are presented in the next section.
-
-
-
-% \clearpage
+% The experimental results are presented in the next section.
 
 \section{Experimental Results}
 
-This section first describes the training of the driving systems. Following this, we describe the performance of our proposed image-specific and image-agnostic attacks.
+This section first describes the training of the driving systems. Following this, we evaluate the performance of our proposed image-specific and image-agnostic attacks.
 
 % \begin{figure*}[b]
 %     \centering
@@ -292,6 +292,8 @@ In the following sections, we use the data from the Udacity Simulator to analyze
     \caption{The structure of the end-to-end driving model. \label{table_NVIDIA_model}}
 \end{center}
 \end{table}
+
+\clearpage
 
 \subsection{The Image-Specific Attack}
 
