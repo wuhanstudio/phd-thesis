@@ -1,4 +1,5 @@
 *.aux
 *.log
+*.drawio
 Thesis.*
 !Thesis.tex
