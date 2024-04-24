@@ -3,7 +3,7 @@
 
 % \newrefsection
 
-In previous chapters, we study adversarial attacks against end-to-end driving, image classification, object detection and object tracking models, including both white-box and black-box attacks. In this chapter, we use interpretation methods to understand deep learning models and apply defence techniques to secure the system against adversarial attacks.
+In previous chapters, we study adversarial attacks against end-to-end driving, image classification, object detection, and object tracking models, including white-box and black-box attacks. This chapter introduces how we use interpretation methods to understand how deep neural networks make predictions for medical applications.
 
 % \section{Interpretation Methods}
 % \label{sec:interpret_deep_learn}
@@ -149,9 +149,9 @@ Models that achieves high accuracy provide fewer interpretations due to the trad
 
 Besides, several model-agnostic methods have been proposed to peek into black-box models, such as Partial Dependence Plot (PDP) \citep{Friedman2001GreedyFA}, Individual Conditional Expectation (ICE) \citep{goldstein2013peeking}, Accumulated Local Effects (ALE) \citep{apley2016visualizing}, Permutation Feature Importance \citep{fisher2018models}, Local Interpretable Model-agnostic Explanations (LIME) \citep{ribeiro2016i}, Shapley Additive Explanation (SHAP) \citep{lundberg2017unified}, and Anchors \citep{Ribeiro2018AnchorsHM}. Most of these model-agnostic methods are reasoned qualitatively through illustrative figures and human experiences. To quantitatively measure their interpretability, metrics such as faithfulness \citep{alvarezmelis2018robust} and monotonicity \citep{luss2019generating} are proposed.
 
-In this paper, instead of targeting a high-accuracy model, we interpret several models to help medical practitioners promptly discover the most significant biomarkers in the pandemic.
+In this research, instead of targeting a high-accuracy model, we interpret several models to help medical practitioners promptly discover the most significant biomarkers in the pandemic.
 
-Overall, this paper makes the following contributions:
+Overall, this research makes the following contributions:
 
 \begin{enumerate}
     \item \textbf{Evaluation}: A systematic evaluation of the interpretability of machine learning models that predict the severity level of COVID-19 patients. We experiment with six interpretation methods and two evaluation metrics on our dataset and receive the same result as research that uses a dedicated model. We further validate our approach on a dataset from Kaggle.
@@ -354,7 +354,6 @@ Second, correlated features were removed because they provide redundant informat
 
 \begin{table}[H]
 \centering
-\caption{Feature Correlation}
 \begin{tabular}{@{}ccc@{}}
 \toprule
 Feature 1    & Feature 2 & Correlation\\ \midrule
@@ -365,8 +364,9 @@ LYM2       & LYM1             & 0.842688    \\
 NTproBNP       & N2L2             & 0.808767   \\ 
 BMI       & Weight             & 0.842409    \\  
 NEU1       & WBC1             & 0.90352    \\  \bottomrule
-\label{tab:feature_correlation}
 \end{tabular}
+\caption{Feature Correlation}
+\label{tab:feature_correlation}
 \end{table}
 
 
@@ -382,13 +382,13 @@ Third, statistical methods that calculate mutual information is employed to remo
 
 \begin{table}[H]
 \centering
-\caption{Features with Mutual Information}
 \begin{tabular}{@{}cc@{}}
 \toprule
 Statistical Methods & Removed Features \\ \midrule
 Mutual Information & Height, CK, HiCKMB, Cr, WBC1, Hemoptysis      \\
 Univariate & Weight, AST, CKMB, PCT1, WBC2        \\  \bottomrule
 \end{tabular}
+\caption{Features with Mutual Information}
 \end{table}
 
 Mutual information is calculated using equation \ref{eq:2} that determines how similar the joint distribution p(X, Y) is to the products of individual distributions p(X)p(Y). Univariate Test measures the dependence of two variables, and a high p-value indicates a less similar distribution between X and Y. 
@@ -406,39 +406,23 @@ Machine learning models outperform humans in many different areas in terms of ac
 
 For healthcare applications, both accuracy and interpretability are significant. Four different models are selected to extract information from our dataset: Decision Tree, Random Forests, Gradient Boosted Trees, and Neural Networks.
 
-\begin{figure*}
+\begin{table}[H]
 \centering
-\begin{subfigure}[b]{0.475\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/dt_pdp_crp_ntproBNP.png}
-    \caption{Decision Tree}
-    \label{fig:dt_pdp}
-\end{subfigure}
-% \hfill
-\begin{subfigure}[b]{0.475\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/rf_pdp_crp_ntproBNP.png}
-    \caption{Random Forest}
-    \label{fig:rf_pdp}
-\end{subfigure}
-% \vskip\baselineskip
-% \hfill
-\begin{subfigure}[b]{0.475\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/xgbc_pdp_crp_ntproBNP.png}
-    \caption{Gradient Boosted Trees}
-    \label{fig:gbt_pdp}
-\end{subfigure}
-% \hfill
-\begin{subfigure}[b]{0.475\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/nn_pdp_crp_ntproBNP.png}
-    \caption{Neural Networks}
-    \label{fig:nn_pdp}
-\end{subfigure}
-\caption{Partial Dependence Plot: There is a positive correlation between the level of NTproBNP/CRP and the probability of turning severe because as NTproBNP/CRP increases, the average possibility (y-axis) of turning severe increases.}
-\label{fig.pdp}
-\end{figure*}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+Layer Type   & Output Shape & Param \\ \midrule
+Dense & (None, 10) & 370           \\
+Dropout & (None, 10) & 0           \\
+Dense & (None, 15) & 165           \\
+Dropout & (None, 15) & 0           \\
+Dense & (None, 5) & 80           \\
+Dropout & (None, 5) & 0           \\
+Dense & (None, 1) & 6           \\
+\bottomrule
+\end{tabular}
+\caption{The structure of Neural Networks}
+\label{tab:nn}
+\end{table}
 
 \textbf{Decision Tree:} Decision Tree (DT) is a widely adopted method for both classification and regression. It's a non-parametric supervised learning method that infers decision rules from data features. The decision tree try to find decision rules that make the best split measured by Gini impurity or entropy. More importantly, the generated decision tree can be visualized, thus easy to understand and interpret \citep{Breiman2015Classification}.
 
@@ -451,32 +435,14 @@ For healthcare applications, both accuracy and interpretability are significant.
 % \par 
 %  Simple interpretable models cannot achieve satisfactory accuracy in applications of image, thus many model-agnostic methods are employed to interpret complex black-box models.
 
-As for the implementation, there is no hyperparameter for the decision tree. For random forests, 100 trees are used during the initialization. The hyperparameters for gradient boosted trees are selected according to prior experience. The structure for neural networks is listed in table \ref{tab:nn}. All these methods are implemented using scikit-learn \citep{scikit-learn}, Keras and python3.6.
-
-\begin{table}[H]
-\centering
-\caption{The structure of Neural Networks}
-\begin{tabular}{@{}ccc@{}}
-\toprule
-Layer Type   & Output Shape & Param \\ \midrule
-Dense & (None, 10) & 370           \\
-Dropout & (None, 10) & 0           \\
-Dense & (None, 15) & 165           \\
-Dropout & (None, 15) & 0           \\
-Dense & (None, 5) & 80           \\
-Dropout & (None, 5) & 0           \\
-Dense & (None, 1) & 6           \\
-\bottomrule
-\label{tab:nn}
-\end{tabular}
-\end{table}
+As for the implementation, there is no hyperparameter for the decision tree. For random forests, 100 trees are used during the initialization. The hyperparameters for gradient boosted trees are selected according to prior experience. The structure for neural networks is listed in table \ref{tab:nn}. All these methods are implemented using scikit-learn \citep{scikit-learn}, Keras and Python3.6.
 
 After training, gradient boosted trees and neural networks achieve the highest precision on the test set. Among 9 patients in our test set, four of them are severe. Both the decision tree and random forests fail to identify two severe patients, while Gradient Boosted Trees and Neural Networks find all of the severe patients. 
 
+
 \begin{table}[H]
 \centering
-\caption{Classification Results on our dataset}
-\begin{tabular}{p{2cm}p{1.1cm}cccp{1cm}}
+\begin{tabular}{cccccc}
 \toprule
 Classifier    & CV & \multicolumn{3}{c}{Test Set} & 95\% confidence interval \\ \midrule
                         & F1     & Precision  & Recall  & F1    &\\
@@ -485,90 +451,19 @@ Random Forest           & 0.62   & 0.67       & 0.50    & 0.57  & 0.31\\
 Gradient Boosted Trees  & 0.67   & 0.78       & 1.00    & 0.80  & 0.27\\
 Neural Networks         & 0.58   & 0.78       & 1.00    & 0.80  & 0.27\\ \bottomrule
 \end{tabular}
+\caption{Classification Results on our dataset}
 \end{table}
 
 % \par
 % In this paper, we do not try to get the most accurate model, instead we focus on understanding different models. Thus, in the next section, we'll interpret these models and try to understand why they make different decisions.
 
-\begin{figure*}
-\centering
-\begin{subfigure}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/dt_ice_crp_ntproBNP.png}
-    \caption{Decision Tree}
-    \label{fig:dt_ice}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/rf_ice_crp_ntproBNP.png}
-    \caption{Random Forest}
-    \label{fig:rf_ice}
-\end{subfigure}
-\hfill
-% \vskip\baselineskip
-\begin{subfigure}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/xgbc_ice_crp_ntproBNP.png}
-    \caption{Gradient Boosted Trees}
-    \label{fig:gbt_ice}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/nn_ice_crp_ntproBNP.png}
-    \caption{Neural Networks}
-    \label{fig:nn_ice}
-\end{subfigure}
-\caption{Individual Conditional Expectation: Each line in different colors represents a patient. As we increase NTproBNP/CRP while keeping other features the same, the probability of turning severe increases for each individual, but each patient has a different starting level because their other physical conditions differ.}
-\label{fig.ice}
-\end{figure*}
-
-% \par
-% Sometimes it's not appropriate to use PDP and ICE in medical applications, because both PDP and ICE sample in a grid and make predictions, while some points in the grid may never appear in real world. For example, it's very rare for young people to have a NTproBNP as high as elderlys. ALE only samples in a small range of area which makes it more realistic.
-
-\begin{figure*}
-\centering
-\begin{subfigure}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/dt_ALE_NTproBNP_CRP.png}
-    \caption{Decision Tree}
-    \label{fig:dt_ale}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/rf_ALE_NTproBNP_CRP.png}
-    \caption{Random Forest}
-    \label{fig:rf_ale}
-\end{subfigure}
-\hfill
-% \vskip\baselineskip
-\begin{subfigure}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/xgbc_ALE_NTproBNP_CRP.png}
-    \caption{Gradient Boosted Trees}
-    \label{fig:gbt_ale}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/nn_ALE_NTproBNP_CRP.png}
-    \caption{Neural Networks}
-    \label{fig:nn_ale}
-\end{subfigure}
-\caption{Accumulated Local Effects: As the level of NTproBNP/CRP increases, the possibility of turning severe (yellow) goes above the average.}
-\label{fig.ale}
-\end{figure*}
-
-\newpage
+% \newpage
 \subsection{Interpretation (Permutation Feature Importance)}
 
 First, we use  Permutation Feature Importance to find the most important features in different models. In table \ref{tab:important_feature}, CRP2 and NTproBNP are recognized as most important features by most models.
 
 \begin{table}[H]
 \centering
-\caption{Five most important features}
 \begin{tabular}{@{}ccc@{}}
 \toprule
 Model                   & Most Important Features \\ \midrule
@@ -576,26 +471,170 @@ Decision Tree           & NTproBNP, CRP2, ALB2, Temp, Symptom      \\
 Random Forest           & CRP2, NTproBNP, cTnI, LYM1, ALB2         \\
 Gradient Boosted Trees  & CRP2, cTnITimes, LYM1, NTproBNP, Phlegm  \\
 Neural Networks         & NTproBNP, CRP2, CRP1, LDH, Age           \\  \bottomrule
-\label{tab:important_feature}
 \end{tabular}
+\caption{Five most important features}
+\label{tab:important_feature}
 \end{table}
 
 According to medical knowledge, CRP refers to C-Reactive Protein, which increases when there's inflammation or viral infection in the body. C-reactive protein (CRP) levels are positively correlated with lung lesions and could reflect disease severity\citep{WANG2020332}. NTproBNP refers to N-Terminal prohormone of Brain Natriuretic Peptide, which will be released in response to changes in pressure inside the heart. The CRP level in severe patients rises due to viral infection, and patients with higher NT-proBNP (above 88.64 pg/mL) level had more risks of in-hospital death \citep{Gao2020.03.07.20031575}.
 
 % Thus, the two most important features revealed by machine learning models do not obey medical knowledge.
 
-\newpage
+% \clearpage
+
 \subsection{Interpretation (PDP, ICE, ALE)}
 
 After recognizing the most important features, PDP, ICE, and ALE are employed to further visualize the relationship between CRP and NTproBNP.
 
 In the PDPs, all of the four models indicate a higher risk of turning severe with the increase of NTproBNP and CRP which is consistent with the retrospective study on COVID-19. The difference is that different models have different tolerances and dependence on NTproBNP and CRP. Averagely, the decision tree has less tolerance on a high level of NTproBNP ($>$2000ng/ml), and gradient boosted trees give a much higher probability of death as CRP increases. Since PDPs only calculate an average of all instances, we use ICEs to identify heterogeneity.
-    
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.85\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/dt_pdp_crp_ntproBNP.png}
+    \caption{Decision Tree}
+    \label{fig:dt_pdp}
+\end{subfigure}
+% \hfill
+\begin{subfigure}[b]{0.85\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/rf_pdp_crp_ntproBNP.png}
+    \caption{Random Forest}
+    \label{fig:rf_pdp}
+\end{subfigure}
+% \vskip\baselineskip
+% \hfill
+\end{figure}
+\begin{figure}[H]\ContinuedFloat
+\centering
+\begin{subfigure}[b]{0.85\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/xgbc_pdp_crp_ntproBNP.png}
+    \caption{Gradient Boosted Trees}
+    \label{fig:gbt_pdp}
+\end{subfigure}
+% \hfill
+\begin{subfigure}[b]{0.85\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/nn_pdp_crp_ntproBNP.png}
+    \caption{Neural Networks}
+    \label{fig:nn_pdp}
+\end{subfigure}
+\caption{Partial Dependence Plot: There is a positive correlation between the level of NTproBNP/CRP and the probability of turning severe because as NTproBNP/CRP increases, the average possibility (y-axis) of turning severe increases.}
+\label{fig.pdp}
+\end{figure}
+
 ICE reveals individual differences. Though all of the models give a prediction of a higher risk of severe as NTproBNP and CRP increase, some patients have a much higher initial probability which indicates other features have an impact on overall predictions. For example, elderly people have higher NTproBNP than young people and have a higher risk of turning severe.
 
 In the ALEs,  as NTproBNP and CRP get higher, all of the four models give a more positive prediction of turning severe, which coincides with medical knowledge.
 
-% \clearpage
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/dt_ice_crp_ntproBNP.png}
+    \caption{Decision Tree}
+    \label{fig:dt_ice}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/rf_ice_crp_ntproBNP.png}
+    \caption{Random Forest}
+    \label{fig:rf_ice}
+\end{subfigure}
+\hfill
+\end{figure}
+
+\vfill
+
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H] \ContinuedFloat
+% \vskip\baselineskip
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/xgbc_ice_crp_ntproBNP.png}
+    \caption{Gradient Boosted Trees}
+    \label{fig:gbt_ice}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/nn_ice_crp_ntproBNP.png}
+    \caption{Neural Networks}
+    \label{fig:nn_ice}
+\end{subfigure}
+\caption{Individual Conditional Expectation: Each line in different colors represents a patient. As we increase NTproBNP/CRP while keeping other features the same, the probability of turning severe increases for each individual, but each patient has a different starting level because their other physical conditions differ.}
+\label{fig.ice}
+\end{figure}
+
+\vfill
+
+% \par
+% Sometimes it's not appropriate to use PDP and ICE in medical applications, because both PDP and ICE sample in a grid and make predictions, while some points in the grid may never appear in real world. For example, it's very rare for young people to have a NTproBNP as high as elderlys. ALE only samples in a small range of area which makes it more realistic.
+
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/dt_ALE_NTproBNP_CRP.png}
+    \caption{Decision Tree}
+    \label{fig:dt_ale}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/rf_ALE_NTproBNP_CRP.png}
+    \caption{Random Forest}
+    \label{fig:rf_ale}
+\end{subfigure}
+\hfill
+% \vskip\baselineskip
+\end{figure}
+
+\vfill
+
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H] \ContinuedFloat
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/xgbc_ALE_NTproBNP_CRP.png}
+    \caption{Gradient Boosted Trees}
+    \label{fig:gbt_ale}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/nn_ALE_NTproBNP_CRP.png}
+    \caption{Neural Networks}
+    \label{fig:nn_ale}
+\end{subfigure}
+\caption{Accumulated Local Effects: As the level of NTproBNP/CRP increases, the possibility of turning severe (yellow) goes above the average.}
+\label{fig.ale}
+\end{figure}
+
+\vfill
+
+\clearpage
 
 \subsection{Misclassified Patients}
 
@@ -605,13 +644,13 @@ Patient No. 2 (normal) is predicted with a probability of 0.53 of turning severe
 
 \begin{table}[H]
 \centering
-\caption{Misclassified Patients}
 \begin{tabular}{ccccc}
 \toprule
 No & Class  & Probability of Severe & Prediction & Type\\ \midrule
 2 & Normal & 0.53 & Severe & \textbf{False Positive}       \\
 5 & Severe & 0.24  & Normal & \textbf{False Negative}   \\ \bottomrule
 \end{tabular}
+\caption{Misclassified Patients}
 \label{tab:misclassified}
 \end{table}
 
@@ -641,7 +680,6 @@ Besides, neural networks notice that the patient is elderly (Age = 63). If we ca
 
 \begin{table}[H]
 \centering
-\caption{Average Age in different severity levels}
 \begin{tabular}{@{}cc@{}}
 \toprule
 Severity Level   & Average Age\\ 
@@ -652,6 +690,7 @@ Severity Level   & Average Age\\
 3      &          69.40 \\ 
 \bottomrule
 \end{tabular}
+\caption{Average Age in different severity levels}
 \end{table}
 
 
@@ -659,9 +698,137 @@ Gradient boosted trees and neural networks make correct predictions because they
 
 % \color{blue}
 Medical research is a case-by-case study. Every patient is unique. It's strenuous to find a single criterion that suits every patient, thus it's important to focus on each patient and make a diagnosis accordingly. This is one of the benefits of using interpretable machine learning. It unveils the most significant features for most patients and provides the interpretation for each patient as well.
-\color{black}
+% \color{black}
 
-% \clearpage
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H]
+% \setcounter{figure}{4}
+\centering
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_dt_5.png}
+    \caption{Decision Tree}
+    \label{fig:lime_dt_5}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_rf_5.png}
+    \caption{Random Forests}
+    \label{fig:lime_rf_5}
+\end{subfigure}
+\hfill
+\end{figure}
+
+\vfill
+
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H] \ContinuedFloat
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_xgbc_5.png}
+    \caption{Gradient Boosted Trees}
+    \label{fig:lime_xgbc_5}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_nn_5.png}
+    \caption{Neural Networks}
+    \label{fig:lime_nn_5}
+\end{subfigure}
+\caption{LIME Explanation (\textbf{False-Negative Patient No.5}): Features in green have a positive contribution to the prediction (increasing the probability of turning severe), and features in red have a negative effect on the prediction (decreasing the probability of turning severe)}
+\label{fig:lime_5}
+\end{figure}
+
+\vfill
+
+\clearpage
+
+% \null
+% \vfill
+
+% \begin{figure}[H]
+% % \setcounter{figure}{5}
+% \centering
+% \begin{subfigure}[b]{}
+%     \centering
+%     \includegraphics[angle=90,origin=c]{figures/chapter_interp/shap_dt_5.png}
+%     \caption{Decision Tree}
+%     \label{fig:shap_dt_5}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[b]{}
+%     \centering
+%     \includegraphics[angle=90,origin=c]{figures/chapter_interp/shap_rf_5.png}
+%     \caption{Random Forests}
+%     \label{fig:shap_rf_5}
+% \end{subfigure}
+% \vfill
+% \begin{subfigure}[b]{}
+%     \centering
+%     \includegraphics[angle=90,origin=c]{figures/chapter_interp/shap_xgbc_5.png}
+%     \caption{Gradient Boosted Trees}
+%     \label{fig:shap_xgbc_5}
+% \end{subfigure}
+% \vfill
+% \begin{subfigure}[b]{}
+%     \centering
+%     \includegraphics[angle=90,origin=c]{figures/chapter_interp/shap_nn_5.png}
+%     \caption{Neural Networks}
+%     \label{fig:shap_nn_5}
+% \end{subfigure}
+% \vfill
+% \caption{SHAP Explanation (\textbf{False-Negative Patient No.5}): Features pushing the prediction to be higher (severe) are shown in red,  and those pushing the prediction to be lower (normal) are in blue.}
+% \label{fig:shap_5}
+% \end{figure}
+
+\begin{sidewaysfigure}
+    \centering
+    \begin{subfigure}[b]{\textheight}
+        \centering
+        \includegraphics[width=\textheight]{figures/chapter_interp/shap_dt_5.png}
+        \caption{Decision Tree}
+        \label{fig:shap_dt_5}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}[b]{\textheight}
+        \centering
+        \includegraphics[width=\textheight]{figures/chapter_interp/shap_rf_5.png}
+        \caption{Random Forests}
+        \label{fig:shap_rf_5}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}[b]{\textheight}
+        \centering
+        \includegraphics[width=\textheight]{figures/chapter_interp/shap_xgbc_5.png}
+        \caption{Gradient Boosted Trees}
+        \label{fig:shap_xgbc_5}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}[b]{\textheight}
+        \centering
+        \includegraphics[width=\textheight]{figures/chapter_interp/shap_nn_5.png}
+        \caption{Neural Networks}
+        \label{fig:shap_nn_5}
+    \end{subfigure}
+  \caption{SHAP Explanation (\textbf{False-Negative Patient No.5}): Features pushing the prediction to be higher (severe) are shown in red, and those pushing the prediction to be lower (normal) are in blue.}
+  \label{fig:shap_5}
+\end{sidewaysfigure}
+
+
+% \vfill
+
+\clearpage
+
 \subsection{Interpretation (False Positive)}
 
 With limited medical resources at the initial outbreak of the pandemic, it's equally important to investigate false positive, so that valuable resources can be distributed to patients in need.
@@ -670,9 +837,8 @@ In table \ref{tab:misclassified}, patient 2 is normal, but all of our models dia
 
 \begin{table}[H]
 \centering
-\caption{Record of the false positive Patient 2}
 % \begin{tabular}{p{2cm}p{1.1cm}cccp{1cm}}
-\begin{tabular}{cp{2.2cm}p{2.1cm}}
+\begin{tabular}{ccc}
 \toprule
 Feature   & Patient 5 (Severe) & Patient 2 (Normal)\\ 
 \midrule
@@ -694,8 +860,9 @@ ALB2                &  36.50    &   37.60 \\
 Symptoms            &  None     &   Fever \\
 NDisease            & Hypertention & Hypertention, DM, Hyperlipedia \\
 \bottomrule
-\label{tab:normal2}
 \end{tabular}
+\caption{Record of the false positive Patient 2}
+\label{tab:normal2}
 \end{table}
 
 % \newpage
@@ -709,7 +876,6 @@ Even though all of the four models make the same predictions as human doctors, i
 
 \begin{table}[H]
 \centering
-\caption{Most important features from LIME, SHAP}
 \begin{tabular}{@{}cc@{}}
 \toprule
 Model                   & LIME                          \\  
@@ -726,8 +892,9 @@ Random Forests          & CRP2, CRP1, LDH      \\
 Gradient Boosted Trees  & CRP2, NTproBNP, LDH  \\
 Neural Networks         & CRP2, NTproBNP, CRP1 \\  
 \bottomrule
-\label{tab:important_feature_patient}
 \end{tabular}
+\caption{Most important features from LIME, SHAP}
+\label{tab:important_feature_patient}
 \end{table}
 
 % \subsection{Other Implications}
@@ -751,16 +918,101 @@ As a result, the prediction of false-positive is consistent with doctors' diagno
 
 % \color{blue}
 In conclusion, as illustrated previously in the explanation for patient 5 (false negative), every patient is unique. Some patients are more resistant to viral infection, while some are more vulnerable. Pursuing a perfect model is tough in healthcare, but we can try to understand how different models make predictions using interpretable machine learning to be more responsible with our diagnoses.
-\color{black}
+% \color{black}
 
-\newpage
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H]
+% \setcounter{figure}{4}
+\centering
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_dt_2.png}
+    \caption{Decision Tree}
+    \label{fig:lime_dt_2}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_rf_2.png}
+    \caption{Random Forests}
+    \label{fig:lime_rf_2}
+\end{subfigure}
+\end{figure}
+\vfill
+
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H] \ContinuedFloat
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_xgbc_2.png}
+    \caption{Gradient Boosted Trees}
+    \label{fig:lime_xgb_2}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_nn_2.png}
+    \caption{Neural Networks}
+    \label{fig:lime_nn_2}
+\end{subfigure}
+\hfill
+\caption{LIME Explanation (\textbf{False-Positive Patient No.2}): Features in green have a positive contribution to the prediction (increasing the probability of turning severe), and features in red have a negative effect on the prediction (decreasing the probability of turning severe)}
+\label{fig:lime_2}
+\end{figure}
+
+\vfill
+
+\clearpage
+
+\begin{sidewaysfigure}
+\centering
+\begin{subfigure}[b]{1.0\textheight}
+    \centering
+    \includegraphics[width=\textheight]{figures/chapter_interp/shap_dt_2.png}
+    \caption{Decision Tree}
+    \label{fig:shap_dt_2}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{1.0\textheight}
+    \centering
+    \includegraphics[width=\textheight]{figures/chapter_interp/shap_rf_2.png}
+    \caption{Random Forests}
+    \label{fig:shap_rf_2}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{1.0\textheight}
+    \centering
+    \includegraphics[width=\textheight]{figures/chapter_interp/shap_xgbc_2.png}
+    \caption{Gradient Boosted Trees}
+    \label{fig:shap_xgbc_2}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{1.0\textheight}
+    \centering
+    \includegraphics[width=\textheight]{figures/chapter_interp/shap_nn_2.png}
+    \caption{Neural Networks}
+    \label{fig:shap_nn_2}
+\end{subfigure}
+\hfill
+\caption{SHAP Explanation (\textbf{False-Positive Patient No.2}): Features pushing the prediction to be higher (severe) are shown in red,  and those pushing the prediction to be lower (normal) are in blue.}
+\label{fig:shap_2}
+\end{sidewaysfigure}
+
+\clearpage
 \subsection{Evaluating Interpretation}
 
 Though we do find some indicative symptoms of COVID-19 through model interpretation, they are confirmed credible because these interpretations are corroborated by medical research. If we use the interpretation to understand a new virus at the early stage of an outbreak, there will be less evidence to support our interpretation. Thus we use Monoitinicity and Faithfulness to evaluate different interpretations using IBM AIX 360 toolbox \citep{aix360-sept-2019}. The decision tree only provides a binary prediction (0 or 1) rather than a probability between 0 and 1, so it cannot be evaluated using Monotonicity and Faithfulness.
 
 \begin{table}[H]
 \centering
-\caption{Failthfulness Evaluation}
 \begin{tabular}{@{}ccc@{}}
 \toprule
 Models   & LIME & SHAP \\ \midrule
@@ -768,13 +1020,13 @@ Random Forests & 0.37  & 0.59      \\
 Gradient Boosted Trees & 0.46 & 0.49 \\
 Neural Networks & 0.45 & 0.33 \\ \bottomrule
 \end{tabular}
+\caption{Failthfulness Evaluation}
 \end{table}
 
 Faithfulness (ranging from -1 to 1) reveals the correlation between the importance assigned by the interpretability algorithm and the effect of each attribute on the performance of the model. All of our interpretations receive good faithfulness scores, and SHAP receives a higher faithfulness score than LIME on average. The interpretation by SHAP receives better results because the Shapley value is calculated by removing the effect of specific features which is similar to how faithfulness is computed, so SHAP is more akin to faithfulness.
 
 \begin{table}[H]
 \centering
-\caption{Monotonicity Evaluation}
 \begin{tabular}{@{}ccc@{}}
 \toprule
 Models   & LIME & SHAP \\ \midrule
@@ -782,6 +1034,7 @@ Random Forests & False  & False      \\
 Gradient Boosted Trees & 22\% True & 22\% True \\
 Neural Networks & False & False \\ \bottomrule
 \end{tabular}
+\caption{Monotonicity Evaluation}
 \end{table}
 
 % \color{blue}
@@ -796,149 +1049,6 @@ As for monotonicity, most interpretation methods receive a False though we do fi
 \subsection{Summary}
 
 In this section, the interpretation of four different machine learning models reveals that N-Terminal pro-Brain Natriuretic Peptide (NTproBNP), C-Reaction Protein (CRP), and lactic dehydrogenase (LDH), lymphocyte (LYM) are the four most important biomarkers that indicate the severity level of COVID-19 patients. In the next section, we further validate our methods on two datasets to corroborate our proposal.
-
-
-% \clearpage
-
-\begin{figure*}
-% \setcounter{figure}{4}
-\centering
-\begin{subfigure}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_dt_5.png}
-    \caption{Decision Tree}
-    \label{fig:lime_dt_5}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_rf_5.png}
-    \caption{Random Forests}
-    \label{fig:lime_rf_5}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_xgbc_5.png}
-    \caption{Gradient Boosted Trees}
-    \label{fig:lime_xgbc_5}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_nn_5.png}
-    \caption{Neural Networks}
-    \label{fig:lime_nn_5}
-\end{subfigure}
-\caption{LIME Explanation (\textbf{False-Negative Patient No.5}): Features in green have a positive contribution to the prediction (increasing the probability of turning severe), and features in red have a negative effect on the prediction (decreasing the probability of turning severe)}
-\label{fig:lime_5}
-\end{figure*}
-
-\begin{figure*}
-% \setcounter{figure}{5}
-\centering
-\begin{subfigure}[b]{1.0\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_dt_5.png}
-    \caption{Decision Tree}
-    \label{fig:shap_dt_5}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{1.0\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_rf_5.png}
-    \caption{Random Forests}
-    \label{fig:shap_rf_5}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{1.0\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_xgbc_5.png}
-    \caption{Gradient Boosted Trees}
-    \label{fig:shap_xgbc_5}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{1.0\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_nn_5.png}
-    \caption{Neural Networks}
-    \label{fig:shap_nn_5}
-\end{subfigure}
-\hfill
-\caption{SHAP Explanation (\textbf{False-Negative Patient No.5}): Features pushing the prediction to be higher (severe) are shown in red,  and those pushing the prediction to be lower (normal) are in blue.}
-\label{fig:shap_5}
-\end{figure*}
-
-% \clearpage
-
-\begin{figure*}
-% \setcounter{figure}{4}
-\centering
-\begin{subfigure}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_dt_2.png}
-    \caption{Decision Tree}
-    \label{fig:lime_dt_2}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_rf_2.png}
-    \caption{Random Forests}
-    \label{fig:lime_rf_2}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_xgbc_2.png}
-    \caption{Gradient Boosted Trees}
-    \label{fig:lime_xgb_2}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_nn_2.png}
-    \caption{Neural Networks}
-    \label{fig:lime_nn_2}
-\end{subfigure}
-\hfill
-\caption{LIME Explanation (\textbf{False-Positive Patient No.2}): Features in green have a positive contribution to the prediction (increasing the probability of turning severe), and features in red have a negative effect on the prediction (decreasing the probability of turning severe)}
-\label{fig:lime_2}
-\end{figure*}
-
-\begin{figure*}
-\centering
-\begin{subfigure}[b]{1.0\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_dt_2.png}
-    \caption{Decision Tree}
-    \label{fig:shap_dt_2}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{1.0\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_rf_2.png}
-    \caption{Random Forests}
-    \label{fig:shap_rf_2}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{1.0\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_xgbc_2.png}
-    \caption{Gradient Boosted Trees}
-    \label{fig:shap_xgbc_2}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{1.0\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/shap_nn_2.png}
-    \caption{Neural Networks}
-    \label{fig:shap_nn_2}
-\end{subfigure}
-\hfill
-\caption{SHAP Explanation (\textbf{False-Positive Patient No.2}): Features pushing the prediction to be higher (severe) are shown in red,  and those pushing the prediction to be lower (normal) are in blue.}
-\label{fig:shap_2}
-\end{figure*}
 
 % \clearpage
 
@@ -965,48 +1075,12 @@ Our methods reveal the same results without taking efforts to design a dedicated
 
 \subsection{Validation on 5644 infected patients in Brazil}
 
-\begin{figure*}
-% \setcounter{figure}{4}
-\centering
-\begin{subfigure}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_kaggle_dt.png}
-    \caption{Decision Tree}
-    \label{fig:lime_kaggle_dt}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_kaggle_rf.png}
-    \caption{Random Forests}
-    \label{fig:lime_kaggle_rf}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_kaggle_xgbc.png}
-    \caption{Gradient Boosted Trees}
-    \label{fig:lime_kaggle_xgbc}
-\end{subfigure}
-\hfill
-\begin{subfigure}[b]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_kaggle_nn.png}
-    \caption{Neural Networks}
-    \label{fig:lime_kaggle_nn}
-\end{subfigure}
-\hfill
-\label{fig:kaggle_lime}
-\caption{LIME Explanation (\textbf{Kaggle Patient 0}): Features in green have a positive contribution to the prediction (increasing the probability of turning severe), and features in red have a negative effect on the prediction (decreasing the probability of turning severe)}
-\end{figure*}
-
 Our approach obtains the same result on the dataset with 92 patients from Zhuhai, China, and a medium-size dataset with 485 patients from Wuhan, China. Besides, we further validate our approach on a larger dataset with 5644 patients in Brazil, from Kaggle.
 
 This dataset consists of 111 features including anonymized personal information, laboratory virus tests, urine tests, venous blood gas analysis, arterial blood gases, blood routine test, among other features. All data were anonymized following the best international practices and recommendations. The difference between this dataset and ours is that all data are standardized to have a mean of zero and a unit standard deviation, thus the original data range that contains clinical meaning is lost. Still, the most important medical indicators can be extracted using interpretation methods.
 
 \begin{table}[H]
 \centering
-\caption{Patient No.0 in the Kaggle Dataset}
 \begin{tabular}{@{}ll@{}}
 \toprule
 Feature & Value\\ 
@@ -1032,6 +1106,7 @@ Proteina C reativa mg/dL & 0.236\\
 \bottomrule
 \label{tab:kaggle}
 \end{tabular}
+\caption{Patient No.0 in the Kaggle Dataset}
 \end{table}
 
 % \color{blue}
@@ -1040,8 +1115,7 @@ Following the same approach, a preprocessing is applied on the dataset that remo
 
 \begin{table}[H]
 \centering
-\caption{Classification Results (Kaggle)}
-\begin{tabular}{p{2cm}p{1.1cm}cccp{1cm}}
+\begin{tabular}{cccccc}
 \toprule
 Classifier    & CV & \multicolumn{3}{c}{Test Set} & 95\% confidence interval \\ \midrule
               & F1               & Precision  & Recall  & F1    &\\
@@ -1051,6 +1125,7 @@ Gradient Boosted Trees  & 0.56    & 0.90       & 0.75    & 0.59 & 0.089\\
 Neural Networks       & 0.38             & 0.90       & 0.50    & 0.67 & 0.089\\ \bottomrule
 \label{tab:kaggle_models}
 \end{tabular}
+\caption{Classification Results (Kaggle)}
 \end{table}
 
 After training and interpreting four different models, decision tree, random forests, gradient boosted trees, and neural networks, the most important features are identified and listed in table \ref{tab:important_feature_kaggle}. The three most common indicative features are leukocytes, eosinophils, and platelets.
@@ -1059,7 +1134,6 @@ According to medical research, patients with increased leukocyte count are more 
 
 \begin{table}[H]
 \centering
-\caption{Five most important features (Kaggle)}
 \begin{tabular}{@{}ccc@{}}
 \toprule
 Model                   & Most Important Features \\ \midrule
@@ -1067,8 +1141,9 @@ Decision Tree           & Leukocytes, Eosinophils, Patient age quantile      \\
 Random Forest           & Leukocytes, Eosinophils, Platelets        \\
 Gradient Boosted Trees  & Patient age quantile, Hematocrit, Platelets  \\
 Neural Networks         & Leukocytes, Platelets, Monocytes          \\  \bottomrule
-\label{tab:important_feature_kaggle}
 \end{tabular}
+\caption{Five most important features (Kaggle)}
+\label{tab:important_feature_kaggle}
 \end{table}
 
 % \color{blue}
@@ -1079,33 +1154,84 @@ To further validate our interpretation, faithfulness and monotonicity are calcul
 
 \begin{table}[H]
 \centering
-\caption{Failthfulness Evaluation (Kaggle)}
 \begin{tabular}{@{}ccc@{}}
 \toprule
 Models   & LIME & SHAP \\ \midrule
 Random Forests & 0.71  & 0.82      \\
 Gradient Boosted Trees & 0.61 & 0.72 \\
 Neural Networks & 0.25 & 0.42 \\ \bottomrule
-\label{kaggle_faith}
 \end{tabular}
+\caption{Failthfulness Evaluation (Kaggle)}
+\label{kaggle_faith}
 \end{table}
 
 \begin{table}[H]
 \centering
-\caption{Monotonicity Evaluation (Kaggle)}
 \begin{tabular}{@{}ccc@{}}
 \toprule
 Models   & LIME & SHAP \\ \midrule
 Random Forests & False  & False      \\
 Gradient Boosted Trees & True & False \\
 Neural Networks & False & False \\ \bottomrule
-\label{kaggle_mono}
 \end{tabular}
+\caption{Monotonicity Evaluation (Kaggle)}
+\label{kaggle_mono}
 \end{table}
+
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H]
+% \setcounter{figure}{4}
+\centering
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_kaggle_dt.png}
+    \caption{Decision Tree}
+    \label{fig:lime_kaggle_dt}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_kaggle_rf.png}
+    \caption{Random Forests}
+    \label{fig:lime_kaggle_rf}
+\end{subfigure}
+\end{figure}
+\vfill
+
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H] \ContinuedFloat
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_kaggle_xgbc.png}
+    \caption{Gradient Boosted Trees}
+    \label{fig:lime_kaggle_xgbc}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter_interp/lime_kaggle_nn.png}
+    \caption{Neural Networks}
+    \label{fig:lime_kaggle_nn}
+\end{subfigure}
+\hfill
+\label{fig:kaggle_lime}
+\caption{LIME Explanation (\textbf{Kaggle Patient 0}): Features in green have a positive contribution to the prediction (increasing the probability of turning severe), and features in red have a negative effect on the prediction (decreasing the probability of turning severe)}
+\end{figure}
+\vfill
+
+\clearpage
 
 \section{Conclusion}
 
-In this paper, through the interpretation of four different machine learning models, we reveal that N-Terminal pro-Brain Natriuretic Peptide (NTproBNP), C-Reaction Protein (CRP), and lactic dehydrogenase (LDH), lymphocyte (LYM) are the four most important biomarkers that indicate the severity level of COVID-19 patients. Our findings are consistent with medical knowledge and recent research that exploits dedicated models. We further validate our methods on a large open dataset from Kaggle and unveil leukocytes, eosinophils, and platelets as three indicative biomarkers for COVID-19.
+In this research, through the interpretation of four different machine learning models, we reveal that N-Terminal pro-Brain Natriuretic Peptide (NTproBNP), C-Reaction Protein (CRP), and lactic dehydrogenase (LDH), lymphocyte (LYM) are the four most important biomarkers that indicate the severity level of COVID-19 patients. Our findings are consistent with medical knowledge and recent research that exploits dedicated models. We further validate our methods on a large open dataset from Kaggle and unveil leukocytes, eosinophils, and platelets as three indicative biomarkers for COVID-19.
 
 The pandemic is a race against time. Using interpretable machine learning, medical practitioners can incorporate insights from models with their prior medical knowledge to promptly reveal the most significant indicators in early diagnosis and hopefully win the race in the fight against the pandemic.
 
@@ -1114,3 +1240,164 @@ The pandemic is a race against time. Using interpretable machine learning, medic
 % \printbibliography[
 %   keyword={chapter_defence}, heading=subbibintoc, resetnumbers=true
 % ]
+
+% \onecolumn
+\chapter{Appendix}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}cc@{}}
+\toprule
+Feature                   & Comments  \\ 
+\toprule
+Severity03 & Severe (3) - Normal (0) \\
+Severity01 & Severe (1), Normal (0)	\\
+\bottomrule
+\end{tabular}
+\caption{Diagnoses}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}cc@{}}
+\toprule
+Feature                   & Comments \\ 
+\toprule
+MedNum           & Medical Number  \\
+No            & Patient No.         \\  
+Sex  & Man (1), Woman(0)          \\  
+Age	& - \\
+AgeG1 &	$Age > 50 (1), Age \leq 50 (0)$ \\
+Height &  -	 \\
+Weight &  - \\
+BMI	 & Body Mass Index   \\
+\bottomrule
+\end{tabular}
+\caption{Personal Info}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}cc@{}}
+\toprule
+Feature                   & Comments \\ 
+\toprule
+WBC1 &	White Blood Cell (first time) \\
+NEU1 &	Neutrophil Count (first time) \\
+LYM1 &	Lymphocyte Count (first time) \\
+N2L1 &  -  \\
+WBC2 &	White Blood Cell (second time)  \\
+NEU2 &	Neutrophil Count (second time) \\
+LYM2 &	Lymphocyte Count (second time) \\
+N2L2 &  -  \\
+\bottomrule
+\end{tabular}
+\caption{Complete Blood Count}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}cc@{}}
+\toprule
+Feature                   & Comments  \\ 
+\toprule
+PCT1 &	Procalcitonin (first time)  \\
+CRP1 &	C-Reactive Protein (first time)  \\
+PCT2 &	Procalcitonin (second time)  \\
+CRP2 &	C-Reactive Protein (second time) \\
+\bottomrule
+\end{tabular}
+\caption{Inflammatory Markers}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}cc@{}}
+\toprule
+Feature                   & Comments  \\ 
+\toprule
+Symptom & -		 \\
+Fever & -	\\
+Cough & -	 \\
+Phlegm & -	 \\
+Hemoptysis & -	  \\
+SoreThroat & -\\
+Catarrh & - \\
+Headache & -	 \\
+ChestPain & - \\
+Fatigue & -	 \\
+SoreMuscle & -	 \\
+Stomachache & -		 \\
+Diarrhea & -	 \\
+PoorAppetie & -	 \\
+NauseaNVomit & -  \\
+% \toprule
+% Feature                   & Anamneses  \\ 
+% \toprule
+Hypertention & -	  \\
+Hyperlipedia & -	 \\
+DM & Diabetic Mellitus\\
+Lung & Lunge Disease	 \\
+CAD & Coronary Heart Disease	 \\
+Arrythmia & -  \\
+Cancer & -  \\
+\bottomrule
+\end{tabular}
+\caption{Symptoms and Anamneses}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}cc@{}}
+\toprule
+Feature                   & Comments  \\ 
+\toprule
+AST	& Aspartate aminotransferase\\
+LDH	& Lactate Dehydrogenase  \\
+CK	& Creatine Kinase	 \\
+CKMB &  The amount of an isoenzyme of creatine kinase (CK)  \\
+HBDH & Alpha-Hydroxybutyrate Dehydrogenase \\
+HiCKMB & Highest CKMB  \\
+% NTproBNP & N-terminal Prohormone of Brain Natriuretic Peptide	& - \\
+Cr & Serum Creatinine \\
+ALB1 &	Albumin Count (first time) \\
+ALB2 &	Albumin Count (second time) \\
+\bottomrule
+\end{tabular}
+\caption{Biochemical Examination}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}cc@{}}
+\toprule
+Feature                   & Comments  \\ 
+\toprule
+Temp & Temperature \\
+LVEF & Left Ventricular Ejection Fraction\\
+Onset2Admi & Time from onset to admission \\
+Onset2CT1 & Time from onset to CT test\\
+Onset2CTPositive1 & Time from onset to CT test positive \\
+Onset2CTPeak & Time from onset to CT peak \\
+% \toprule
+% Feature                   & Tests not taken  \\ 
+% \toprule
+cTnITimes &	When was cTnI tested  \\
+cTnI & Cardiac Troponin I	 \\
+cTnlCKMBOrdinal1  & The value when hospitalized	 \\
+cTnlCKMBOrdinal2 & The maximum value when hospitalized \\
+CTScore & Peak CT Score  \\
+AIVolumneP & Peak Volume \\
+SO2 & Empty \\
+PO2 & Empty  \\
+YHZS & Empty\\
+RUL & Empty \\
+RML & Empty  \\
+RLL & Empty  \\
+LUL & Empty  \\
+LLL & Empty \\
+\bottomrule
+\end{tabular}
+\caption{Other test results}
+\end{table}
