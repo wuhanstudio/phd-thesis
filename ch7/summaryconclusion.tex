@@ -1,25 +1,45 @@
 \chapter{Conclusion and Future Work}
 \label{chpt:conclusion}
 
-In conclusion, this research intends to achieve practical adversarial attacks against deep learning models. We have made some progress in distributed black-box attacks (\textbf{Adversarial Classification}) and real-time white-box attacks (\textbf{Adversarial Driving}, \textbf{Adversarial Detection}, and the \textbf{Man-in-the-Middle hardware attack}).
+This thesis provides insights into the research question: Have adversarial attacks become a practical threat against deep learning applications? This chapter summarizes our contributions and addresses limitations that can be improved in future research.
 
 \section{Thesis Summary}
 
-In the last year, we'll try to devise adversarial attacks against object tracking and investigate the effects of hardware acceleration on our attacks. Eventually, we hope we can understand various models through interpretation, and thus deploying deep learning models more securely in robotics.
+The existence of adversarial examples sparked widespread interest and discussion in deep learning research. Small perturbations that are unperceivable by human eyes can result in significant shifts in model predictions, suggesting a fundamentally different approach to task comprehension compared to human cognition. Chapters 2-5 presented novel adversarial attacks, including real-time online white-box attacks, Human-in-the-Middle hardware attacks, and distributed black-box attacks. Furthermore, Chapter 6 introduced how we used interpretable machine learning to understand model predictions for healthcare applications.
 
-\clearpage
+Adversarial attacks against classifiers have been well-explored in academic research, while attacks against regression models are not as well understood. Chapter \ref{chpt:driving} proposed two real-time online attacks against the regressional end-to-end driving model. These attacks achieved real-time performance using two simple yet effective adversarial loss functions and assumed no access to the ground truth. As a result, both regression and classification models are vulnerable to adversarial attacks.
 
-\section{Future Research}
+In addition, Chapter 3 introduced real-time online attacks against object detection models, a combination of regression and classification tasks. Besides adversarial filters that apply unperceivable perturbations to the entire image and adversarial patches that apply conspicuous perturbations to a part of the image, a new method, the adversarial overlay, was proposed to combine the strengths of adversarial filters and patches. However, all aforementioned adversarial attacks require access to the operating system to inject the perturbation, limiting the practicality of the methods. Thus, we proposed the Human-in-the-Middle hardware attack that could bypass the operating system by injecting the perturbation into the communication channel.
 
-We plan to generate adversarial patches against object detection models in a simulated environment by changing the material or texture of an object, which is a special kind of physical patch.
-   
+\textbf{Chapter \ref{chpt:tracking}} \color{gray}\lipsum[1-1][1-9]\color{black}
+
+Following our findings in real-time online white-box attacks, our focus transitioned to black-box attacks in Chapter \ref{chpt:classification}. Although existing research has demonstrated the feasibility of query-efficient black-box attacks that do not require access to model structure and weights, we revealed several common mistakes that exaggerated the effectiveness of attacks. For example, we shouldn't assume access to model input shape and pre-processing methods when attacking image classification cloud APIs. Besides,  prior research has primarily focused on increasing the success rate and reducing the number of queries, while we exploited the load balancing to enable distributed black-box attacks that could reduce the attack query time.
+
+Having explored real-time online white-box attacks and time-efficient black-box attacks, we moved towards interpretation methods in Chapter \ref{chpt:defence}.  We experimented with six interpretation methods (PFI, PDP, ALE, ICE, LIME, SHAP) and two evaluation metrics (faithfulness and monotonicity) to interpret black-box machine learning models. The interpretation results revealed that the three most indicative biomarkers identified by the models aligned with other medical experimental results. Although deep neural networks are susceptible to adversarial attacks, interpretation methods can help verify if the model's decision-making criteria are consistent with medical knowledge.
+
+In conclusion, white-box attacks exploit gradients to achieve real-time online attacks against classification and regression models. Adversarial perturbations can be generalized to other models due to the transferability of deep learning models and can be injected into the communication channel without requiring access to the operating system, putting embedded systems at risk. Black-box attacks, in contrast, though slower due to the query process, can target machine-learning cloud services without access to gradients. However, the effectiveness of existing query-efficient black-box attacks is overrated due to assumptions about access to input shapes and pre-processing methods. The existence of adversarial examples highlights the fundamental differences between the cognition of deep learning models and human cognition. For healthcare applications, interpretation methods can be employed to verify the decision-making criteria of machine learning models and ensure that model predictions align with medical knowledge.
+
+\section{Limitations \& Future Research}
+
+fast-advancing new attacks being proposed benefit from new optimization methods
+
+red and blue team in cyber security.  the cat and mouse game
+
+Eventually, we hope we can understand various models through interpretation, and thus deploying deep learning models more securely in robotics and healthcare applications.
+
 \subsection{Robust Physical Patch in Simulated Environments}
 
-For autonomous driving, it is more popular to test safety-critical edge cases in simulation. Testing physical attacks in simulators is more efficient than in the physical world since we can easily vary weather and lighting conditions. In simulators, adversarial patches can be applied by changing the material or texture of an object, but prior research only applies patches by modifying pixel values \cite{mathov2021enhancing} \cite{nesti2022evaluating} \cite{rossolini2022realworld}.
+One paragraph.
+
+As rendering techniques advances
+
+For autonomous driving, it is more popular to test safety-critical edge cases in simulation. Testing physical attacks in simulators is more efficient than in the physical world since we can easily vary weather and lighting conditions. In simulators, adversarial patches can be applied by changing the material or texture of an object, but prior research only applies patches by modifying pixel values \citep{mathov2021enhancing} \citep{nesti2022evaluating} \citep{rossolini2022realworld}.
 
 Besides, testing physical patches could waste a lot of printing materials.
 
 In summary, most prior research tests physical attacks in the real world or applies adversarial patches by modifying pixel values in simulators.
+
+We plan to generate adversarial patches against object detection models in a simulated environment by changing the material or texture of an object, which is a special kind of physical patch.
 
 \subsection{Multi-Agent Reinforcement Learning (MARL)}
 
@@ -28,3 +48,6 @@ Multi-agent Reinforcement Learning
 
 \subsection{Scientific Machine Learning (SciML)}
 
+Besides medical research, scientific application discovery.
+
+physics informed machine learning.
