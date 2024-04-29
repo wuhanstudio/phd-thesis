@@ -7,9 +7,6 @@ This chapter first introduces how deep learning models are employed in autonomou
 
 % For instance, the Amazon Kiva Robot and Alibaba Quicktron Robot can help warehouse staffs find desired items by moving goods shelves. Each robot can perceive the surrounding environment to avoid collisions with other robots, and receive commands from warehouse staff via cloud servers. On the other hand, autonomous driving research teams from Waymo (formerly the Google self-driving car project), Tesla, etc intend to achieve autonomous navigation without human interference.
 
-% On the other hand, the development of physics engines and realistic renderers makes it feasible to simulate complex robots in simulators. Reinforcement learning that learns from trial and error, can now be trained and verified in a virtual environment before deploying to the physical world.
-
-
 \section{Deep Learning}
 \label{sec:deep_learning}
 
@@ -109,33 +106,6 @@ The LGSVL is another autonomous vehicle simulation platform based on the Unity3D
 \end{figure}
 
 Besides autonomous driving, deep learning models are also widely used in medical applications, especially during the COVID-19 pandemic. With the rapid transmission of COVID-19, the demand for medical supplies goes beyond hospitals' capacity in many countries. Various diagnostic and predictive models are employed to release the pressure on healthcare workers.
-
-% \clearpage
-
-% \subsection{Reinforcement Learning}
-% \label{sec:reinf_robot}
-
-% Deep reinforcement learning can be integrated into robotic systems as well. Given observations of the environment under certain states, the agent (robot) takes actions to achieve objectives. Most reinforcement learning tasks are evaluated in games such as the Atari. Recently, the NVIDIA Issac Gym simulator makes large-scale reinforcement learning possible.
-
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=\textwidth]{figures/chapter_intro/issac_gym.jpg}
-% \caption{NVIDIA Isaac Gym}
-% \label{fig.issac_gym}
-% \end{figure}
-
-% However, reinforcement learning models are vulnerable to adversarial attacks by adding perturbations to agents' observations \citep{chen2019adversarial}. Besides, recent research unveils that adversarial policy that acts abnormally in a shared environment can also induce extremely unlikely activations to occur.
-
-% \begin{figure}[H]
-% \centering
-% \includegraphics[scale=0.4]{figures/chapter_intro/adv_policy.jpg}
-% \caption{Adversarial Policies: Attacking Deep Reinforcement Learning}
-% \label{fig.adv_policy}
-% \end{figure}
-
-% For instance, the red agent tries to prevent the blue agent from crossing the line. Unexpectedly, the red agent wins the game by falling to the ground, which looks like a random policy. But this abnormal action of the red agent effectively causes the blue agent to fall as well \citep{gleave2021adversarial}. 
-
-% In chapter \ref{chpt:driving}, we provide more experiments of adversarial attacks against end-to-end models in autonomous driving systems.
 
 Unfortunately, both modular systems and end-to-end driving models are vulnerable to adversarial attacks. The trustworthiness of deep learning models for medical diagnoses is also challenged.
 

@@ -21,33 +21,24 @@ In conclusion, white-box attacks exploit gradients to achieve real-time online a
 
 \section{Limitations \& Future Research}
 
-fast-advancing new attacks being proposed benefit from new optimization methods
-
-red and blue team in cyber security.  the cat and mouse game
-
-Eventually, we hope we can understand various models through interpretation, and thus deploying deep learning models more securely in robotics and healthcare applications.
+Generating adversarial attacks is an optimization process that focuses on optimizing the adversarial inputs rather than tuning model parameters. The fast-paced development of new attacks benefits from advances in optimization methods, resembling the ongoing cat-and-mouse game seen in cybersecurity between red and blue teams. As stronger attacks emerge, they prompt the development of new defense strategies, which in turn lead to the creation of even stronger attacks. This section explores future research directions that leverage new technologies not discussed in the thesis.
 
 \subsection{Robust Physical Patch in Simulated Environments}
 
-One paragraph.
+Physical patches are susceptible to variations in angle and distance due to the constraints of the non-differentiable rendering process. Adversarial patches printed on paper may differ from optimized digital patches due to shearing (viewing from different angles) and lighting conditions. If we can compute the gradient of adversarial loss functions with respect to texture and lighting, the optimized adversarial patch can become more resilient to environmental changes. 
 
-As rendering techniques advances
+On the other hand, as rendering techniques advance, more photo-realistic game engines and renderers are being developed. In the context of autonomous driving, it is increasingly common to test safety-critical edge cases in simulation. Testing physical attacks in simulators offers greater efficiency compared to the physical world, as it allows for easy variation of weather and lighting conditions. Moreover, testing physical patches in simulators helps to avoid wasting significant amounts of printing materials.
 
-For autonomous driving, it is more popular to test safety-critical edge cases in simulation. Testing physical attacks in simulators is more efficient than in the physical world since we can easily vary weather and lighting conditions. In simulators, adversarial patches can be applied by changing the material or texture of an object, but prior research only applies patches by modifying pixel values \citep{mathov2021enhancing} \citep{nesti2022evaluating} \citep{rossolini2022realworld}.
-
-Besides, testing physical patches could waste a lot of printing materials.
-
-In summary, most prior research tests physical attacks in the real world or applies adversarial patches by modifying pixel values in simulators.
-
-We plan to generate adversarial patches against object detection models in a simulated environment by changing the material or texture of an object, which is a special kind of physical patch.
+As a result, leveraging differentiable renderers such as Pytorch 3D \citep{ravi2020pytorch3d}, Kaolin \citep{KaolinLibrary}, and Mitsuba 2 \citep{nimier2019mitsuba} can lead to more robust adversarial patches in a simulated environment. Researchers can then use photo-realistic game engines to effectively transfer the patch to the physical world.
 
 \subsection{Multi-Agent Reinforcement Learning (MARL)}
 
-Multi-agent Reinforcement Learning
+The development of physics engines and realistic renderers makes it feasible to simulate complex robots in simulators. Reinforcement learning learns from trial and error and can be trained and verified in a virtual environment before deploying to the physical world. However, this thesis did not investigate the impact of adversarial attacks involving multiple agents interacting with one another.
 
+As expected, reinforcement learning models are vulnerable to adversarial attacks when perturbations are added to agents' observations \citep{chen2019adversarial}. Recent research also reveals that adversarial policies acting abnormally in a shared environment can induce extremely unlikely activations. For example, in a scenario where a red agent aims to prevent a blue agent from crossing a line, the red agent unexpectedly wins the game by falling to the ground, resembling a random policy. However, this abnormal action effectively causes the blue agent to fall as well \citep{gleave2021adversarial}. These situations should be thoroughly tested and theoretically analyzed to understand adversarial attacks in an interactive environment.
 
 \subsection{Scientific Machine Learning (SciML)}
 
-Besides medical research, scientific application discovery.
+Unlike deep neural networks, traditional numerical simulation methods that use finite difference, finite element methods to solve Ordinary Differential Equations (ODE) and Partial Differential Equations (PDE) follow the underlying physical laws and are less vulnerable to adversarial attacks. Scientific Machine Learning (SciML) is a growing field that combines the strengths of traditional numerical methods and machine learning to address some of the biggest challenges in science. This raises the question: Will incorporating deep neural networks into these methods increase their vulnerability to adversarial attacks? This thesis does not explore adversarial attacks in applications beyond computer vision.
 
-physics informed machine learning.
+On the other hand, existing research on enhancing the robustness of deep learning models can benefit from scientific knowledge. For example, residual networks reduce error by creating skip connections that feed the input and output of the current layer into the next layer, which is identical to the Euler method. However, the Euler method, known for its simplicity, is considered a poor solver due to error accumulation at each step, and these insights can guide improvements in residual layers. By understanding and applying scientific concepts, we can better interpret the underlying mechanisms of deep neural network architectures and enhance their performance and robustness.
