@@ -355,13 +355,13 @@ Although deep neural networks are vulnerable to adversarial attacks, traditional
 
 \textbf{Have black-box attacks become a practical threat against commercial Cloud APIs?}
 
-IoT devices that do not have enough memory and computational resources rely on cloud APIs to achieve computer vision tasks, such as image classification. Existing black-box attacks have reported attack success rates of over 95\% with less than 1,000 queries. Have they become a real threat against commercial cloud APIs such as Imagga and Google Cloud Vision?
+IoT devices with limited memory and computational power depend on cloud APIs for tasks like image classification. Existing black-box attacks report success rates of over 95\% using fewer than 1,000 queries. This raises the question: Have these attacks become a significant threat to commercial cloud APIs such as Imagga and Google Cloud Vision?
 
 \vspace{0.5cm}
 
 \textbf{How can we embrace deep learning models safely?}
 
-Deep learning models that achieve high accuracy provide fewer interpretations due to the trade-off between accuracy and interpretability. How can we interpret and safely embrace black-box models, especially for medical applications?
+Deep learning models that achieve high accuracy provide fewer interpretations due to the trade-off between accuracy and interpretability. In medical applications, this poses a challenge as both high accuracy and interpretability are essential; relying on black-box models that medical practitioners cannot fully understand may pose risks to patients. How can we interpret and safely utilize black-box models in medical contexts? How can we interpret and safely embrace black-box models, especially for medical applications?
 
 % It is risky to put one's life in the hands of models that medical researchers do not fully understand. 
 
@@ -371,21 +371,34 @@ Deep learning models that achieve high accuracy provide fewer interpretations du
 
 To answer the research questions listed in Section \ref{sec:research_question}, the remaining of the thesis is organized as follows:
 
+\vspace{0.5cm}
+
 % This thesis presents adversarial attacks against mobile robot perception models, such as image classification, object detection, and object tracking. 
 
-\begin{itemize}[label={}]
-    \item \textbf{Chapter \ref{chpt:driving}} introduces a real-time online white-box attack against the NVIDIA end-to-end driving model. The attack does not require access to the ground truth (\textbf{Published in IEEE Intelligent Vehicle Symposium}).
-    \item \textbf{Chapter \ref{chpt:detection}} further presents real-time online white-box attacks against object detection models (\textbf{Published in IEEE Intelligent Vehicle Symposium}). Besides, we propose a Human-in-the-Middle hardware attack that injects the perturbation into the communication channel between the camera and the detection system (\textbf{IEEE Transactions on AI, minor revision}).
-    \item \textbf{Chapter \ref{chpt:tracking}} attacks the object tracking system.
+% \begin{itemize}[label={}]
 
-    To be done.
+\noindent \textbf{Chapter \ref{chpt:driving}} introduces two real-time online white-box attack against the NVIDIA end-to-end driving model, including image-specific and image-agnostic attacks. Both attacks do not require access to the ground truth. We tested the attacks in simulation and on real Turtlebots (\textbf{Published in IEEE Intelligent Vehicle Symposium}).
 
-    To be done.
+\vspace{0.5cm}
 
-    \item \textbf{Chapter \ref{chpt:classification}} unveils several common mistakes in prior research and proposes distributed black-box attacks to accelerate attacks against image classification cloud services (\textbf{Under Review for Publication}).
-    \item \textbf{Chapter \ref{chpt:defence}} studies the interpretability of machine learning models for medical applications and combines deep neural networks with human knowledge to understand how black-box models make diagnosis (\textbf{Published in IEEE Transactions on AI}).
-    \item \textbf{Chapter \ref{chpt:conclusion}} concludes the thesis and envisions future research directions to understand and safely embrace deep learning models. 
-\end{itemize}
+\noindent \textbf{Chapter \ref{chpt:detection}} further presents three real-time online white-box attacks against object detection models: the one-targeted attack, multi-targeted attack, and multi-untargeted attack. By combining the imperceptibility of adversarial filters with the localizability of adversarial patches, our method, adversarial overlay, can generate adversarial perturbations of arbitrary shapes at given locations. (\textbf{Published in IEEE Intelligent Vehicle Symposium}). 
+
+Besides, we propose a Human-in-the-Middle hardware attack that injects the perturbation into the communication channel between the camera and the detection system, thus bypassing the operating system (\textbf{IEEE Transactions on Artificial Intelligence, Minor Revision}).
+
+\vspace{0.5cm}
+
+\color{gray} \noindent \textbf{Chapter \ref{chpt:tracking}} attacks the object tracking system. \lipsum[1][1-6]\color{black}
+
+\vspace{0.5cm}
+
+\noindent \textbf{Chapter \ref{chpt:classification}} unveils several common mistakes in existing black-box attacks and proposes distributed black-box attacks to accelerate attacks against image classification cloud services. Prior research overestimated the effectiveness of black-box attacks by applying the perturbation before image resizing and pre-processing, which is not accessible to end users for commercial image classification cloud APIs. In addition to minimizing the number of queries, black-box attacks can be further optimized by leveraging the load-balancing mechanism commonly used in cloud APIs (\textbf{Under Review for Publication}).
+
+\vspace{0.5cm}
+
+\noindent \textbf{Chapter \ref{chpt:defence}} studies the interpretability of machine learning models for medical applications and combines deep neural networks with human knowledge to understand how black-box models make diagnoses during the COVID-19 pandemic. The interpretation results revealed that the three most indicative biomarkers identified by the models aligned with other medical experimental results (\textbf{Published in IEEE Transactions on Artificial Intelligence}).
+
+\vspace{0.5cm}
+
+\noindent \textbf{Chapter \ref{chpt:conclusion}} concludes the thesis and envisions future research directions to understand and safely embrace deep learning models. 
 
 % Since end-to-end deep learning models are computationally expensive, pruning and quantization are commonly used techniques to make large models feasible for embedded systems, but theses techniques could render deep learning models more vulnerable.
-
