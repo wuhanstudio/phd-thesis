@@ -331,7 +331,6 @@ The square attack is a local search method that is more query-efficient than Sim
 The square attack improves query efficiency by initializing the perturbation with vertical stripes, motivated by the fact that CNNs are sensitive to high-frequency perturbations \citep{yin2019fourier}. Then, the square attack generates square-shaped perturbations to decrease the margin loss $L(C(X), y)$ defined by:
 
 $$ L(C(X), y)= C_y(X)-\max_{k \neq y}C_k(X)$$
-
 where $y$ is the correct class of the input image X and $C_k(X)$ is the output probability of class $k$.
 
 We apply horizontal distribution to both the initialization and iteration processes across images. To apply vertical distribution, we generate a batch of square-shaped perturbations independently and send out queries concurrently for each perturbation. After receiving the queries, we add the perturbations that reduce the margin loss $L(C(X^{'}), y)$ to the image. Then, we project the accumulated perturbation to the $L_\infty$ ball to ensure imperceptibility (see Alg. \ref{alg:square_vertical}).

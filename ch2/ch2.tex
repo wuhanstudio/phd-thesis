@@ -76,7 +76,6 @@ where $y$ is the benign output steering command, $f(\theta, x)$ is the regressio
 We use the $L_2$ norm to quantify the magnitude of the perturbation. The $L_2$ norm of the perturbation $\eta$ should be smaller than 0.03 (8 / 255) for an RGB input image according to the value used in prior research \citep{chow2020adversarial} \citep{ACFH2020square}. In particular, to ensure that the perturbation is unperceivable to human eyes, we require \begin{equation}
 ||x^{'}-x||_{2} = ||\ {\eta}\ ||_{2} \leq \xi %,\ \xi = 0.03
 \end{equation}
-
 where $\xi = 0.03$.
 
 Our target model is the NVIDIA end-to-end driving model \citep{bojarski2016end}. The input shape of the model is (160, 320, 3), which represents (height, width, channel) respectively. The output steering angle is in the range of $[-1, 1]$ on all our (unperturbed) collected images. An output of $-1$ represents steering to the left, and an output of 1 means steering to the right. The input image is captured by the front camera, and we then apply predefined preprocessing methods before feeding the image to the model. Refer to \citep{bojarski2016end} for details on these preprocessing methods, including cropping, resizing, and RGB to YUV. 
