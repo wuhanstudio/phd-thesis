@@ -60,7 +60,7 @@ Following the established divide-and-conquer engineering principle, autonomous d
 
 Through the localization module, the vehicle determines its position in the environment. The perception module enables vehicles to collect information and extract relevant knowledge from the environment. Then, the prediction module predicts future measurements, behavior, trajectory, etc. Lastly, the planning module makes purposeful decisions to achieve the goal, and the control module executes the planned actions. Besides modular systems, end-to-end driving that maps inputs directly to steering commands has started to rise as an alternative to modular systems.
 
-It is risky to attack real-world autonomous driving systems. The development of physics engines and realistic renderers makes it feasible to test adversarial attacks in photo-realistic simulators.
+Unfortunately, both modular systems and end-to-end driving models are vulnerable to adversarial attacks. It is risky to attack real-world autonomous driving systems, while the development of physics engines and realistic renderers makes it feasible to test adversarial attacks in photo-realistic simulators.
  
 % \subsubsection{Deep Learning}
 % \label{sec:deep_robot}
@@ -109,12 +109,33 @@ The LGSVL is another autonomous vehicle simulation platform based on the Unity3D
 \label{fig.airsim}
 \end{figure}
 
+
 \section{Deep Learning in Healthcare}
 \label{sec:healthcare}
 
-Besides autonomous driving, deep learning models are also widely used in medical applications, especially during the COVID-19 pandemic. With the rapid transmission of COVID-19, the demand for medical supplies goes beyond hospitals' capacity in many countries. Various diagnostic and predictive models are employed to release the pressure on healthcare workers.
+Deep learning models are also extensively used in safety-critical healthcare applications. More recently, these models played significant roles in identifying biomarkers and making diagnoses, particularly during the COVID-19 pandemic. 
 
-Unfortunately, both modular systems and end-to-end driving models are vulnerable to adversarial attacks. The trustworthiness of deep learning models for medical diagnoses is also challenged.
+As the virus spread rapidly, it became essential to promptly screen a large group of people and isolate infected individuals. Reverse Transcription Polymerase Chain Reaction (RT-PCR) is commonly used to detect viruses from respiratory secretions in acute respiratory infections, which can also be employed to diagnose COVID-19, as confirmed by \citet{corman2020detection}. However,  the demand for the RT-PCR test exceeded hospitals' capacity in many countries. Besides, false negatives could occur if the sample contains insufficient quantities of the virus at the early stage of infection. As a result, diagnostic and predictive models were implemented to assist in fast screening and relieve pressure on healthcare workers.
+
+Chest CT imaging is a common technique for diagnosing pneumonia and can also assist in COVID-19 confirmation. However, discriminating COVID-19 pneumonia from non-COVID-19 pneumonia poses a challenge to medical practitioners. Matsuyama et al. proposed a wavelet-based CNN system to address this challenge \citep{matsuyama2020deep}. Instead of using the raw image, the neural network takes the wavelet coefficients of the original image as inputs (see Fig. \ref{fig.healthcare} left). Although deep neural networks can achieve high accuracy, they often sacrifice interpretability. To improve interpretability, gradient-weighted class activation mapping is employed to highlight the areas the CNN model focuses on, ensuring that the model's predictions align with medical knowledge.
+
+Although CT chest imaging can assist in COVID-19 confirmation, the patient throughput is limited because a deep cleaning of the CT examination room is necessary before imaging the next patient \citep{kwee2020chest}. Utilizing biomarkers from routine tests, such as complete blood count (CBC) and inflammatory markers, as inputs to machine learning models could be beneficial. Yan et al. developed a rule-based decision tree model that employs three biomarkers—lactic dehydrogenase (LDH), lymphocyte count, and high-sensitivity C-reactive protein (hs-CRP)—selected by machine learning models to make predictions \citep{Yan2020} (see Fig. \ref{fig.healthcare} right). The model is small and interpretable while still achieving over 90\% accuracy.
+
+The wavelet-based CT chest imaging system that uses deep neural networks is vulnerable to adversarial attacks. Although the small decision tree model is interpretable, it relies solely on three biomarkers for prediction, limiting its capacity for more complex tasks.
+
+\clearpage
+
+\null
+\vfill
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/chapter_intro/healthcare.jpg}
+\caption{Two approaches to COVID-19 severity prediction \citep{matsuyama2020deep, Yan2020}.}
+\label{fig.healthcare}
+\end{figure}
+
+\vfill
 
 \clearpage
 
