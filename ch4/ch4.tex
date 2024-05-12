@@ -79,14 +79,14 @@ Recent research interests are shifting from \acrshort{sot} to \acrshort{mot}, es
 \centering
 \begin{tabular}{ lcccc } 
 \hline
-Method & Sensor & Type & Performance & HOTA    \\
+Method & Sensor & Type & Real-Time & HOTA    \\
 \hline
-BiTrack (Not publications yet) &    Lidar   &      -         & Offline & 82.69\% \\ 
-LEGO \citep{zhang2023lego}   &    Lidar   &      -         & Online  & 80.75\% \\ 
-CollabMOT \citep{ninh2024collabmot}   &    Binocular   &      \acrshort{tbd}         & Offline  & 80.02\% \\ 
-RAM \citep{tokmakov2022object}    &    Monocular  & \acrshort{jdt} & Online  & 79.53\% \\ 
-PermaTrack \citep{tokmakov2021learning} & Monocular  & \acrshort{jdt} & Online  & 78.03\% \\ 
-\textbf{OC-SORT \citep{cao2023observation}}    & \textbf{Monocular}  & \textbf{\acrshort{tbd}} & \textbf{Online}  & \textbf{76.54\%} \\ 
+BiTrack (Not publications yet) &    Lidar   &      -         & N & 82.69\% \\ 
+LEGO \citep{zhang2023lego}   &    Lidar   &      -         & Y  & 80.75\% \\ 
+CollabMOT \citep{ninh2024collabmot}   &    Stereo   &      \acrshort{tbd}         & N  & 80.02\% \\ 
+RAM \citep{tokmakov2022object}    &    Mono  & \acrshort{jdt} & Y  & 79.53\% \\ 
+PermaTrack \citep{tokmakov2021learning} & Mono  & \acrshort{jdt} & Y  & 78.03\% \\ 
+\textbf{OC-SORT \citep{cao2023observation}}    & \textbf{Mono}  & \textbf{\acrshort{tbd}} & \textbf{Y}  & \textbf{76.54\%} \\ 
 \hline
 \end{tabular}
 \caption{Top \acrfull{mot} methods on the KITTI leaderboard.}
@@ -101,7 +101,7 @@ Camera and Lidar are the two most popular sensors used in autonomous vehicles. O
 
 \textbf{Binocular Tracker}: This approach combines 2D object detection results with depth information obtained from stereo vision to achieve 3D object detection and tracking. However, using a stereo camera setup requires extensive calibration and complex matching algorithms \citep{ninh2024collabmot}.
 
-\textbf{Multi-Modality Tracker}: In autonomous driving, accurately estimating vehicles' pose in 3D space is crucial. By combining 2D detection results with 3D Lidar data, this approach achieves the highest tracking accuracy on the KITTI leaderboard, though at the cost of using more expensive 3D laser scanners than CMOS cameras.
+\textbf{Multi-Modality Tracker}: Accurately estimating vehicles' pose in 3D space is crucial for autonomous driving. By combining 2D detection results with 3D Lidar data, this approach achieves the highest tracking accuracy on the KITTI leaderboard, though at the cost of using more expensive 3D laser scanners than CMOS cameras.
 
 % \clearpage
 
@@ -115,7 +115,7 @@ Camera and Lidar are the two most popular sensors used in autonomous vehicles. O
 
 % \item Transformer: More accurate, but computationally expensive \citep{meinhardt2022trackformer} for 2D MOT \citep{lin2021swintrack}.
 
-To explore whether traditional statistical methods, such as the Kalman Filter, can help mitigate the impact of adversarial attacks, we focus on \acrshort{tbd} methods instead of \acrshort{jdt}, which rely solely on end-to-end deep learning models. Additionally, due to the lower cost and ease of setup of monocular cameras compared to 3D Lidar and stereo cameras, our primary focus is on vision-only monocular 2D object detection.
+To explore whether traditional statistical methods, such as the Kalman Filter, can help mitigate the impact of adversarial attacks, we focus on modular \acrshort{tbd} methods (highlighted in Tab \ref{tab.mot}) instead of end-to-end \acrshort{jdt} models. Additionally, due to the lower cost and ease of setup of monocular cameras compared to 3D Lidar and stereo cameras, our primary focus is on vision-only monocular 2D object detection.
 
 % Object Tracking Assumptions: 
 
@@ -147,19 +147,57 @@ To explore whether traditional statistical methods, such as the Kalman Filter, c
 
 \subsection{Adversarial Attacks}
 
-Adversarial attacks move from image classification to object detection and then to object tracking.
+Adversarial attacks have progressed from image classification to object detection and then object tracking models. Notably, \acrfull{jdt} methods that utilize end-to-end deep learning models, such as GOTURN \citep{wiyatno2019physical} and FairMOT \citep{lin2021trasw}, are vulnerable to adversarial attack. For \acrfull{tbd} methods, adversaries focus on vulnerabilities in various components within the tracking system, including the object detector, the association method, and the tracklet management module.
 
-The first adversarial attack against MOT attacks a TBD method that uses YOLOv3 as the object detection model, the Hungarian matching for the data association, and the Kalman filter for noisy measurement.
+\textbf{Attacking Object Detectors}: The accuracy of \acrshort{tbd} methods heavily relies on the object detector's ability to produce precise bounding boxes of target objects. If the object detector produces bounding boxes at incorrect positions or does not predict bounding boxes at all, the subsequent modules will struggle to generate precise tracklets. 
+
+Table \ref{tab.mot_attack} presents studies focusing on attacking object detectors, and most work attacks SiameseRPN-based trackers  \citep{wu2019sta}. Siamese neural networks employ triplet loss or contrastive loss to train a similarity function to discern objects, such as distinguishing facial features in face recognition systems. 
+
+In 2019, the first adversarial attack against \acrshort{mot} models attacked a \acrshort{tbd} method that used YOLOv3 as the object detector \citep{jia2020fooling}. Moreover, YOLOX \citep{ge2021yolox} and CenterNet \citep{duan2019centernet} stand out as two widely-used object detectors for autonomous driving applications, yet they both exhibit vulnerability to adversarial attacks \citep{zhou2023f,pang2024blinding}.
+
+\textbf{Attacking Association Methods}: Another crucial factor for \acrshort{mot} system is to assign a unique ID to each detected object. It is possible to perturb the association module so that the same object may be given different IDs in different frames, thus breaking the continuity of tracklets. Liu et al. introduced the Blind Attack, which assigns the background label to the target object, and the Blur Attack, which assigns other labels to the target object \citep{liu2022efficient}.
+
+
+\textbf{Attacking Tracklets}: Tracklets, commonly managed by the Kalman Filter, store the position and velocity of each vehicle. By perturbing objects' speed and direction, incorrect states are predicted for each object, enabling the switching of tracklets between adjacent objects. For instance, Lin et al. perturbed the appearance and distance similarity of two adjacent pedestrians, causing FairMOT and ByteTrack models to fail to track the targets in the subsequent frames \citep{lin2021tracklet}.
+
+While it is acknowledged that \acrshort{mot} systems utilizing 3D Lidar Point Clouds are also susceptible to adversarial attacks \citep{cheng2021universal, cheng2022non, wang2022adversary}, our research focuses on attacks targeting vision-only \acrshort{mot} systems.
 
 \clearpage
 
-Most following work attacks SiameseRPN-based trackers for SOT \citep{wu2019sta} \citep{liang2020efficient} \citep{guo2020spark} \citep{chen2020one} \citep{yan2020cooling}. Another research attacks the GOTURN model, which is an efficient end-to-end SOT model \citep{wiyatno2019physical}. We only find one research paper that attacks FairMOT (JDT) \citep{lin2021trasw}. There are many adversarial attacks against 3D Lidar Point Cloud \citep{cheng2021universal} \citep{cheng2022non} \citep{wang2022adversary}.
+\begin{sidewaystable}
+\centering
+\begin{tabular}{ clccccc } 
+\hline
+Year & Method & Tracking & Model & Attack Type & Patch / Filter \\
+\hline
+2019 & Hijacking Attack \citep{jia2020fooling} & MOT & Yolov3 & Whitebox & Digital Patch \\
+2019 & EOT Attack \citep{wiyatno2019physical} & SOT & GOTURN & Whitebox & Physical Patch \\
+2020 & SPARK Attack \citep{guo2020spark} & SOT & SiamRPN++  & Whitebox & Digital Filter  \\
+2020 & One-Shot Attack \citep{chen2020one} & SOT & Siamese Tracker  & Whitebox & Digital Filter \\
+2020 & FAN Attack \citep{liang2020efficient} & SOT & Siamese Network & Whitebox & Digital Filter  \\
+2020 & Hijacking Tracker \citep{yan2020hijacking}& SOT & SiamRPN & Whitebox & Digital Filter \\
+2020 & Cool-Shrink Attack \citep{yan2020cooling} & SOT & SiamRPN++ & Whitebox & Digital Filter \\
+2021 & Tracklet-Switch Attack \citep{lin2021tracklet} & MOT & FairMOT \& ByteTrack & Whitebox & Digital Filter \\
+2021 & MTD Attack \citep{ding2021towards} & SOT & SiamRPN++  & Whitebox & Physical Patch \\
+2021 & ABA Attack \citep{guo2021learning} & SOT & SiamRPN++ & Whitebox & Digital Blurry \\
+2021 & IoU Attack \citep{jia2021iou} & SOT & SiamRPN++ & Blackbox & Digital Filter  \\
+2022 & Few-Shot Attack \citep{li2022few} & SOT & SiamFC++  & Whitebox & Physical Patch\\
+2022 & Ad2 Attack \citep{fu2022ad} & SOT & SiamAPN & Whitebox & Digital Filter \\
+2022 & Shuffle Attack \citep{liu2022efficient} & SOT & Yolov3 + Kalman & Whitebox & Digital Filter  \\
+2022 & Diminishing \citep{suttapak2022diminishing} & SOT & SiamRPN++ & Whitebox & Digital Filter    \\
+2023 & F\&F Attack \citep{zhou2023f} & MOT & YOLOX \& CenterNet & Whitebox & Digital Filter  \\
+2024 & Blinding \& Blurring Attack \citep{pang2024blinding} & MOT & YOLOX \& CenterNet & Whitebox & Digital Filter \\
+\hline
+\end{tabular}
+\caption{Adversarial Attacks against Object Tracking Models.}
+\label{tab.mot_attack}
+\end{sidewaystable}
 
 \clearpage
 
 \section{Methodology}
 
-\subsection{Adversarial Attacks}
+\subsection{Problem Formulation}
 
 
 \clearpage
