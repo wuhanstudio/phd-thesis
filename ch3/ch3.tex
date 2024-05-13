@@ -172,12 +172,8 @@ The generation of adversarial patches for attacking real-time robotic applicatio
 Recent research in penetration tests against the Robot Operating System (ROS) has shown that it is possible to inject digital patches into the ROS message that contains the camera image \citep{dieber2020penetration}. In particular, Dieber et al. succeeded in isolating a ROS node so that they could intercept and manipulate the ROS message that contains sensor data while the victim node is unaware of the attack. In this paper, we generate digital overlays (unperceivable digital patches) at desired locations in real time and then exploit the vulnerability to inject the digital overlays into the input image. Overall, this paper makes the following contributions:
 \begin{itemize}
     \item We devise three adversarial attacks that can generate digital overlays of different shapes at specified locations in real time (see Fig. \ref{fig:detection.overview}). This extends previous research that primarily has focused on square patches.
-    \item 
-    Investigating the effect of various digital overlays it is found that the size of the overlay is critical for the 
-    success of the attack, whereas the attack performance is independent of the aspect ratio.
-    
-    %We investigate the adversarial effect of digital overlays of different sizes and aspect ratios. In particular, it is found that the size of the overlay is critical for the success of the attack, whereas the attack performance is independent of the aspect ratio. 
-    \item We test our attacks in the Robot Operating System (ROS). The system is open-sourced to faciliate future extensions and comparisons\footnote{The code is available on Github: \url{https://github.com/wuhanstudio/adversarial-detection}}.
+    \item We investigate the adversarial effect of digital overlays of different sizes and aspect ratios. In particular, it is found that the size of the overlay is critical for the success of the attack, whereas the attack performance is independent of the aspect ratio. 
+    \item We test our attacks in the Robot Operating System (ROS). The system is open-sourced to facilitate future extensions and comparisons\footnote{Our source code on GitHub: \url{https://github.com/wuhanstudio/adversarial-detection}}.
 \end{itemize}
 
 \subsection{Preliminaries}
@@ -214,12 +210,12 @@ Contrary to filters, these patches are limited in size and only perturb part of 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/digital_filter.jpg}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/detection/digital_filter.jpg}
         \caption{Digital filters apply the perturbation to the entire input image in the digital world \citep{wang2021daedalus}.}
         \label{fig:digital_filter}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/physical_filter.jpg}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/detection/physical_filter.jpg}
         \caption{Physical filters apply the perturbation by attacking the camera using, e.g., a translucent film attached to the camera lens \citep{li2019adversarial}.}
         \label{fig:physical_filter}
     \end{subfigure}
@@ -230,12 +226,12 @@ Contrary to filters, these patches are limited in size and only perturb part of 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/digital_patch.jpg}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/detection/digital_patch.jpg}
         \caption{Digital patches replace a part of the input image with the adversarial patch (left top corner) \citep{liu2018dpatch}.}
         \label{fig:digital_patch}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/physical_patch.jpg}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/detection/physical_patch.jpg}
         \caption{Physical patches print the adversarial patch on a physical object, e.g., on a poster \citep{lee2019physical}.}
         \label{fig:physical_patch}
     \end{subfigure}
@@ -898,12 +894,13 @@ In addition, note that the overall detection error
 \end{align}
 where $\mathcal{O}_{true}$ is the ground truth model output, includes the attack error $\varepsilon_{\texttt{attack}}$ and the model error $\varepsilon_{\texttt{model}}$. The mAP measures the overall error by comparing the adversarial outputs with the ground truth, but we are only interested in the attack error $\varepsilon_{\texttt{attack}}=\mathcal{O}(x^{'}) - \mathcal{O}(x)$.
 % Image-wise metric
-Therefore, we devise three new evaluation metrics. 
-\begin{enumerate}
-    \item Mean Confidence Variation: The average increase or decrease of the confidence value (before the sigmoid activation function) of all the bounding boxes at each iteration step $t$. This metric reflects the strength of the attack on the confidence value and is expressed as $\frac{1}{N}\sum_{i=1}^{N}{( c_{t,i} - c_{t-1,i} )}$.
-    \item Number of Boxes: The total number of bounding boxes after the NMS. This metric shows how many objects are detected at each step of the attack $|\texttt{NMS}(O(x^{'}))|$.
-    \item Relative Box Variation: After each iteration, the position of false positive bounding boxes fluctuates. This metric measures the percentage of consistent bounding boxes (bounding boxes that have the same position as in the previous step) at the current step and can be expressed as $\frac{|\texttt{NMS}(\mathcal{O}(x_t^{'}))| + |\texttt{NMS}(\mathcal{O}(x_{t-1}^{'}))| - |\texttt{NMS}(\mathcal{O}(x_{t}^{'}),\ \mathcal{O}(x_{t-1}^{'}))|}{|\texttt{NMS}(\mathcal{O}(x_t^{'}))|}$.
-\end{enumerate}
+Therefore, we devise three new evaluation metrics.
+
+\textbf{Mean Confidence Variation}: The average increase or decrease of the confidence value (before the sigmoid activation function) of all the bounding boxes at each iteration step $t$. This metric reflects the strength of the attack on the confidence value and is expressed as $\frac{1}{N}\sum_{i=1}^{N}{( c_{t,i} - c_{t-1,i} )}$.
+
+\textbf{Number of Boxes}: The total number of bounding boxes after the NMS. This metric shows how many objects are detected at each step of the attack $|\texttt{NMS}(O(x^{'}))|$.
+
+\textbf{Relative Box Variation}: After each iteration, the position of false positive bounding boxes fluctuates. This metric measures the percentage of consistent bounding boxes (bounding boxes that have the same position as in the previous step) at the current step and can be expressed as $\frac{|\texttt{NMS}(\mathcal{O}(x_t^{'}))| + |\texttt{NMS}(\mathcal{O}(x_{t-1}^{'}))| - |\texttt{NMS}(\mathcal{O}(x_{t}^{'}),\ \mathcal{O}(x_{t-1}^{'}))|}{|\texttt{NMS}(\mathcal{O}(x_t^{'}))|}$.
 
 Further, we compare our attack with the TOG attack \citep{chow2020adversarial}, which is also a gradient-based attack that updates the adversarial perturbation using the gradient of input with respect to the adversarial loss function. The main difference is that the TOG attack uses uniform initialization and updates the perturbation with a constant learning rate (no learning rate decay). Besides, the TOG attack uses the YOLO training loss \citep{redmon2018yolov3, bochkovskiy2020yolov4} as the adversarial loss function. We study the effect of these factors in the following sections, respectively.
 
@@ -1125,6 +1122,11 @@ We also measured the transferability of the UAPs across maps (100 iterations, $k
 
 % The PCB attack generates significantly higher mean confidence variation, more number of boxes, and less consistent bounding boxes than the original TOG attack. 
 
+\clearpage
+
+\null
+\vfill
+
 \begin{table}[H]
     \centering
     \begin{subtable}[t]{\textwidth}
@@ -1134,7 +1136,7 @@ We also measured the transferability of the UAPs across maps (100 iterations, $k
         & \multicolumn{4}{c}{PCB Attack ($k=0.98$)} & \multicolumn{4}{c}{TOG Attack ($k=1.00$)}\\
         Iteration & 1 it & 10 it & 50 it & 100 it & 1 it & 10 it & 50 it & 100 it \\ 
         \hline
-        \ \textbf{Map 01 (train)}  & \textbf{5.62} & \textbf{6.68} & \textbf{6.99} & \textbf{7.10} & \textbf{3.04} & \textbf{3.12} & \textbf{3.71} & \textbf{2.66} \\
+        \ \textbf{Map 01}  & \textbf{5.62} & \textbf{6.68} & \textbf{6.99} & \textbf{7.10} & \textbf{3.04} & \textbf{3.12} & \textbf{3.71} & \textbf{2.66} \\
         \ Map 02  & 2.09 & 3.23 & 3.65 & 3.82 & 0.84 & 0.76 & 1.04 & 0.75 \\
         \ Map 03  & 2.75 & 3.97 & 4.49 & 4.68 & 1.74 & 1.57 & 1.83 & 1.36 \\
         \ Map 04  & 4.30 & 5.37 & 5.85 & 6.05 & 2.71 & 2.40 & 2.75 & 2.23 \\
@@ -1156,7 +1158,7 @@ We also measured the transferability of the UAPs across maps (100 iterations, $k
         & \multicolumn{4}{c}{PCB Attack ($k=0.98$)} & \multicolumn{4}{c}{TOG Attack ($k=1.00$)}\\
         Iteration & 1 it & 10 it & 50 it & 100 it & 1 it & 10 it & 50 it & 100 it \\ 
         \hline
-        \ \textbf{Map 01 (train)}  & \textbf{165.83} & \textbf{280.85} & \textbf{323.39} & \textbf{346.00} & \textbf{3.88} & \textbf{1.71} & \textbf{1.99} & \textbf{2.70} \\
+        \ \textbf{Map 01}  & \textbf{165.83} & \textbf{280.85} & \textbf{323.39} & \textbf{346.00} & \textbf{3.88} & \textbf{1.71} & \textbf{1.99} & \textbf{2.70} \\
         \ Map 02  & 1.89 & 21.72 & 49.71 & 63.54 & 1.61 & 1.47 & 1.61 & 1.63 \\
         \ Map 03  & 4.68 & 10.47 & 18.45 & 24.78 & 2.20 & 2.05 & 2.18 & 2.16 \\
         \ Map 04  & 32.29 & 74.44 & 87.96 & 100.46 & 0.78 & 0.71 & 1.32 & 0.74 \\
@@ -1178,7 +1180,7 @@ We also measured the transferability of the UAPs across maps (100 iterations, $k
         \multicolumn{5}{c}{PCB Attack ($k=0.98$)}\\
         Iteration & 1 it & 10 it & 50 it & 100 it  \\ 
         \hline
-        \ \textbf{Map 01 (train)}  & \textbf{0.19\%} & \textbf{0.11\%} & \textbf{0.09\%} & \textbf{0.08\%} \\
+        \ \textbf{Map 01}  & \textbf{0.19\%} & \textbf{0.11\%} & \textbf{0.09\%} & \textbf{0.08\%} \\
         \ Map 02  & 60.65\% & 6.40\% & 2.27\% & 1.46\% \\
         \ Map 03  & 63.88\% & 24.64\% & 14.34\% & 11.16\% \\
         \ Map 04  & 2.60\% & 0.54\% & 0.44\% & 0.31\% \\
@@ -1189,7 +1191,7 @@ We also measured the transferability of the UAPs across maps (100 iterations, $k
         \multicolumn{5}{c}{TOG Attack ($k=1.00$)}\\
         Iteration & 1 it & 10 it & 50 it & 100 it  \\ 
         \hline
-        \ \textbf{Map 01 (train)}  & \textbf{36.43\%} & \textbf{43.23\%} & \textbf{32.32\%} & \textbf{43.33\%} \\
+        \ \textbf{Map 01}  & \textbf{36.43\%} & \textbf{43.23\%} & \textbf{32.32\%} & \textbf{43.33\%} \\
         \ Map 02 & 80.37\% & 81.92\% & 86.92\% & 83.50\% \\
         \ Map 03 & 87.34\% & 86.02\% & 85.99\% & 87.41\% \\
         \ Map 04 & 68.17\% & 66.50\% & 54.42\% & 64.89\% \\
@@ -1202,15 +1204,17 @@ We also measured the transferability of the UAPs across maps (100 iterations, $k
         \label{tab:trans_rela_box}
     \end{subtable}
 \hspace{\fill}
-    \caption{Evaluation results of the image-agnostic attack tested on the CARLA dataset ($\epsilon=8$).}
+    \caption{Evaluation results of the image-agnostic attack tested on the CARLA dataset ($\epsilon=8$, trained on Map 01).}
     \label{tab:trans}
 \end{table}
+
+\vfill
 
 \clearpage
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/cor.png}
+    \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/cor.png}
   \caption{The heatmap of UAPs trained on seven maps.}
   \label{fig:cor}
 \end{figure}
