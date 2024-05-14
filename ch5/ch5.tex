@@ -329,8 +329,9 @@ To apply vertical distribution to SimBA, we need to decouple the correlation bet
 The square attack is a local search method that is more query-efficient than SimBA and achieves SOTA attack success rate \citep{andriushchenko2020square}. 
 
 The square attack improves query efficiency by initializing the perturbation with vertical stripes, motivated by the fact that CNNs are sensitive to high-frequency perturbations \citep{yin2019fourier}. Then, the square attack generates square-shaped perturbations to decrease the margin loss $L(C(X), y)$ defined by:
-
-$$ L(C(X), y)= C_y(X)-\max_{k \neq y}C_k(X)$$
+\begin{equation}
+L(C(X), y) = C_y(X) - \max_{k \neq y}C_k(X)    
+\end{equation}
 where $y$ is the correct class of the input image X and $C_k(X)$ is the output probability of class $k$.
 
 We apply horizontal distribution to both the initialization and iteration processes across images. To apply vertical distribution, we generate a batch of square-shaped perturbations independently and send out queries concurrently for each perturbation. After receiving the queries, we add the perturbations that reduce the margin loss $L(C(X^{'}), y)$ to the image. Then, we project the accumulated perturbation to the $L_\infty$ ball to ensure imperceptibility (see Alg. \ref{alg:square_vertical}).
@@ -377,7 +378,9 @@ We apply horizontal distribution to both the initialization and iteration proces
 \subsection{Distributed Bandits Attack (Gradient Estimation)}
 
 The Bandits Attack is a gradient estimation method that improves the optimal least-squares estimator by introducing gradient priors \citep{ilyas2018prior}. The perturbation vector $q_i=v_i+\delta u_i$ is computed from the gradient prior $v_i$ and a Gaussian vector $u_i$ sampled from $\mathcal{N}(0, \frac{1}{d_i}I)$. The Bandits Attack uses imperfect gradient estimators $\nabla_i$ defined by: 
-$$\nabla_i= \frac{l(v_i+\delta u_i)-l(v_i-\delta u_i)}{\delta} u_i$$ 
+\begin{equation}
+\nabla_i= \frac{l(v_i+\delta u_i)-l(v_i-\delta u_i)}{\delta} u_i
+\end{equation}
 to improve query efficiency at the cost of introducing noises in the estimations. Therefore, averaging over a batch of concurrent gradient estimations can improve the accuracy and efficiency. Lastly, the adversarial image $x'$ are updated using projected gradient descent (PGD), while gradient priors are updated using exponentiated gradients (EG) \citep{pmlr-v117-ghai20a}.
 
 % The projected gradient descent (PGD) step is used to update adversarial images $x'$, while the exponentiated gradients (EG) \citep{pmlr-v117-ghai20a} step is used to update gradient priors $\boldsymbol{v}$.
