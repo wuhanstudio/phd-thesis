@@ -132,7 +132,7 @@ In previous chapters, we study adversarial attacks against end-to-end driving, i
 
 \begin{figure*}
 \centering
-\includegraphics[width=6.16in]{figures/chapter_interp/interpretable-ml-covid19.png}
+\includegraphics[width=\textwidth]{figures/chapter_interp/interpretable-ml-covid19.png}
 \caption{The difference between the usual workflow of machine learning, and our approach.}
 \label{fig:approach}
 \end{figure*}
@@ -155,10 +155,8 @@ Overall, this research makes the following contributions:
 
 \begin{enumerate}
     \item \textbf{Evaluation}: A systematic evaluation of the interpretability of machine learning models that predict the severity level of COVID-19 patients. We experiment with six interpretation methods and two evaluation metrics on our dataset and receive the same result as research that uses a dedicated model. We further validate our approach on a dataset from Kaggle.
-
     \item \textbf{Implication}: Through the interpretation of models trained on our dataset, we reveal N-Terminal pro-Brain Natriuretic Peptide (NTproBNP), C-Reaction Protein (CRP), lactic dehydrogenase (LDH), and lymphocyte (LYM) as the most indicative biomarkers in identifying patients' severity level. Applying the same approach on the Kaggle dataset, we further unveil three significant features, leukocytes, eosinophils, and platelets.
-
-    \item \textbf{Implementation}: We design a system that healthcare professionals can interact with its AI Models to incorporate model insights with medical knowledge. We release our implementation, models for future research and validation. \footnote{Our source code and models are available at \url{https://github.com/wuhanstudio/interpretable-ml-covid-19}.}
+    \item \textbf{Implementation}: We design a system that healthcare professionals can interact with its AI Models to incorporate model insights with medical knowledge. We release our implementation, models for future research and validation\footnote{Our source code and models are available at \url{https://github.com/wuhanstudio/interpretable-ml-covid-19}.}.
 \end{enumerate}
 
 % In this paper, instead of targeting at a high-accuracy model, we use different methods to interpret models which are trained to predict the severity of COVID-19 using a dataset of 92 patient with 74 features. Besides checking whether or not their predictions are based on reasonable medical knowledge, we try to find clues that may be missed by medical practitioners in COVID-19 diagnosis. To quantitatively evaluate different interpretation methods, we use faithfulness and monoticity to justify the interpretation of feature importance. 
@@ -444,7 +442,7 @@ After training, gradient boosted trees and neural networks achieve the highest p
 \centering
 \begin{tabular}{cccccc}
 \toprule
-Classifier    & CV & \multicolumn{3}{c}{Test Set} & 95\% confidence interval \\ \midrule
+Classifier    & CV & \multicolumn{3}{c}{Test Set} & 95\% CI \\ \midrule
                         & F1     & Precision  & Recall  & F1    &\\
 Decision Tree           & 0.55   & 0.67       & 0.50    & 0.57  & 0.31\\
 Random Forest           & 0.62   & 0.67       & 0.50    & 0.57  & 0.31\\
@@ -956,14 +954,12 @@ In conclusion, as illustrated previously in the explanation for patient 5 (false
     \caption{Gradient Boosted Trees}
     \label{fig:lime_xgb_2}
 \end{subfigure}
-\hfill
 \begin{subfigure}[b]{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_interp/lime_nn_2.png}
     \caption{Neural Networks}
     \label{fig:lime_nn_2}
 \end{subfigure}
-\hfill
 \caption{LIME Explanation (\textbf{False-Positive Patient No.2}): Features in green have a positive contribution to the prediction (increasing the probability of turning severe), and features in red have a negative effect on the prediction (decreasing the probability of turning severe)}
 \label{fig:lime_2}
 \end{figure}
@@ -1117,7 +1113,7 @@ Following the same approach, a preprocessing is applied on the dataset that remo
 \centering
 \begin{tabular}{cccccc}
 \toprule
-Classifier    & CV & \multicolumn{3}{c}{Test Set} & 95\% confidence interval \\ \midrule
+Classifier    & CV & \multicolumn{3}{c}{Test Set} & 95\% CI \\ \midrule
               & F1               & Precision  & Recall  & F1    &\\
 Decision Tree & 0.37             & 0.88       & 0.75    & 0.71  & 0.098\\
 Random Forests & 0.37             & 0.90       & 0.50    & 0.67  & 0.089\\
