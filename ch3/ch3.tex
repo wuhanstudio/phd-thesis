@@ -149,13 +149,13 @@ Intelligent robots rely on object detection models to perceive the environment. 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/one.jpg}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/detection/one.jpg}
         \caption{The \textbf{original image} (left) only contains one traffic sign. The \textbf{One-Targeted} Attack (right) generates one overlay containing several target objects (stop sign).}
         \label{fig:sparse-untar} 
     \end{subfigure}
 
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=1\linewidth]{figures/chapter_detection/detection/multi.jpg}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi.jpg}
         \caption{The \textbf{Multi-Untargeted} Attack (left) generates multiple overlays containing different kinds of objects (30, 60, stop). The \textbf{Multi-Targeted} Attack (right) generates multiple overlays containing several target objects (stop sign).}
         \label{fig:dense-untar}
     \end{subfigure}
@@ -201,9 +201,7 @@ Contrary to filters, these patches are limited in size and only perturb part of 
 
 \textbf{Physical Patch} (Fig. \ref{fig:physical_patch}) In 2017, Google presented landmark research for generating a physical patch to attack an image classification model \citep{brown2017patch}. As a result, research interest gradually shifted to from digital to physical patches. Later, Lee et al. \citep{lee2019physical} and Wang et al. \citep{wang2021daedalus} extended the physical patch attack from image classification to object detection. One shortcoming of physical patches is their inflexibility. Once the adversarial patch has been printed out, the only way to change it is through reprinting. To improve their flexibility, Hoory et al. dynamically displayed adversarial patches on a flat screen attached to a car \citep{hoory2020dynamic}.
 
-% \subsection{Summary}
-
-% Initially, research on adversarial attacks was focused on the design of digital perturbations. Later, adversarial attacks were extended the digital attacks to the physical world. In the next section, we describe a process for generating unperceivable digital patches at desired locations in real time.
+In conclusion, research on adversarial attacks initially focused on the design of digital perturbations. Later, adversarial perturbations were extended from digital attacks to the physical world. In the next section, we describe a process for generating unperceivable digital patches at desired locations in real-time.
 
 % \clearpage
 
@@ -432,12 +430,12 @@ Three hyper-parameters are crucial for the attack: the attack strength $\xi$, th
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.5\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/multi_untargeted_mono_success.png}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_mono_success.png}
         \caption{Different channels (Red, Green, Blue).}
          \label{fig:mono_suc}
     \end{subfigure}
     \begin{subfigure}[b]{0.9\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/multi_untargeted_aspect_success.png}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_aspect_success.png}
         \caption{Different aspect ratios (left $1:n$, right: $n:1$).}
          \label{fig:aspect_suc}
     \end{subfigure}
@@ -447,12 +445,12 @@ Three hyper-parameters are crucial for the attack: the attack strength $\xi$, th
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.5\textwidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/detection/multi_untargeted_mono_box.png}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_mono_box.png}
         \caption{Different channels (Red, Green, Blue).}
          \label{fig:mono_box}
     \end{subfigure}
     \begin{subfigure}[b]{0.9\textwidth}
-        \includegraphics[width=1\linewidth]{figures/chapter_detection/detection/multi_untargeted_aspect_box.png}
+        \includegraphics[width=1\textwidth]{figures/chapter_detection/detection/multi_untargeted_aspect_box.png}
         \caption{Different aspect ratios (left $1:n$, right: $n:1$).}
          \label{fig:aspect_box}
     \end{subfigure}
@@ -507,25 +505,27 @@ As illustrated in Table \ref{tab:fix-box}, on average, the attack requires only 
 For an online attack, the attack can be even more efficient. It is unnecessary to re-generate the adversarial overlay from scratch for every input video frame since there is a high correlation between consecutive video frames and iterations \citep{ilyas2018prior}. As a result, we can save computations by reusing the overlay generated in the previous timestep. In the demo video, the attack achieved near real-time performance on an Intel i7-8665U CPU.
 
 \clearpage
+
+\null
 \vfill
 
 \begin{figure}[H]
 \centering
-\begin{subfigure}[b]{0.65\textwidth}
+\begin{subfigure}[b]{0.60\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_xi_success.png}
     \caption{Different $\xi$ with $\alpha=2$, box size$=64$.}
     \label{fig:xi_suc}
 \end{subfigure}
 \hfill
-\begin{subfigure}[b]{0.65\textwidth}
+\begin{subfigure}[b]{0.60\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_lr_success.png}
     \caption{Different $\alpha$ with $\xi=8$, box size $=64$.}
     \label{fig:alpha_suc}
 \end{subfigure}
 \hfill
-\begin{subfigure}[b]{0.65\textwidth}
+\begin{subfigure}[b]{0.60\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_box_success.png}
     \caption{Different box sizes with $\xi=8, \alpha=2$.}
@@ -537,23 +537,28 @@ For an online attack, the attack can be even more efficient. It is unnecessary t
 
 \vfill
 
+\clearpage
+
+\null
+\vfill
+
 \begin{figure}[H]
 \centering
-\begin{subfigure}[b]{0.65\textwidth}
+\begin{subfigure}[b]{0.59\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_xi_box.png}
     \caption{Different $\xi$ with $\alpha=2$, box size$=64$.}
     \label{fig:xi_box}
 \end{subfigure}
 \hfill
-\begin{subfigure}[b]{0.65\textwidth}
+\begin{subfigure}[b]{0.59\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_lr_box.png}
     \caption{Different $\alpha$ with $\xi=8$, box size $=64$.}
     \label{fig:alpha_box}
 \end{subfigure}
 \hfill
-\begin{subfigure}[b]{0.65\textwidth}
+\begin{subfigure}[b]{0.59\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/chapter_detection/detection/multi_untargeted_box_box.png}
     \caption{Different box sizes with $\xi=8, \alpha=2$.}
@@ -562,6 +567,8 @@ For an online attack, the attack can be even more efficient. It is unnecessary t
 \caption{The average box number increase of the multi-untargeted attack with different $\xi$, $\alpha$, and box sizes}
 \label{fig.hyper_box}
 \end{figure}
+
+\vfill
 
 \clearpage
 
@@ -621,20 +628,20 @@ The key contributions of this research are summarized as follows:
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/mitm.png}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/mitm.png}
         \caption{Man-in-the-Middle Attack in Network Security}
         \label{fig:mitm} 
     \end{subfigure}
 
-    \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/overview.png}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/overview.png}
         \caption{Human-in-the-Middle Attack in Deep Learning}
         \label{fig:minm}
     \end{subfigure}
 
-    \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/demo.jpg}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/demo.jpg}
         \caption{Demo of the Hardware Attack}
         \label{fig:demo}
     \end{subfigure}
@@ -663,7 +670,7 @@ In robotic applications, one-stage models are generally preferred due to their s
 
 % \begin{figure}[bp]
 %     \centering
-%     \includegraphics[width=0.5\linewidth]{figures/detection.jpg}
+%     \includegraphics[width=0.5\textwidth]{figures/detection.jpg}
 %     \caption{The most widely used object detection models.}
 %     \label{fig:detection}
 % \end{figure}
@@ -685,7 +692,7 @@ non-invasive attacks \citep{wang2022survey}. Invasive attacks deploy the perturb
 
 \begin{figure}[bt]
     \centering
-    \includegraphics[width=0.9\linewidth]{figures/chapter_detection/hardware/attack.jpg}
+    \includegraphics[width=0.9\textwidth]{figures/chapter_detection/hardware/attack.jpg}
     \caption{Our approach to generate and apply adversarial perturbations in bold.}
     \label{fig:attack}
 \end{figure}
@@ -832,13 +839,13 @@ To implement the hardware attack, specialized hardware such as Raspberry Pi Zero
     \centering
     \begin{subfigure}[b]{\textwidth}
     \centering
-        \includegraphics[width=0.8\linewidth]{figures/chapter_detection/hardware/design.jpg}
+        \includegraphics[width=0.8\textwidth]{figures/chapter_detection/hardware/design.jpg}
         \caption{The Design of the Embedded System.}
         \label{fig:design}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
         \centering
-        \includegraphics[width=0.9\linewidth]{figures/chapter_detection/hardware/minm_attack.jpg}
+        \includegraphics[width=0.9\textwidth]{figures/chapter_detection/hardware/minm_attack.jpg}
         \caption{The Physical Attack, Hardware Attack and Digital Attack.}
         \label{fig:comparison} 
     \end{subfigure}
@@ -908,14 +915,14 @@ Further, we compare our attack with the TOG attack \citep{chow2020adversarial}, 
     \centering
     \begin{subfigure}[b]{\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/fabrication.jpg}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/fabrication.jpg}
         \caption{The mAP cannot distinguish between fabrication and vanishing attacks (both \text{mAP}=0). %The fabrication attack (left) generates more objects, and the vanishing attack (right) clears detection results. None of them matches the ground truth. Thus, different attacks result in the same low mAP.
         }
         \label{fig:fabrication} 
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/mislabel.jpg}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/mislabel.jpg}
         \caption{The mAP does not consider confidence values (both \text{mAP}=0). 
         %Both strong (left) and weak (right) attacks produce an incorrect bounding box. The attacker prefers a strong attack (Dog 99\%) over a weak attack (Dog 60\%), but the mAP does not reflect the attack strength.
         }
@@ -931,7 +938,7 @@ Further, we compare our attack with the TOG attack \citep{chow2020adversarial}, 
 
 % \begin{figure}[b]
 %     \centering
-%     \includegraphics[width=0.5\linewidth]{figures/fabrication.jpg}
+%     \includegraphics[width=0.5\textwidth]{figures/fabrication.jpg}
 %     \caption{mAP cannot distinguish between fabrication and vanishing attacks. %The fabrication attack (left) generates more objects, and the vanishing attack (right) clears detection results. None of them matches the ground truth. Thus, different attacks result in the same low mAP.
 %     }
 %     \label{fig:fabrication} 
@@ -941,7 +948,7 @@ Further, we compare our attack with the TOG attack \citep{chow2020adversarial}, 
 
 % \begin{figure}[t]
 %     \centering
-%     \includegraphics[width=0.5\linewidth]{figures/mislabel.jpg}
+%     \includegraphics[width=0.5\textwidth]{figures/mislabel.jpg}
 %     \caption{mAP does not consider confidence values. 
 %     %Both strong (left) and weak (right) attacks produce an incorrect bounding box. The attacker prefers a strong attack (Dog 99\%) over a weak attack (Dog 60\%), but the mAP does not reflect the attack strength.
 %     }
@@ -962,7 +969,7 @@ Our results showed that, for the first two evaluation metrics, only two out of t
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/init.png}
+    \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/init.png}
     \caption{The image-specific  PCB fabrication attack using different initialization methods.}
     \label{fig:init}
 \end{figure}
@@ -979,7 +986,7 @@ Using our new evaluation metrics, we can observe the complete iteration process 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/lr.png}
+    \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/lr.png}
     \caption{The  image-specific  PCB fabrication attack with different learning rate decays.}
     \label{fig:decay}
 \end{figure}
@@ -1000,7 +1007,7 @@ In contrast, both the TOG and PCB attacks converge faster and perform better tha
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/loss.png}
+    \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/loss.png}
     \caption{Different adversarial loss functions of the  image-specific  fabrication attack.}
     \label{fig:loss}
 \end{figure}
@@ -1077,25 +1084,25 @@ We used an autonomous driving dataset collected from the CARLA simulator \citep{
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/clear_noon_city.png}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/clear_noon_city.png}
         \caption{Clear Noon (City)}
         \label{fig:clear_noon} 
     \end{subfigure}
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/clear_noon_urban.png}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/clear_noon_urban.png}
         \caption{Clear Noon (Suburban)}
         \label{fig:clear_noon_suburban}
     \end{subfigure}
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/hard_rain_city.png}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/hard_rain_city.png}
         \caption{Hard Rain Sunset (City)}
         \label{fig:hard_rain} 
     \end{subfigure}
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/chapter_detection/hardware/wet_cloudy_city.png}
+        \includegraphics[width=\textwidth]{figures/chapter_detection/hardware/wet_cloudy_city.png}
         \caption{Wet Cloudy Night (City)}
         \label{fig:wet_cloudy}
     \end{subfigure}
