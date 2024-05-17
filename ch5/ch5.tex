@@ -3,7 +3,7 @@
 
 % \newrefsection
 
-In this chapter, we focus on adversarial attacks against image classification models. Image Classification is one of the most fundamental tasks in computer vision that associate pre-defined labels with each image. Existing image classification models are accurate enough and have been widely adopted in real-world applications.
+In this chapter, we focus on adversarial attacks against image classification models. Image Classification is one of the most fundamental tasks in computer vision that associate pre-defined labels with each image. Existing image classification models are accurate enough and have been widely adopted in real-world applications, such as Google Cloud Vision, Amazon Rekognition, OpenAI, Imagga, etc.
 
 One of the most prominent applications for image classification is Cloud Service. Deep learning models deployed in data centers can serve as Cloud APIs. The end-user can receive classification results without knowing the implementation details of various models. Our objective is to achieve adversarial attacks under this black-box scenario, which means we aim to fool the model without access to its structure and weights.
 
@@ -20,8 +20,6 @@ Black-box adversarial attacks fool image classifiers into misclassifying images 
 \section{Introduction}
 \label{sec:introduction}
 Image classification models are widely used in real-world applications and typically achieve top-5 accuracy of over 90\%. Cloud-based image classification services, such as Google Cloud Vision, provide pre-trained models as APIs, allowing users to classify images by sending requests to cloud servers. Cloud APIs are particularly useful for IoT edge devices that lack the computational power to run deep learning models locally.
-
-% , but can still leverage cloud APIs to obtain classification results.
 
 % (Existing Black-box Attacks)
 However, image classification cloud services are vulnerable to black-box adversarial attacks, which generate imperceptible perturbations to input images to mislead classification models into incorrect predictions. While prior research has shown that black-box attacks can achieve high success rates of over 95\% with only 1,000 queries without access to model structure and weights \citep{bhambri2019survey}, most research has generated adversarial images offline on local models rather than online on cloud servers. The efficiency of online black-box attacks against cloud services remains unclear.
@@ -41,6 +39,8 @@ Implementing online black-box attacks is more challenging than offline attacks d
     \caption{We initiate the black-box attacks directly against cloud services and apply the perturbation before image encoding and pre-processing.}
     \label{fig:cloudapi}
 \end{figure*}
+
+\clearpage
 
 \subsection{Common Mistakes}
 \label{common_errors}
@@ -70,11 +70,11 @@ Sending queries to real-world cloud APIs typically costs around \$1 for every 1,
     \item The model prediction function only accepts input images $x$ as an array of the same shape. It is tempting to resize all input images to the same size as the model input, thus unintentionally exploiting extra information about the model input shape.
 \end{itemize}
 
-% As a result, some prior research tested their attacks on local models and compared their methods with others with unfair settings. 
+As a result, some prior research tested their attacks on local models and compared their methods with others with unfair settings. 
 
 % In the next section, we introduce our open-source image classification cloud service. This cloud service will both facilitate future research and prevent these mistakes so that we can obtain a fair comparison of existing black-box attacks.
 
-% \clearpage
+\clearpage
 
 \subsection{Contributions}
 
@@ -577,25 +577,24 @@ In summary, our experiments showed that horizontal distribution reduced the tota
 
 \subsection{Vertical Distribution}
 
-In this section, we focus on improving the efficiency of attacking a single image through vertical distribution, which sends out queries concurrently across iterations of an image. The implementations of vertical distribution presented in Section \ref{horizon_vertical} serve to illustrate the general concept of distributed attacks, but there may be other approaches to achieving vertical distribution that are more effective for specific black-box attacks. In the following experiments, we use the implementation presented in Section \ref{horizon_vertical}.
+In this section, we focus on improving the efficiency of attacking a single image through vertical distribution, which sends out queries concurrently across iterations of an image. 
+
+In the following experiments, we use the implementation presented in Section \ref{horizon_vertical}. The implementations of vertical distribution presented in Section \ref{horizon_vertical} serve to illustrate the general concept of distributed attacks, but there may be other approaches to achieving vertical distribution that are more effective for a specific black-box attack.
 
 % In this section, we focus on improving the iteration process for attacking a single image using vertical distribution. The vertical distribution accelerates the attack by concurrently sending out queries across iterations of the same image. In the following experiments, We use examples of vertical distribution illustrated in Section \ref{horizon_vertical}, while there are different ways to achieve vertical distribution for a specific black-box attack.
 
 \textbf{The SimBA Attack}: Though the baseline method, SimBA, achieves a relatively low attack success rate, we can use vertical distribution to accelerate the attack. Using vertical distribution, we randomly choose a batch of unrepeated pixels to perturb and the probability of the correct class decreases faster than the original non-distributed attack (see Fig. \ref{fig:simba_plot}). This is particularly effective when attacking with SimBA, which has a relatively low attack success rate. 
 
-
 % Though the baseline method, SimBA, achieves a relatively low attack success rate, we can use vertical distribution to decrease the probability of the correct class faster until the model makes a wrong prediction. 
 
-\textbf{The Square Attack}: Similarly, the vertically distributed square attack decreases the margin loss faster than the original method and achieves an early successful attack (see Fig. \ref{fig:square_plot}) because multiple square-shaped perturbations are generated as a batch in a single iteration.
+\textbf{The Square Attack}: Similarly, the vertically distributed square attack decreases the margin loss faster than the original method and achieves an early successful attack (see Fig. \ref{fig:square_plot}). This is because multiple square-shaped perturbations are generated as a batch in a single iteration.
 
 \textbf{The Bandits Attack}: The vertically distributed bandits attack also achieves an early successful attack (see Fig. \ref{fig:bandits_plot}) by averaging a batch of concurrent gradient estimations, and thus improving the imperfect gradient estimator $\nabla_i$. Note that the original non-distributed Bandits Attack failed to generate an adversarial example after 1,000 queries, which means vertical distribution can also improve the attack success rate.
 
-Besides, we show some adversarial images generated by vertically distributed black-box attacks and original methods in Fig. \ref{fig.vertical_img}. They were generated under the same $\epsilon=0.05$, and we cannot tell the difference between images generated with and without vertical distribution from the perspective of human eyes.
+Besides, we show some adversarial images generated by vertically distributed black-box attacks and original methods (no vertical distribution) in Fig. \ref{fig.vertical_img}. They were generated under the same $\epsilon=0.05$, and we cannot tell the difference between images generated with and without vertical distribution from the perspective of human eyes.
 
 In conclusion, compared with non-distributed attacks, vertically distributed attacks require less time to achieve a successful attack for each image, while the generated adversarial example is visually the same as in the original method. This highlights the potential of vertical distribution as an effective strategy for improving the efficiency of black-box attacks.
 
-% \pagebreak
-% \addtolength{\textheight}{-1cm}   % This command serves to balance the column lengths.
 
 \begin{figure*}[tp]
 \centering
