@@ -287,7 +287,7 @@ After finding the match, the tracking results can be evaluated using the followi
 
 For the video frame at time $t$, the object tracking model assigns a unique ID $j$ to a detected object and produces a hypothesis $h_j^t$. After solving the linear assignment problem using the Hungarian Algorithm, if the hypothesis $h_j^t$ is mapped to $o_i^t$ (see \ref{fig:mt_ml}), the ground truth object is considered tracked at time step t.
 
-Ground truth objects with the same ID at different time steps are combined into a tracklet. A tracklet is classified as mostly tracked if correctly tracked in at least 80\% of the frames. Conversely, a tracklet is classified as mostly lost if correctly tracked in at most 20\% of the frames. The evaluation metric \acrshort{mt} counts the number of mostly tracked tracklets, while \acrshort{ml} counts the number of mostly lost tracklets.
+Ground truth objects with the same ID at different time steps are combined into a tracklet. A tracklet is classified as mostly tracked if correctly tracked in at least 80\% of the frames. Conversely, a tracklet is classified as mostly lost if correctly tracked in at most 20\% of the frames. The evaluation metric \acrshort{mt} counts the number of mostly tracked tracklets, while \acrshort{ml} counts the number of mostly lost tracklets \citep{wu2006tracking}.
 
 \begin{figure}[H]
     \centering
@@ -320,7 +320,7 @@ As illustrated in Fig. \ref{fig:track_mota_fp_fn}, the tracking result is accura
     \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/chapter_tracking/MOTA_IDSW.jpg}
-        \caption{ID Switch}
+        \caption{ID Switch (Different colors represent different IDs assigned by the tracking model).}
         \label{fig:track_mota_idsw}
     \end{subfigure}
   \caption{The False Negatives (FN), False Positives (FP) and ID Switches (IDSW) for \acrfull{mota}.}
@@ -329,7 +329,9 @@ As illustrated in Fig. \ref{fig:track_mota_fp_fn}, the tracking result is accura
 
 \subsection{ID Scores (IDF1)}
 
-While the MOTA provides information about how the detector performs using FN and FP, and use IDSW to evaluate association algorithm, it is biased towards detection. For instance,
+The MOTA metric provides insight into detector performance by considering false negatives (FN) and false positives (FP) and uses ID switches (IDSW) to evaluate the association algorithm. However, it is biased towards detection performance. For instance, both Tracklet 1 (\ref{fig:track_idf1_track_1}) and Tracklet 2 (\ref{fig:track_idf1_track_2}) achieve a MOTA of 70\%, as all ground truth objects in Fig. \ref{fig:track_idf1_gt} are matched with hypotheses, indicating an effective detector. Despite this, Tracklet 2 is preferable in some scenarios because it maintains consistent IDs for the same object over a longer period than Tracklet 1.
+
+Another evaluation metric is needed to measure how long the tracker correctly identifies targets. The IDF1 score addresses this issue by first matching each ground-truth object to a specific tracklet with a consistent ID. A hypothesis is considered a match only when both the position and IDs align. Consequently, Tracklet 2, which maintains consistent IDs for the same object over a longer period, results in fewer FPs and FNs than Tracklet 1, indicating it is a better tracker.
 
 \begin{figure}[H]
     \centering
@@ -355,50 +357,68 @@ While the MOTA provides information about how the detector performs using FN and
   \label{fig:tracking_idf1}
 \end{figure}
 
-To address these issues, we propose to measure performance not by how often mismatches occur, but by how long the tracker correctly identifies targets.
-
-Bipartite graphs are commonly used to model matching problems,
+Formally, the ID score uses a Bipartite graph $G = (V_T, V_C, E)$ to connect nodes in ground truths and hypothesis at time $t$. $V_T$ includes regular nodes $\tau$ (ground truths) and false positives $f^+_{\gamma}$, while $V_C$ includes regular nodes $\gamma$ (hypotheses) and false negatives $f^-_{\tau}$ (see Fig. \ref{fig:idf1_bipartite}). An edge represents a true positive ID (IDTP) if both connected nodes are regular nodes, a false positive ID (IDFP) if the connection is $(f^+_{\gamma})$  and a false negative ID (IDFN) if the connection is $(\tau, f^-_{\tau})$. 
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{figures/chapter_tracking/bipartite.jpg}
-  \caption{Bipartite Graph for IDF1 score.}
+  \caption{The IDF1 score defines IDFP and IDFN using a Bipartite Graph.}
   \label{fig:idf1_bipartite}
 \end{figure}
 
-To this end, ground-truth identities are first matched to computed ones.
-
+Lastly, the IDF1 score can be computed from Identification Precision (IDP) and Identification Recall (IDR) using the following equations:
 \begin{equation}
     \text{IDP} = \frac{\text{IDTP}}{\text{IDTP} + \text{IDFP}} \quad 
     \text{IDR} = \frac{\text{IDTP}}{\text{IDTP} + \text{IDFN}}
 \end{equation}
-
 \begin{equation}
     \text{IDF}_1 = \frac{2 \text{IDTP}}{2 \text{IDTP} + \text{IDFP} + \text{IDFN}}
 \end{equation}
 
 \subsection{Higher Order Tracking Accuracy (HOTA)}
 
-The MOTA is biased towards detection, while IDF1 is biased towards association. The HOTA tries to find a balance between detection and association.
-
+The MOTA is biased towards detection, while IDF1 is biased towards association. The HOTA metric tries to find a balance between the detection accuracy (DetA) and association accuracy (AssA) using the following equation:
 \begin{equation}
-    \text{DetA}_{\alpha} = \frac{|\text{TP}_{\alpha}|}{|\text{TP}_\alpha| + |\text{FN}_\alpha| + |\text{FP}_\alpha|},
-    \text{AssA}_{\alpha} = \frac{1}{|\text{TP}_\alpha|} \sum_{c \in \text{TP}} \text{Ass-IoU}(c)
+    \text{HOTA}_{\alpha} = \sqrt{\text{DetA}_{\alpha} \cdot \text{AssA}_{\alpha}} = \sqrt{\frac{\sum_{c \in \text{TP}_\alpha} \text{Ass-IoU}(c)}{|\text{TP}_{\alpha}| + | FN_{\alpha}| + | \text{FP}_{\alpha}| }} \numberthis
 \end{equation}
 
-Then HOTA
+First, the HOTA metric runs the Hungarian algorithm to determine a one-to-one matching between hypotheses and ground truths with $\text{IoU} > \alpha$. Then, detection accuracy (DetA) is calculated for hypotheses that match the ground truth detections without considering IDs. Association accuracy (AssA), on the other hand, is calculated for hypotheses that match both detection and IDs \citep{luiten2021hota}.
 
-\begin{equation}
-    \text{HOTA}_{\alpha} = \sqrt{\text{DetA}_{\alpha} \cdot \text{AssA}_{\alpha}} = \sqrt{\frac{\sum_{c \in \text{TP}} \text{Ass-IoU}(c)}{|\text{TP}_{\alpha}| + | FN_{\alpha}| + | \text{FP}_{\alpha}| }}
-\end{equation}
+\begin{alignat}{2}
+    \text{DetA}_{\alpha} &= \frac{|\text{TP}_{\alpha}|}{|\text{TP}_\alpha| + |\text{FN}_\alpha| + |\text{FP}_\alpha|} \\
+    \text{AssA}_{\alpha} &= \frac{1}{|\text{TP}_\alpha|} \sum_{c \in \text{TP}_\alpha} \text{Ass-IoU}(c) \\
+    \text{Ass-IoU(c)} &= {|\text{TP}}\sum_{c \in \text{TP}} \frac{|\text{TPA}|}{|\text{TPA}|+|\text{FNA}| + |\text{FPA}|}
+\end{alignat}
+% \text{HOTA} &= \int_{0 < \alpha \leq 1} \text{HOTA}_{\alpha} \approx \frac{1}{19} \sum_{\substack{\alpha=0.05 \\ \alpha+= 0.05}}^{0.95} \text{HOTA}_{\alpha} \numberthis
 
-Lastly,
 
-\begin{equation}
-    \text{HOTA} = \int_{0 < \alpha \leq 1} \text{HOTA}_{\alpha} \approx \frac{1}{19} \sum_{\substack{\alpha=0.05 \\ \alpha+= 0.05}}^{0.95} \text{HOTA}_{\alpha}
-\end{equation}
+For example, Tracklet 1 in Fig. \ref{fig:track_hota_track_1} only detects the first 5 objects out of 10, while Tracklet 2 in Fig. \ref{fig:track_hota_track_2} detects all 10 objects but with less consistency in ID assignment. As a result, MOTA prefers Tracklet 2 due to its better detection accuracy, while IDF1 favors Tracklet 1 for its superior association accuracy. On the other hand, HOTA assigns a score of 50\% to both tracklets, attempting to balance detection and association performance.
 
-% \clearpage
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_tracking/IDSW_gt.jpg}
+        \caption{The ground truth tracklet.}
+        \label{fig:track_hota_gt} 
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_tracking/HOTA_track_1.jpg}
+        \caption{Tracklet 1: DetA = 50\%, MOTA = 50\%, \textbf{HOTA = 50\%}, IDF1 = 67\%, AssA = 50\%.}
+        \label{fig:track_hota_track_1}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_tracking/HOTA_Track_2.jpg}
+        \caption{Tracklet 2: DetA = 100\%, MOTA = 97\%, \textbf{HOTA = 50\%}, IDF1 = 25\%, AssA = 25\%.}
+        \label{fig:track_hota_track_2}
+    \end{subfigure}
+  \caption{A comparison of MOTA, IDF1, and HOTA. Different colors indicate different IDs assigned by the tracking model.}
+  \label{fig:tracking_hota}
+\end{figure}
+
+\clearpage
 
 \section{Experimental Results}
 
