@@ -8,7 +8,7 @@ In this chapter, we present adversarial attacks against object tracking systems.
 \section{Introduction}
 \label{sec:adv_track}
 
-As introduced in Chapter \ref{chpt:driving}, deep learning models are widely used in autonomous driving for perception tasks, such as object-tracking, to generate trajectories of surrounding vehicles. In this context, we lack access to gradients, which makes white-box attacks nearly impossible. Additionally, the difficulty in obtaining intermediate query results within the internal data path makes it impractical for black-box attacks to query the model.
+As introduced in Chapter \ref{chpt:driving}, deep learning models are widely used in autonomous driving for perception tasks, such as object-tracking, to generate trajectories of surrounding vehicles. In the context of autonomous driving, we lack access to gradients, which makes white-box attacks nearly impossible. Additionally, the difficulty in obtaining intermediate query results within the internal data path makes it impractical for black-box attacks to query the model.
 
 However, this does not necessarily mean that current autonomous driving systems are robust against adversarial attacks. Many object tracking systems still rely on pre-trained object detection models (as outlined in Table \ref{tab.detection_github}), making them susceptible to transferable perturbations generated using well-known object detection models. Consequently, adversarial attacks targeting object detection could also impact object tracking systems.
 
@@ -422,19 +422,218 @@ For example, Tracklet 1 in Fig. \ref{fig:track_hota_track_1} only detects the fi
 
 \section{Experimental Results}
 
-We first demonstrate the importance of detector.
+In this section, we apply the white-box PCB attack introduced in Chapter \ref{chpt:detection} to the SORT tracking framework \citep{bewley2016simple}, a widely used TBD framework recognized for its real-time performance. We also attack several subsequent tracking methods built upon SORT, including Deep SORT \citep{wojke2017simple}, Strong SORT \citep{du2023strongsort}, and OC SORT \citep{cao2023observation}.
 
+To investigate whether traditional algorithms, such as the Kalman Filter and the Hungarian Algorithm, can alleviate the effects of adversarial attacks, we first set up a baseline by evaluating SORT, Deep SORT, Strong SORT, and OC SORT combined with different detectors (YOLOv3, YOLOv4, YOLOX) on the KITTI and CARLA datasets without applying adversarial attacks (see Fig. \ref{fig:tracking_demo}). The experimental results are presented in Table \ref{tab.kitti} and Table \ref{tab.carla} \footnote{Our source code and dataset are available on GitHub: \url{https://github.com/wuhanstudio/adversarial-tracking}}, and we have the following findings:
 
-\subsection{Image-Specific}
+\begin{enumerate}
+    \item Even with a perfect detector (using ground truth as detections), the tracking methods could not achieve 100\% HOTA because the same object may be assigned different IDs when occlusion occurs.
+    \item However, if the accuracy of the detector decreases, the the tracking performance significantly deteriorates. Since YOLOX and YOLOv4 achieve comparable performance, we focus on YOLOv4 and YOLOv3 in our further experiments.
+    \item The tracking module can be improved without using neural networks. Although both OC SORT and Strong SORT improve the tracking accuracy, OC SORT does not use an additional neural network for ID association, demonstrating that substantial improvements can be achieved with traditional algorithms. 
+\end{enumerate}
 
+% Further, we used an autonomous driving dataset collected from the CARLA simulator \citep{deschaud2021kitticarla}. The dataset includes driving records from 7 maps, including different areas (city, rural, urban, highway), daytime (noon, sunset, night), and weather (clear, cloudy, soft rain, and hard rain) (see Fig. \ref{fig:carla}). A 30-second driving video was collected from each map, sampling at 10 FPS, which is the same as the KITTI autonomous vehicle. 
+
+% Next, we apply the image-specific and image-agnostic PCB attack to these frameworks.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_tracking/kitti_demo.png}
+        \caption{KITTI Autonomous Vehicle}
+        \label{fig:tracking_demo_kitti} 
+    \end{subfigure}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_tracking/carla_demo.png}
+        \caption{CARLA Simulator}
+        \label{fig:tracking_demo_carla}
+    \end{subfigure}
+  \caption{Sample images from the KITTI and CARLA dataset.}
+  \label{fig:tracking_demo}
+\end{figure}
 
 \clearpage
 
-\subsection{Image-Agnostic}
+\null
+\vfill
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{gray!25}{white}
+\begin{tabular}{ ccccccc } 
+\hline
+\rowcolor{gray!50}
+Detector & Tracker & HOTA $\uparrow$ & MOTA $\uparrow$ & IDF1 $\uparrow$ & MT $\uparrow$ & ML $\downarrow$ \\
+\hline
+Ground Truth & OC SORT      &  \textbf{93.84}  &  \textbf{93.70}  & \textbf{96.41}   &  473   & \textbf{11}   \\
+Ground Truth & Strong SORT  &  93.72  &  93.05  & 96.38   &  \textbf{506}   & 14   \\ 
+Ground Truth & Deep SORT    &  85.43  & 90.43   &  94.83  &  480   &  14  \\ 
+Ground Truth & SORT         &  84.95  &  92.80  &  95.12  &  467   &  \textbf{11}  \\ 
+\hline
+YOLOX & OC SORT      &  53.78  &  52.24  &  \textbf{68.29}  &  143   &  113  \\
+YOLOX & Strong SORT  &  \textbf{54.30}  &  \textbf{54.31}  &  66.93  &  \textbf{187}   &  \textbf{89}  \\ 
+YOLOX & Deep SORT    &  52.82  &  50.83  &  68.11  &  173   &  106  \\ 
+YOLOX & SORT         &  51.32  &  54.14  &  66.96  &  163   &  105  \\ 
+\hline
+YOLOv4 & OC SORT      &  53.38  &  56.76  &  68.97  &  160   &  81  \\
+YOLOv4 & Strong SORT  &  \textbf{55.17}  &  60.03  &  \textbf{69.32}  &  \textbf{220}   &  \textbf{65}  \\ 
+YOLOv4 & Deep SORT    &  51.99  &  \textbf{64.95}  &  67.45  &  190   &  81  \\ 
+YOLOv4 & SORT         &  50.63  &  59.25  &  66.33  &  188   &  72  \\ 
+\hline
+YOLOv3 & OC SORT      &  40.60  &  43.98  &  55.94  &  89  &  130  \\
+YOLOv3 & Strong SORT  &  \textbf{43.25}  &  \textbf{47.64}  &  57.47  &  \textbf{122}  &  \textbf{96}  \\ 
+YOLOv3 & Deep SORT    &  41.69  &  45.55  &  \textbf{57.65}  &  112  &  111  \\ 
+YOLOv3 & SORT         &  39.27  &  46.83  &  53.72  &  108  &  113  \\ 
+\hline
+\end{tabular}
+\caption{A comparison of different real-time online trackers (KITTI dataset).}
+\label{tab.kitti}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{gray!25}{white}
+\begin{tabular}{ ccccccc } 
+\hline
+\rowcolor{gray!50}
+Detector & Tracker & HOTA $\uparrow$ & MOTA $\uparrow$ & IDF1 $\uparrow$ & MT $\uparrow$ & ML $\downarrow$ \\
+\hline
+Ground Truth & OC SORT      &  \textbf{92.93}  &  \textbf{95.03}  &  \textbf{93.55}  &  173  &  \textbf{9}  \\
+Ground Truth & Strong SORT  &  91.17  &  94.20  &  91.79  &  \textbf{181}  &  \textbf{9}  \\ 
+Ground Truth & Deep SORT    &  82.41  &  91.21  &  90.16  &  165  &  10  \\ 
+Ground Truth & SORT         &  82.11  &  93.89  &  88.98  &  171  &  \textbf{9}  \\ 
+\hline
+YOLOX & OC SORT      &  \textbf{60.40}  &  64.89  &  \textbf{77.10}  &  103  &  30  \\
+YOLOX & Strong SORT  &  59.60  &  63.08  &  73.64  &  \textbf{121}  &  \textbf{26}   \\ 
+YOLOX & Deep SORT    &  56.97  &  59.59  &  73.61  &  101  &  28  \\ 
+YOLOX & SORT         &  57.01  &  \textbf{64.91}  &  72.96  &  118  &  27  \\ 
+\hline
+YOLOv4 & OC SORT      &  57.99  &  63.25  &  \textbf{75.78}  &  82  &  36  \\
+YOLOv4 & Strong SORT  &  \textbf{59.49}  &  \textbf{65.36}  &  74.81  &  \textbf{107}  &  \textbf{28}  \\ 
+YOLOv4 & Deep SORT    &  56.65  &  60.43  &  74.07  &  89  &  31  \\ 
+YOLOv4 & SORT         &  56.31  &  65.27  &  73.37  &  103  &  \textbf{28}  \\ 
+\hline
+YOLOv3 & OC SORT      &  55.90  &  61.10  &  \textbf{74.31}  &  86  &  34  \\
+YOLOv3 & Strong SORT  &  \textbf{56.19}  &  61.43  &  71.43  &  \textbf{109}  &  \textbf{27}  \\ 
+YOLOv3 & Deep SORT    &  53.80  &  57.24  &  70.92  &  91  &  \textbf{27}  \\ 
+YOLOv3 & SORT         &  53.45  &  \textbf{62.63}  &  69.30  &  107  &  28  \\ 
+\hline
+\end{tabular}
+\caption{A comparison of different real-time online trackers (CARLA dataset).}
+\label{tab.carla}
+\end{table}
+
+\vfill
+\clearpage
+
+\subsection{Image-Specific PCB Attack}
+
+First, we tested the images-specific PCB attack with hpyerparameters of attack strength $\epsilon=8$ and learning rate decay $k=0.99$ . We iterate the perturbation for one step and frame-by-frame for 300 frames of each map, tested on 7 maps.
+
+
+The tracking accuracy drops significantly for both YOLOv4 and YOLOv3 (see Tab. \ref{tab.carla_pcb}). Yolov4 is more robust than YOLOv3. YOLOv4 generates smaller boxes while Yolov3 generates larger boxes.
+
+Negative MOTA due to large number of false positives. All cars.
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ ccccccc } 
+\hline
+Detector & Tracker & HOTA $\uparrow$ & MOTA $\uparrow$ & IDF1 $\uparrow$ & MT $\uparrow$ & ML $\downarrow$ \\
+\hline
+YOLOv4 & OC SORT      &  25.34 &  17.07  &  34.46  &  21  &  120  \\
+YOLOv4 & Strong SORT  &  26.86  &  0.94  &  33.20  &  24  & 105 \\ 
+YOLOv4 & Deep SORT    &  25.06 &  -6.30  &  32.95  &  23 
+ &  104  \\ 
+YOLOv4 & SORT         &  26.32  &  19.19  &  34.78  &  27  &  115  \\ 
+\hline
+YOLOv3 & OC SORT      &  17.03 &  -482.66  &  14.09  &  56  &  52  \\
+YOLOv3 & Strong SORT  &  14.85  &  -772.60  &  9.95  &  65 &  42 \\ 
+YOLOv3 & Deep SORT    &  15.32  &  -692.26  &  11.29  &  59  &  44  \\ 
+YOLOv3 & SORT         &  15.80  &  -525.81  &  12.00  &  66  &  46  \\ 
+\hline
+\end{tabular}
+\caption{Evaluation results of the Image-Specific PCB attack (CARLA dataset).}
+\label{tab.carla_pcb}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_tracking/yolov3.png}
+        \caption{YOLOv3}
+        \label{fig:tracking_demoyolov3} 
+    \end{subfigure}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_tracking/yolov4.png}
+        \caption{YOLOv4}
+        \label{fig:tracking_demo_yolov4}
+    \end{subfigure}
+  \caption{Sample Images}
+  \label{fig:tracking_attack}
+\end{figure}
+
+\clearpage
+
+\subsection{Image-Agnostic PCB Attack}
+
+Image-agnostic attack generates \acrfull{uap} (see Tab. \ref{tab.carla_uap})
+
+UAP iterates for more steps than image-specific attack, cannot generate cars, thus not as many false positives as image-specific attack.
+
+YOLOv4 more small boxes that cover original boxes filtered out, but covers the vehicle, thus the vehicles are not detected. YOLOv3 also filters , but the original detections are remained.
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ ccccccc } 
+\hline
+Detector & Tracker & HOTA $\uparrow$ & MOTA $\uparrow$ & IDF1 $\uparrow$ & MT $\uparrow$ & ML $\downarrow$ \\
+\hline
+YOLOv4 & OC SORT      &  22.05  &  14.26  &  33.07  &  10  &  136  \\
+YOLOv4 & Strong SORT  &  24.11  &  16.95  &  34.37  &  9  &  122  \\ 
+YOLOv4 & Deep SORT    &  24.87  &  10.98  &  33.54  &  7   &  131  \\ 
+YOLOv4 & SORT         &  21.96  &  14.70  &  30.20  &  10   &  129  \\ 
+\hline
+YOLOv3 & OC SORT      &  43.45  &  45.45  &  62.43  &  39  &  61  \\
+YOLOv3 & Strong SORT  &  43.01  &  47.18  &  57.42  &  61  &  49  \\ 
+YOLOv3 & Deep SORT    &  43.34  &  43.28  &  60.17  &  49  &  52  \\ 
+YOLOv3 & SORT         &  40.58  &  46.85  &  55.20  &  55  &  51  \\ 
+\hline
+\end{tabular}
+\caption{Evaluation results of the Image-Agnostic PCB attack (CARLA dataset).}
+\label{tab.carla_uap}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_tracking/yolov3_uap_origin.png}
+        \caption{Origin}
+        \label{fig:tracking_attack_origin} 
+    \end{subfigure}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/chapter_tracking/yolov3_uap_attack.png}
+        \caption{UAP Attack}
+        \label{fig:tracking_uap_attack}
+    \end{subfigure}
+  \caption{Sample Images}
+  \label{fig:tracking_attack_uap}
+\end{figure}
 
 \clearpage
 
 \section{Summary}
+
+This chapter
 
 % In summary, we find several research papers that attack 2D SOT (caemera) and 3D MOT ( Lidar). But we do not find attacks against 3D monocular trackers \citep{wu2021track} \citep{hu2022monocular}. Neither do we find research that attacks Transformers for 2D MOT.
 
