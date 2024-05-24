@@ -9,6 +9,10 @@ $ sudo apt install texlive-base
 $ tlmgr install scheme-full
 $ tlmgr path add
 
+$ sudo apt-get install latex-cjk-all
+$ tlmgr install cjk
+$ updmap -user
+
 > pdflatex Thesis.tex
 > biber Thesis
 > makeglossaries Thesis
