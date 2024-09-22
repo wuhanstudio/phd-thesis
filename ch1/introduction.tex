@@ -356,25 +356,27 @@ Despite rapid progress in generating adversarial examples, there are many import
 
 \vspace{0.5cm}
 
-\textbf{Is it possible to achieve real-time online adversarial attacks?}
+\textbf{1) Is it possible to achieve real-time online adversarial attacks?}
 
 Much of the current research in adversarial attacks focuses on offline attacks that utilize both input images $x$ and corresponding ground truths $y^*$ to maximize the adversarial loss $\mathcal{L}(f(x, \theta), y^*)$. However, the human-labeled ground truth $y^*$ is unavailable for real-time online attacks. For example, to attack an object detection model deployed on an autonomous driving vehicle, it is impossible to have humans mark the bounding boxes in real time. Can we generate adversarial perturbations without access to the ground truth?
 
 \vspace{0.5cm}
 
-\textbf{Is it possible to inject the perturbations without access to the operating system?}
+\textbf{2) Is it possible to inject the perturbations without access to the operating system?}
 
 Access to the operating system is essential in order to inject adversarial perturbations into input images. However, the operating system (Unix/Linux) where the deep learning model is deployed is highly secure as research in cyber security advances. Although the operating system is highly secure, the sensors that collect the data are exposed directly to the environment to collect the data. Can we exploit the sensor to bypass the operating system?
 
 \vspace{0.5cm}
 
-\textbf{Can traditional methods mediate the impact of adversarial attacks?}
+\textbf{3) Can traditional methods mediate the impact of adversarial attacks?}
 
 Although deep neural networks are vulnerable to adversarial attacks, traditional algorithms such as the Kalman Filter and the Hungarian algorithm are not. In real-world robotic applications, deep learning models are deployed in combination with traditional algorithms that do not use deep neural networks. Are adversarial attacks still effective under these settings?
 
-\vspace{0.5cm}
+% \vspace{0.25cm}
+\clearpage
 
-\textbf{Have black-box attacks become a practical threat against commercial Cloud APIs?}
+\textbf{4) Have black-box attacks become a practical threat against commercial Cloud APIs?}
+\label{question_4}
 
 IoT devices with limited memory and computational power depend on cloud APIs for tasks like image classification. Existing black-box attacks report success rates of over 95\% using fewer than 1,000 queries. This raises the question: Have these attacks become a significant threat to commercial cloud APIs such as Imagga and Google Cloud Vision?
 
@@ -390,35 +392,23 @@ To answer the research questions listed in Section \ref{sec:research_question}, 
 
 % \begin{itemize}[label={}]
 
-\noindent \textbf{Chapter \ref{chpt:driving}} introduces two real-time online white-box attack against the NVIDIA end-to-end driving model, including image-specific and image-agnostic attacks. Both attacks do not require access to the ground truth. We tested the attacks in simulation and on real Turtlebots (\textbf{Published in IEEE Intelligent Vehicle Symposium}). The main contributions of this chapter are as follows:
-
-\begin{itemize}
-    \item We find
-\end{itemize}
+\noindent \textbf{Chapter \ref{chpt:driving}} answers \textbf{research question 1)} by introducing two real-time online white-box attack against the NVIDIA end-to-end driving model, including image-specific and image-agnostic attacks. Both attacks do not require access to the ground truth. We test the attacks in simulation and on real Turtlebots and demonstrate that it is possible to achieve real-time online attacks (\textbf{Published in IEEE Intelligent Vehicle Symposium}). 
 
 \vspace{0.5cm}
 
 \noindent \textbf{Chapter \ref{chpt:detection}} further presents three real-time online white-box attacks against object detection models: the one-targeted attack, multi-targeted attack, and multi-untargeted attack. By combining the imperceptibility of adversarial filters with the localizability of adversarial patches, our method, adversarial overlay, can generate adversarial perturbations of arbitrary shapes at given locations. (\textbf{Published in IEEE Intelligent Vehicle Symposium}). 
 
-Besides, we propose a Human-in-the-Middle hardware attack that injects the perturbation into the communication channel between the camera and the detection system, thus bypassing the operating system (\textbf{Published in IEEE Transactions on Artificial Intelligence}). The main contributions of this chapter are as follows:
-\begin{itemize}
-    \item We find
-\end{itemize}
+To answer \textbf{research question 2)}, we propose a Human-in-the-Middle hardware attack that injects the perturbation into the communication channel between the camera and the detection system, thus bypassing the operating system (\textbf{Published in IEEE Transactions on Artificial Intelligence}). 
 
 \vspace{0.5cm}
 
-\noindent \textbf{Chapter \ref{chpt:tracking}} investigates whether traditional algorithms like the Kalman Filter and Hungarian Algorithm, commonly used in \acrfull{tbd} systems, can mitigate the effects of adversarial attacks. We evaluated four \acrshort{tbd} frameworks—SORT, Deep SORT, Strong SORT, and OC SORT—combined with YOLOv3, YOLOv4, and YOLOX object detectors on both the KITTI and CARLA autonomous driving datasets. Our findings reveal that the adversarial attack introduced in Chapter \ref{chpt:detection} effectively compromises tracking models. The main contributions of this chapter are as follows:
-\begin{itemize}
-    \item We find
-\end{itemize}
+\noindent \textbf{Chapter \ref{chpt:tracking}} explores whether traditional algorithms like the Kalman Filter and Hungarian Algorithm, commonly used in object tracking systems, can mitigate adversarial attacks. We evaluated four \acrshort{tbd} frameworks—SORT, Deep SORT, Strong SORT, and OC SORT—combined with YOLOv3, YOLOv4, and YOLOX object detectors on both the KITTI and CARLA datasets. Our findings reveal that the adversarial attack introduced in Chapter \ref{chpt:detection} still compromises tracking models even with the help of traditional methods, addressing \textbf{research question 3}).
 
 \vspace{0.5cm}
 
-\noindent \textbf{Chapter \ref{chpt:classification}} unveils several common mistakes in existing black-box attacks and proposes distributed black-box attacks to accelerate attacks against image classification cloud services. Prior research overestimated the effectiveness of black-box attacks by applying the perturbation before image resizing and pre-processing, which is not accessible to end users for commercial image classification cloud APIs. In addition to minimizing the number of queries, black-box attacks can be further optimized by leveraging the load-balancing mechanism commonly used in cloud APIs (\textbf{Under Review for Publication}). The main contributions of this chapter are as follows:
+\noindent \textbf{Chapter \ref{chpt:classification}} unveils several common mistakes in existing black-box attacks and proposes distributed black-box attacks to accelerate attacks against image classification cloud services and shed light on \textbf{research question4)}. 
 
-\begin{itemize}
-    \item We find
-\end{itemize}
+Prior research overestimated the effectiveness of black-box attacks by applying the perturbation before image resizing and pre-processing, which is not accessible to end users for commercial image classification cloud APIs. In addition to minimizing the number of queries, black-box attacks can be further optimized by leveraging the load-balancing mechanism commonly used in cloud APIs (\textbf{Under Review for Publication}).
 
 \vspace{0.5cm}
 
