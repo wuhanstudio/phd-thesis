@@ -4,6 +4,8 @@
 
 Based on [George's template](https://github.com/georgedeath/University_of_Exeter_Thesis_Template), I added the university logo and header.
 
+### Thesis Compiling
+
 ```
 $ sudo apt install texlive-base
 $ tlmgr install scheme-full
@@ -19,6 +21,18 @@ $ updmap -user
 > pdflatex Thesis.tex
 > pdflatex Thesis.tex
 ```
+
+### Useful Tools
+
+- Find duplicated entries in references (`refs.bib`).
+
+```
+grep -n 'title =' refs.bib | uniq -cdf 1
+```
+
+- Cleaner and Formatter for BibTeX files.
+
+  https://flamingtempura.github.io/bibtex-tidy/
 
 ![](overview.png)
 
