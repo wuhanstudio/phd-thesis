@@ -195,7 +195,7 @@ x'_{t+1} = \text{proj}_{p}(x'_t + \xi \cdot \text{sign}(\ \bigtriangledown_x \ma
 
 \subsubsection{\acrfull{uap}}
 
-The multi-step \acrshort{pgd} attack is further improved by the Deep Fool attack \citep{moosavidezfooli2016deepfool} that adds the norm of the gradient difference while iterating over each class $k$ at each step $t$:
+The multi-step \acrshort{pgd} attack is further improved by the Deep Fool attack \citep{moosavi2016deepfool} that adds the norm of the gradient difference while iterating over each class $k$ at each step $t$:
 
 \begin{equation}
 x'_{t+1} = x'_t + \frac{|f_k(x^{'}_{t}, \theta) - f_{k^{*}}(x^{'}_{t}, \theta)|}{||\omega'_{\hat{k}}||^2_2} \text{sign}(\omega'_{\hat{k}})
@@ -204,7 +204,7 @@ where the $k^*$ is the ground truth class label and $f_k(\cdot)$ is the predicte
 
 \textbf{From image-specific attack to image-agnostic attack:} So far, we have only introduced image-specific attacks that generate adversarial perturbation for each input image. As image-specific attacks become more and more effective while keeping human-unperceivable, another research question arises: can we produce an image-agnostic perturbation that can attack all images in a dataset?
 
-Based on the Deep Fool attack, Moosavi-dezfooli et al. generate \acrshort{uap}s, represented with $\textbf{v}$, by further projecting the overall perturbation to $L_p$ ball of radius $\xi$ and centered at 0 after iterating over each class $k$ \citep{moosavidezfooli2017universal}:
+Based on the Deep Fool attack, Moosavi-dezfooli et al. generate \acrshort{uap}s, represented with $\textbf{v}$, by further projecting the overall perturbation to $L_p$ ball of radius $\xi$ and centered at 0 after iterating over each class $k$ \citep{moosavi2017universal}:
 
 \begin{equation}
 \text{proj}_p(\textbf{v}, \epsilon)= \arg\ \underset{\textbf{v}_{t+1}}{\min}||\textbf{v}_{t+1} - \textbf{v}_{t}||_2 \quad \text{subject to}\ ||\textbf{v}_{t+1}||_p\leq\xi

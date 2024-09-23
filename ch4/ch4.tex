@@ -382,7 +382,7 @@ The MOTA is biased towards detection, while IDF1 is biased towards association. 
     \text{HOTA}_{\alpha} = \sqrt{\text{DetA}_{\alpha} \cdot \text{AssA}_{\alpha}} = \sqrt{\frac{\sum_{c \in \text{TP}_\alpha} \text{Ass-IoU}(c)}{|\text{TP}_{\alpha}| + | FN_{\alpha}| + | \text{FP}_{\alpha}| }} \numberthis
 \end{equation}
 
-First, the HOTA metric runs the Hungarian algorithm to determine a one-to-one matching between hypotheses and ground truths with $\text{IoU} > \alpha$. Then, detection accuracy (DetA) is calculated for hypotheses that match the ground truth detections without considering IDs. Association accuracy (AssA), on the other hand, is calculated for hypotheses that match both detection and IDs \citep{luiten2021hota}.
+First, the HOTA metric runs the Hungarian algorithm to determine a one-to-one matching between hypotheses and ground truths with $\text{IoU} > \alpha$. Then, detection accuracy (DetA) is calculated for hypotheses that match the ground truth detections without considering IDs. Association accuracy (AssA), on the other hand, is calculated for hypotheses that match both detection and IDs \citep{Luiten2020IJCV}.
 
 \begin{alignat}{2}
     \text{DetA}_{\alpha} &= \frac{|\text{TP}_{\alpha}|}{|\text{TP}_\alpha| + |\text{FN}_\alpha| + |\text{FP}_\alpha|} \\

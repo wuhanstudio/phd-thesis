@@ -73,7 +73,7 @@ y'&=f(\theta, x')
 \end{align}
 where $y$ is the benign output steering command, $f(\theta, x)$ is the regression model that maps input images to steering commands, $\theta$ is the model parameters, $x$ is the original input image, $y'$ is the adversarial output steering command, and $x'$ is the adversarial input image. Further, we will use $\eta=x-x'$ to denote the adversarial perturbation, $y^{*}$ is the ground truth steering command, and $\mathcal{L}(y, y^{*})$ to denote the training loss. Given an input image $x$, the objective of attacking a classifier is to generate a small perturbation $\eta$, such that $y' \neq y^{*}$. However, the objective of attacking a regression model is to generate a small perturbation $\eta$, such that the difference between $y'$ and $y^{*}$ is larger than the average deviation caused by adding random noise to $x$. 
 
-We use the $L_2$ norm to quantify the magnitude of the perturbation. The $L_2$ norm of the perturbation $\eta$ should be smaller than 0.03 (8 / 255) for an RGB input image according to the value used in prior research \citep{chow2020adversarial} \citep{ACFH2020square}. In particular, to ensure that the perturbation is unperceivable to human eyes, we require \begin{equation}
+We use the $L_2$ norm to quantify the magnitude of the perturbation. The $L_2$ norm of the perturbation $\eta$ should be smaller than 0.03 (8 / 255) for an RGB input image according to the value used in prior research \citep{chow2020adversarial} \citep{andriushchenko2020square}. In particular, to ensure that the perturbation is unperceivable to human eyes, we require \begin{equation}
 ||x^{'}-x||_{2} = ||\ {\eta}\ ||_{2} \leq \xi %,\ \xi = 0.03
 \end{equation}
 where $\xi = 0.03$.
