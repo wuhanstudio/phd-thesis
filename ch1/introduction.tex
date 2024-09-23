@@ -56,16 +56,16 @@ Autonomous driving stands out as a successful application of deep learning, leve
 
 % Autonomous Driving is an example of a successful deep learning application that employs deep neural networks. Research teams from Waymo (formerly the Google self-driving car project), Tesla, etc intend to achieve autonomous navigation without human interference.
 
-Following the established divide-and-conquer engineering principle, autonomous driving systems are commonly designed as modular systems that divide the driving task into sub-tasks: localization, perception, prediction, planning, and control \citep{pendleton2017perception}. 
+Following the established divide-and-conquer engineering principle, autonomous driving systems are commonly designed as modular systems that divide the driving task into subtasks: localization, perception, prediction, planning, and control \citep{pendleton2017perception}. 
 
-Through the localization module, the vehicle determines its position in the environment. The perception module enables vehicles to collect information and extract relevant knowledge from the environment. Then, the prediction module predicts future measurements, behavior, trajectory, etc. Lastly, the planning module makes purposeful decisions to achieve the goal, and the control module executes the planned actions. Besides modular systems, end-to-end driving that maps inputs directly to steering commands has started to rise as an alternative to modular systems.
+Through the localization module, the vehicle determines its position in the environment. The perception module enables vehicles to collect information and extract relevant knowledge from the environment. Then, the prediction module predicts future measurements, behavior, trajectory, etc. Lastly, the planning module makes purposeful decisions to achieve the goal, and the control module executes the planned actions. In addition to modular systems, end-to-end driving that maps inputs directly to steering commands has started to rise as an alternative to modular systems.
 
-Unfortunately, both modular systems and end-to-end driving models are vulnerable to adversarial attacks. It is risky to attack real-world autonomous driving systems, while the development of physics engines and realistic renderers makes it feasible to test adversarial attacks in photo-realistic simulators.
+Unfortunately, both modular systems and end-to-end driving models are vulnerable to adversarial attacks. It is risky to attack real-world autonomous driving systems, while the development of physics engines and realistic renderers makes it feasible to test adversarial attacks in photorealistic simulators.
  
 % \subsubsection{Deep Learning}
 % \label{sec:deep_robot}
 
-The CARLA simulator is an open-source platform for autonomous driving simulation based on the Unreal Game Engine (see Fig. \ref{fig:carla_intro}). It simulates various sensors such as depth camera, 3D lidar, and radar. Besides, the Carla simulator provides flexible Python APIs to interact with the virtual environments and supports \acrfull{ros} integration \citep{Dosovitskiy17}.
+The CARLA simulator is an open-source platform for autonomous driving simulation based on the Unreal Game Engine (see Fig. \ref{fig:carla_intro}). It simulates various sensors such as depth camera, 3D lidar, and radar. In addition, the Carla simulator provides flexible Python APIs to interact with virtual environments and supports \acrfull{ros} integration \citep{Dosovitskiy17}.
 
 \begin{figure}[H]
 \centering
@@ -87,7 +87,7 @@ The CARLA simulator is an open-source platform for autonomous driving simulation
 \label{fig.simulator}
 \end{figure}
 
-The LGSVL is another autonomous vehicle simulation platform based on the Unity3D Game Engine (see Fig.\ref{fig:lvsvl}). It provides integration with the Baidu Apollo Platform \citep{rong2020lgsvl}. Both the CARLA simulator and LGSVL simulator focus on autonomous driving simulation. On the other hand, the Microsoft Airsim simulator provides virtual environments for both autonomous driving and drone simulation \citep{airsim2017fsr} (see Fig. \ref{fig.airsim}).
+ LGSVL is another platform for autonomous vehicle simulation based on the Unity3D game engine (see Fig.\ref{fig:lvsvl}). It provides integration with the Baidu Apollo platform \citep{rong2020lgsvl}. Both the CARLA simulator and the LGSVL simulator focus on autonomous driving simulation. On the other hand, the Microsoft Airsim simulator provides virtual environments for autonomous driving and drone simulation \citep{airsim2017fsr} (see Fig. \ref{fig.airsim}).
 
 \begin{figure}[H]
 \centering
@@ -142,16 +142,16 @@ The LGSVL is another autonomous vehicle simulation platform based on the Unity3D
 \section{Review of Adversarial Attacks}
 \label{sec:adv_attack}
 
-The existence of adversarial examples was first identified by Biggio et al. \citep{biggio2013evasion}, and Szegedy et al. \citep{szegedy2013intriguing}. They fooled a classification model by adding a small perturbation to the input image. Existing adversarial attacks can be categorized into white-box, gray-box, and black-box attacks. 
+The existence of adversarial examples was first identified by Biggio et al. \citep{biggio2013evasion} and Szegedy et al. \citep{szegedy2013intriguing}. They fooled a classification model by adding a small perturbation to the input image. Existing adversarial attacks can be categorized into white-box, gray-box, and black-box attacks. 
 
-In white-box attacks, the adversaries have full knowledge of the target model, including the model architecture and parameters. In gray-box attacks, the adversaries only have limited access to the training set, model structure, model parameters, and model outputs. In black-box attacks, the adversaries can only gather information about the target model through querying \citep{REN2020346}. This thesis focuses on white-box and black-box attacks since the boundary between gray-box and black-box attacks is rather unclear. For instance, gray-box attacks with no access to predicted probabilities are also known as label-only black-box attacks.
+In white-box attacks, the adversaries have full knowledge of the target model, including the model architecture and parameters. In gray box attacks, adversaries only have limited access to the training set, the model structure, the model parameters, and the model output. In black-box attacks, adversaries can only gather information about the target model by querying \citep{REN2020346}. This thesis focuses on white-box and black-box attacks, since the boundary between gray-box and black-box attacks is rather unclear. For instance, gray-box attacks with no access to predicted probabilities are also known as label-only black-box attacks.
 
 % Depending on the goal of the attack, adversarial attacks can be further categorized into three types, evasion, poisoning, and extraction attacks \citep{art2018}. Evasion attacks cause models to make incorrect predictions by adding perturbations to the input during inference. The poisoning attack injects malicious data into the training set. Lastly, the extraction attack steals or replicates models that are available to query. For autonomous systems, rather than trying to steal models or poison others' training data, we intend to design a system that is resistant to malicious perturbations in the input. Thus our research object coincides with evasion attacks.
 
 \subsection{White-Box Attacks}
 \label{sec:whitebox_attack}
 
-White-box attacks rely on gradients to deceive deep learning models. In the training process, samples from the training set are fed forward through the model, and gradients are back-propagated from the training loss to the model parameters using the chain rule. Then, gradients are used to update model parameters to minimize the training loss. For adversarial attacks, gradients are back-propagated from the adversarial loss to the model inputs. Using different adversarial loss functions, adversaries achieve different attack objectives. The strategy of updating and applying the perturbation also varies. Next, we use image classification models as target models to formulate white-box attacks (see Fig. \ref{fig.adv_perturb}).
+White-box attacks rely on gradients to deceive deep learning models. In the training process, samples from the training set are fed forward through the model, and gradients are backpropagated from the training loss to the model parameters using the chain rule. Then, gradients are used to update the model parameters to minimize the training loss. For adversarial attacks, the gradients are backpropagated from the adversarial loss to the input of the model. Using different adversarial loss functions, adversaries achieve different attack objectives. The strategy of updating and applying the perturbation also varies. Next, we use image classification models as target models to formulate white-box attacks (see Fig. \ref{fig.adv_perturb}).
 
 \begin{figure}[H]
 \centering
@@ -162,7 +162,7 @@ White-box attacks rely on gradients to deceive deep learning models. In the trai
 
 \subsubsection{Problem Formulation}
 
-Taking image classification models as an example, the deep learning model is denoted as $f(\cdot)$ with input $x$ and prediction $f(x, \theta)$, where $\theta$ is the model weights. The corresponding optimization loss is denoted by $\mathcal{L}(f(x, \theta), y^*)$, where $y^*$ is the ground truth. An adversarial input $x'$ is close to the original input $x$ under a specific distance metric while $f(x', \theta) \neq f(x, \theta)$. Formally, an adversarial example is defined as follows:
+Taking image classification models as an example, the deep learning model is denoted as $f(\cdot)$ with input $x$ and prediction $f(x, \theta)$, where $\theta$ are the model weights. The corresponding optimization loss is denoted by $\mathcal{L}(f(x, \theta), y^*)$, where $y^*$ is the ground truth. An adversarial input $x'$ is close to the original input $x$ under a distance metric, while $f(x', \theta) \neq f(x, \theta)$. Formally, an adversarial example is defined as follows:
 
 \begin{equation}
 x^{'}: ||x - x^{'}|| < \xi, f(x', \theta) \neq f(x, \theta)
@@ -174,11 +174,11 @@ where $ \xi$ is a predefined distance constraint on the maximum allowed perturba
 \end{equation}
 where $p$ is a real number and $d$ is the dimension of the vector $\textbf{v}$. For instance, the $L_0$ distance corresponds to the number of pixels being modified in the perturbation. The $L_2$ distance measures the standard Euclidean distance between $x$ and $x'$, and the $L_\infty$ distance measures the maximum element-wise difference between $x$ and $x'$.
 
-With full access to model structure and parameters, white-box attacks \textbf{maximize} the loss function  $\mathcal{L}(f(x, \theta), y^*)$ by adding noise to \textbf{ model inputs} $x$, while deep learning models are trained by \textbf{minimizing} the loss function  $\mathcal{L}(f(x, \theta), y^*)$ via updating \textbf{model weights} $\theta$.
+With full access to model structure and parameters, white-box attacks \textbf{maximize} the loss function $\mathcal{L}(f(x, \theta), y^*)$ by adding noise to \textbf{ model inputs} $x$, while deep learning models are trained by \textbf{minimizing} the loss function $\mathcal{L}(f(x, \theta), y^*)$ by updating \textbf{ model weights} $\theta$.
 
 \subsubsection{Adversarial Perturbation}
 
-The first gradient based white-box attack is the \acrfull{fgsm} \citep{GoodfellowSS14} that generates the adversarial input using:
+The first gradient-based white-box attack is \acrfull{fgsm} \citep{GoodfellowSS14} that generates adversarial inputs using:
 
 \begin{equation}
 x' = x + \xi \cdot \text{sign}(\ \bigtriangledown_x \mathcal{L}(f(x, \theta), y^*)\ )    
@@ -221,9 +221,9 @@ Based on the Deep Fool attack, Moosavi-dezfooli et al. generate \acrshort{uap}s,
 
 \subsubsection{Digital Patch}
 
-As illustrated in previous sections, adding a small and intentional drift to the input distribution, also known as adversarial perturbations, can substantially decrease the deep neural network's performance. Digital patches apply adversarial perturbations by directly modifying image pixel values. However, the effectiveness of the adversarial perturbation is limited by the maximum allowed perturbation. What if the adversaries prioritize the attack success rate over imperceptibility, which means we can remove the constraint of imperceptibility?
+As illustrated in previous sections, adding a small and intentional drift to the input distribution, also known as adversarial perturbations, can substantially decrease the deep neural network's performance. Digital patches apply adversarial perturbations by directly modifying image pixel values. However, the effectiveness of the adversarial perturbation is limited by the maximum allowed perturbation. What if the adversaries prioritize the attack success rate over imperceptibility, which means that we can remove the constraint of imperceptibility?
 
-Other than applying a small adversarial perturbation to the entire image, we can also add a human-noticeable patch to a small region of the input image to opt for a more effective (see Fig. \ref{fig:digital_patch}). Besides, the effectiveness of adversarial patches should be position invariant. Digital patches can fool the model without overlapping with target objects \citep{saha2020role}.
+In addition to applying a small adversarial perturbation to the entire image, we can also add a human-noticeable patch to a small region of the input image to opt for a more effective (see Fig. \ref{fig:digital_patch}). Besides, the effectiveness of adversarial patches should be position invariant. Digital patches can fool the model without overlapping with target objects \citep{saha2020role}.
 
 
 \begin{figure}[H]
@@ -244,7 +244,7 @@ Other than applying a small adversarial perturbation to the entire image, we can
 
 \subsubsection{Physical Patch}
 
-In 2017, Brown et al. brought adversarial examples to the physical world by printing human-noticeable patches on stickers \citep{brown2017patch}, posing threats against real-world applications (see Fig. \ref{fig.physical_patch}). The physical patch is trained using 10,000 images from the training set, applying a random translation, scaling, and rotation on the patch in each image.
+In 2017, Brown et al. brought adversarial examples to the physical world by printing human-noticeable patches on stickers \citep{brown2017patch}, posing threats against real-world applications (see Fig. \ref{fig.physical_patch}). The physical patch is trained using 10,000 images from the training set, applying a random translation, scaling, and rotation to the patch in each image.
 
 Later, research interests gradually shifted from digital attacks to physical attacks. The digital DPatch \citep{liu2018dpatch} was extended to the physical world \citep{lee2019physical} by adding expectation over transformations to find a physical patch:
 
@@ -277,11 +277,11 @@ The reason that physical patches are visually perceptible by human eyes is that 
 \label{fig.physical_patch_overlap}
 \end{figure}
 
-Physical patches pose great threats against autonomous driving vehicles because they are invariant to input images and thus can inherently achieve real-time attacks \citep{threet2021physical}. For instance, prior research generates stop signs that cannot be recognized by object detection models \citep{song2018physical} \citep{chen2019shapeshifter}, and adversarial posters to vanish pedestrian \citep{thys2019fooling, wang2021towards}. Besides, physical patches do not necessarily need to overlap with target objects (see Fig. \ref{fig.physical_patch_overlap}).
+Physical patches pose great threats to autonomous driving vehicles because they are invariant to input images and therefore can inherently achieve real-time attacks \citep{threet2021physical}. For example, previous research generates stop signs that cannot be recognized by object detection models \citep{song2018physical} \citep{chen2019shapeshifter}, and adversarial posters to vanish pedestrians \citep{thys2019fooling, wang2021towards}. Besides, physical patches do not necessarily need to overlap with target objects (see Fig. \ref{fig.physical_patch_overlap}).
 
-Though most patches are static, Hoory et al. generate and display dynamic patches on a monitor attached to a vehicle \citep{hoory2020dynamic}. However, physical patches can only attack object detection models when the camera is close enough \citep{wang2021daedalus, lu2021scale}.
+Although most patches are static, Hoory et al. generate and display dynamic patches on a monitor attached to a vehicle \citep{hoory2020dynamic}. However, physical patches can only attack object detection models when the camera is close enough \citep{wang2021daedalus, lu2021scale}.
 
-On the other hand, though most physical attacks are visually perceptible by human eyes, some optical attacks can only be captured by sensors (e.g., rolling shutter attacks) but not by human eyes. Li et al. summarized optical adversarial attacks, including attacks that use high-frequency light, laser, and projector in \citep{li2022survey}.
+On the other hand, although most physical attacks are visually perceptible by human eyes, some optical attacks can only be captured by sensors (e.g., rolling shutter attacks) but not by human eyes. Li et al. summarized optical adversarial attacks, including attacks that use high-frequency light, a laser, and a projector in \citep{li2022survey}.
 
 % Our research will focus on adversarial patches that are noticeable by human eyes. In \cite{sharma2022adversarial}, Sharma et al. surveyed adversarial patch attacks in vision-based tasks that involve three mainstream models: classification, detection, and re-identification \cite{wei2022physical}, and we will focus on adversarial attacks against object detection models.
 
@@ -290,7 +290,7 @@ On the other hand, though most physical attacks are visually perceptible by huma
 \subsection{Black-Box Attacks}
 \label{sec:blackbox_attack}
 
-White-box attacks rely on gradients computed through back-propagation to generate adversarial examples efficiently. However, gradients are not available for real-world deep learning applications because back-propagation is essential only for training but not for inference. Without access to gradients, white-box attacks become infeasible in the real world. As a result, black-box attacks become promising for attacks against deep learning cloud services.
+White-box attacks rely on gradients computed through back-propagation to generate adversarial examples efficiently. However, gradients are not available for real-world deep learning applications because backpropagation is essential only for training, but not for inference. Without access to gradients, white-box attacks become infeasible in the real world. As a result, black-box attacks become promising for attacks against deep learning cloud services.
 
 \subsubsection{Problem Formulation}
 
@@ -298,7 +298,7 @@ Taking black-box attacks against image classification models as an example, the 
  
 Given an input image $x$, the objective of the adversary is to fool a black-box image classifier $f(x)$ by adding a small perturbation $\delta$ to the original image and generate an adversarial image $x^{'} = x + \delta$, such that $f(x^{'}) \neq f(x)$. Unlike white-box attacks, note that adversaries have no access to model parameters $\theta$ under black-box settings. Typically, the perturbation $\delta$ is bounded in the $l_2$ or $l_{\infty}$ norm by some user-defined constant.
 
-Decision-based black-box attacks only require access to the predicted class (hard label), while score-based attacks also require the probability of each predicted class (soft label).  Next, we introduce the two most popular strategies of black-box attacks: gradient estimation and local search.
+Decision-based black-box attacks only require access to the predicted class (hard label), while score-based attacks also require the probability of each predicted class (soft label).  Next, we introduce the two most popular strategies for black-box attacks: gradient estimation and local search.
 
 \begin{figure}[H]
 \centering
@@ -311,14 +311,14 @@ Decision-based black-box attacks only require access to the predicted class (har
 
 \subsubsection{Gradient Estimation}
 
-Intuitively, if we can estimate gradients by slightly changing model inputs and observing model outputs, we can exploit existing white-box attacks to generate adversarial examples. For instance, the \acrfull{zoo} Attack amends the C\&W white-box attacks to the black-box setting by approximating gradients using a finite difference method \citep{chen2017zoo}. The original C\&W attack generates adversarial examples $x'$ by solving the optimization problem:
+Intuitively, if we can estimate gradients by slightly changing the model input and observing the model output, we can exploit existing white-box attacks to generate adversarial examples. For example, the \acrfull{zoo} Attack amends the C\&W white-box attacks to the black-box setting by approximating gradients using a finite difference method \citep{chen2017zoo}. The original C\&W attack generates adversarial examples $x'$ by solving the optimization problem:
 
 \begin{equation}
     \text{minimize}\ ||x'-x||^2_2 + c \cdot F(x', t)
 \end{equation}
 where $F(x', t)$ is the regularization function and $c>0$ is a regularization parameter. The target class is represented with $t$.
 
-To solve the above optimization problem, we need access to gradients of the regularization function with respect to the input $\bigtriangledown_{x^{'}} F(x^{'}, t)$, which is not available under black-box settings. Thus, the \acrshort{zoo} attack estimates the gradient using a finite difference method rather than backpropagation:
+To solve the above optimization problem, we need access to the gradients of the regularization function with respect to the input $\bigtriangledown_{x^{'}} F(x^{'}, t)$, which is not available in black-box settings. Thus, the \acrshort{zoo} attack estimates the gradient using a finite difference method rather than backpropagation:
 
 % \begin{equation}
 %     \frac{\partial^2 F(x)}{\partial x^2} \approx \frac{F(x+he_i) - 2F(x) + F(x-he_i)}{h^2}
@@ -339,32 +339,32 @@ Query efficiency is a crucial evaluation metric for black-box attacks, and the f
 
 \subsubsection{Local Search}
 
-On the other hand, local search is another popular black-box attack method. The FGSM attack either adds or deducts a small value to each pixel, indicating that adversarial perturbations are combinations of orthogonal vectors. As a result, local search methods use existing local search methods, such as heuristic search, to search for combinations of orthogonal vectors to decide what pixels to attack.
+On the other hand, local search is another popular black-box attack method. The FGSM attack either adds or deducts a small value to each pixel, indicating that adversarial perturbations are combinations of orthogonal vectors. As a result, local search methods use existing local search methods, such as heuristic search, to search for combinations of orthogonal vectors to decide which pixels to attack.
 
-Intuitively, we can add or deduct a small value to one pixel at a time and choose the operation that decreases the probability of the correct label. The attack is known as the \acrfull{simba} \cite{guo2019simple}, a baseline method. However, even for a 32x32 input image, the \acrshort{simba} method takes over 2000 queries, which is inefficient. To reduce the search space, later research finds combinations of vertical and horizontal lines and square patches rather than individual pixels.
+Intuitively, we can add or deduct a small value to one pixel at a time and choose the operation that decreases the probability of the correct label. The attack is known as \acrfull{simba} \cite{guo2019simple}, a baseline method. However, even for a 32x32 input image, the \acrshort{simba} method takes more than 2000 queries, which is inefficient. To reduce the search space, later research finds combinations of vertical and horizontal lines and square patches rather than individual pixels.
 
 % \clearpage
 
-Besides gradient estimation and local search, another approach to produce adversarial examples is to use a surrogate model. Surrogate-based black-box attacks generate adversarial perturbations by transferring from a surrogate model, but their attack success rates are lower than gradient-estimation and search-based methods.
+In addition to gradient estimation and local search, another approach to producing adversarial examples is to use a surrogate model. Surrogate-based black-box attacks generate adversarial perturbations by transferring from a surrogate model, but their attack success rates are lower than gradient-estimation and search-based methods.
 
-Though existing black-box attacks achieve remarkable attack success rates, we notice some common mistakes in prior research that obtain unfair advantages by applying the perturbation before image encoding and pre-processing, thereby overestimating the effectiveness of the attack (see Chapter \ref{chpt:classification}).
+Although existing black-box attacks achieve remarkable attack success rates, we notice some common mistakes in prior research that obtain unfair advantages by applying the perturbation before image encoding and preprocessing, thereby overestimating the effectiveness of the attack (see Chapter \ref{chpt:classification}).
 
 \section{Research Questions}
 \label{sec:research_question}
 
-Despite rapid progress in generating adversarial examples, there are many important questions arising for practical adversarial attacks.
+Despite rapid progress in generating adversarial examples, many important questions arise for practical adversarial attacks.
 
 \vspace{0.5cm}
 
 \textbf{1) Is it possible to achieve real-time online adversarial attacks?}
 
-Much of the current research in adversarial attacks focuses on offline attacks that utilize both input images $x$ and corresponding ground truths $y^*$ to maximize the adversarial loss $\mathcal{L}(f(x, \theta), y^*)$. However, the human-labeled ground truth $y^*$ is unavailable for real-time online attacks. For example, to attack an object detection model deployed on an autonomous driving vehicle, it is impossible to have humans mark the bounding boxes in real time. Can we generate adversarial perturbations without access to the ground truth?
+Much of the current research on adversarial attacks focuses on offline attacks that utilize both input images $x$ and the corresponding ground truths $y^*$ to maximize adversarial loss $\mathcal{L}(f(x, \theta), y^*)$. However, the human-labeled ground truth $y^*$ is unavailable for real-time online attacks. For example, to attack an object detection model deployed on an autonomous driving vehicle, it is impossible to have humans mark the bounding boxes in real time. Can we generate adversarial perturbations without access to the ground truth?
 
 \vspace{0.5cm}
 
 \textbf{2) Is it possible to inject the perturbations without access to the operating system?}
 
-Access to the operating system is essential in order to inject adversarial perturbations into input images. However, the operating system (Unix/Linux) where the deep learning model is deployed is highly secure as research in cyber security advances. Although the operating system is highly secure, the sensors that collect the data are exposed directly to the environment to collect the data. Can we exploit the sensor to bypass the operating system?
+Access to the operating system is essential in order to inject adversarial perturbations into input images. However, the operating system (Unix / Linux) in which the deep learning model is deployed is highly secure as cyber security research advances. Although the operating system is highly secure, the sensors that collect the data are exposed directly to the environment to collect the data. Can we exploit the sensor to bypass the operating system?
 
 \vspace{0.5cm}
 
@@ -378,7 +378,7 @@ Although deep neural networks are vulnerable to adversarial attacks, traditional
 \textbf{4) Have black-box attacks become a practical threat against commercial Cloud APIs?}
 \label{question_4}
 
-IoT devices with limited memory and computational power depend on cloud APIs for tasks like image classification. Existing black-box attacks report success rates of over 95\% using fewer than 1,000 queries. This raises the question: Have these attacks become a significant threat to commercial cloud APIs such as Imagga and Google Cloud Vision?
+IoT devices with limited memory and computational power depend on cloud APIs for tasks such as image classification. Existing black-box attacks report success rates of more than 95\% using fewer than 1,000 queries. This raises the question: Have these attacks become a significant threat to commercial cloud APIs such as Imagga and Google Cloud Vision?
 
 % \clearpage
 
@@ -408,7 +408,7 @@ To answer \textbf{research question 2)}, we propose a Human-in-the-Middle hardwa
 
 \noindent \textbf{Chapter \ref{chpt:classification}} unveils several common mistakes in existing black-box attacks and proposes distributed black-box attacks to accelerate attacks against image classification cloud services and shed light on \textbf{research question4)}. 
 
-Prior research overestimated the effectiveness of black-box attacks by applying the perturbation before image resizing and pre-processing, which is not accessible to end users for commercial image classification cloud APIs. In addition to minimizing the number of queries, black-box attacks can be further optimized by leveraging the load-balancing mechanism commonly used in cloud APIs (\textbf{Under Review for Publication}).
+Previous research overestimated the effectiveness of black-box attacks by applying the perturbation before image resizing and preprocessing, which is not accessible to end users for commercial image classification cloud APIs. In addition to minimizing the number of queries, black-box attacks can be further optimized by leveraging the load-balancing mechanism commonly used in cloud APIs (\textbf{Under Review for Publication}).
 
 \vspace{0.5cm}
 
