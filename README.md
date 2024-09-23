@@ -24,15 +24,17 @@ $ updmap -user
 
 ### Useful Tools
 
-- Find duplicated entries in references (`refs.bib`).
+- Export only cited references:
 
 ```
-grep -n 'title =' refs.bib | uniq -cdf 1
+biber --output_resolve <filename>.bcf --output_format=bibtex
 ```
 
 - Cleaner and Formatter for BibTeX files.
 
   https://flamingtempura.github.io/bibtex-tidy/
+
+- After cleaning up, it's easier to find duplicated references.
 
 ![](overview.png)
 
