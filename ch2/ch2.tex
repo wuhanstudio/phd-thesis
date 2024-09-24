@@ -5,7 +5,7 @@
 
 As introduced in Chapter \ref{chpt:intro}, deep convolutional networks become promising for autonomous driving tasks as research in deep neural networks advances. In particular, there is an emerging trend of employing end-to-end neural network models for autonomous driving. Although previous research has shown that deep neural network classifiers are vulnerable to adversarial attacks, the effect of adversarial attacks is not as well understood for regression tasks. 
 
-In this chapter, we devise two white-box attacks against end-to-end autonomous driving models. Both attacks can be initiated in real-time on CPUs without employing GPUs (response to research question 1). The image-specific and image-agnostic attack deviates the steering angle from the original output by 0.478 and 0.111, respectively, in an average of 800 attacks with the same attack strength (epsilon=1), which is much stronger than random noises that only perturb the steering angle by 0.002 (the steering angle ranges from [-1, 1]). 
+In this chapter, we devise two white-box attacks against end-to-end autonomous driving models. Both attacks can be initiated in real-time on CPUs without employing GPUs (\textbf{response to research question 1}). The image-specific and image-agnostic attack deviates the steering angle from the original output by 0.478 and 0.111, respectively, in an average of 800 attacks with the same attack strength (epsilon=1), which is much stronger than random noises that only perturb the steering angle by 0.002 (the steering angle ranges from [-1, 1]). 
 
 % Our attacks manipulate the behavior of the autonomous driving system by perturbing the input image. 
 

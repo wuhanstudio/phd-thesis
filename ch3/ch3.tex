@@ -7,7 +7,7 @@ In the previous chapter, we demonstrated that it is possible to achieve real-tim
 
 As mentioned in Research Question 2), another challenge is where and how we apply the adversarial perturbation without access to the operating system. Unlike an image classification task that receives static images as input, object detection systems usually process a real-time video stream from the camera. Although we have various approaches to generate the perturbation, it will not pose a threat against real-world applications if we cannot apply the perturbation in real time.
 
-Starting with an introduction to existing object detection models and white-box attacks, we then aim to achieve online attacks that generate the perturbation in real time. Furthermore, we produce a single \acrfull{uap} that could attack all images received from a camera and inject the perturbation via a Human-in-the-Middle hardware attack (response to research question 2).
+Starting with an introduction to existing object detection models and white-box attacks, we then aim to achieve online attacks that generate the perturbation in real time. Furthermore, we produce a single \acrfull{uap} that could attack all images received from a camera and inject the perturbation via a Human-in-the-Middle hardware attack (\textbf{response to research question 2)}.
 
 % Lastly, we introduce the WHite-box Adversarial Toolbox (WHAT) that integrates our attacks into an open-source toolbox.
 
@@ -159,7 +159,7 @@ As introduced in Chapter \ref{chpt:intro}, intelligent robots rely on object det
         \caption{The \textbf{Multi-Untargeted} Attack (left) generates multiple overlays containing different kinds of objects (30, 60, stop). The \textbf{Multi-Targeted} Attack (right) generates multiple overlays containing several target objects (stop sign).}
         \label{fig:dense-untar}
     \end{subfigure}
-    \caption{This paper demonstrates how to generate adversarial overlays of arbitrary shapes at specified positions in real time.}
+    \caption{This method demonstrates how to generate adversarial overlays of arbitrary shapes at specified positions in real time.}
     \label{fig:detection.overview}
 \end{figure}
 
@@ -169,7 +169,7 @@ Reliable object detection is crucial for multiple safety-critical robotic applic
 
 The generation of adversarial patches for attacking real-time robotic applications is still a rather challenging task. The generation process itself is often very computationally expensive. In addition, the efficiency of the physical patch is conditioned on strict requirements on the relative distance and orientation of the camera and the patch \citep{wang2021daedalus} \citep{threet2021physical}. These requirements are often difficult to satisfy for real-world robotic applications deployed in dynamic environments.
 
-Recent research in penetration tests against the Robot Operating System (ROS) has shown that it is possible to inject digital patches into the ROS message that contains the camera image \citep{dieber2020penetration}. In particular, Dieber et al. succeeded in isolating a ROS node so that they could intercept and manipulate the ROS message that contains sensor data while the victim node is unaware of the attack. In this paper, we generate digital overlays (unperceivable digital patches) at desired locations in real time and then exploit the vulnerability to inject the digital overlays into the input image. Overall, this paper makes the following contributions:
+Recent research in penetration tests against the Robot Operating System (ROS) has shown that it is possible to inject digital patches into the ROS message that contains the camera image \citep{dieber2020penetration}. In particular, Dieber et al. succeeded in isolating a ROS node so that they could intercept and manipulate the ROS message that contains sensor data while the victim node is unaware of the attack. In this section, we generate digital overlays (unperceivable digital patches) at desired locations in real time and then exploit the vulnerability to inject the digital overlays into the input image. Overall, this method makes the following contributions:
 \begin{itemize}
     \item We devise three adversarial attacks that can generate digital overlays of different shapes at specified locations in real time (see Fig. \ref{fig:detection.overview}). This extends previous research that primarily has focused on square patches.
     \item We investigate the adversarial effect of digital overlays of different sizes and aspect ratios. In particular, it is found that the size of the overlay is critical for the success of the attack, whereas the attack performance is independent of the aspect ratio. 
@@ -614,7 +614,7 @@ However, both digital and physical attacks have their limitations. Digital pertu
 
 \subsection{Contributions}
 
-This paper presents a novel hardware attack that combines the flexibility of physical attacks with the efficiency of digital attacks, inspired by Man-in-the-Middle Attacks in network security (refer to Fig. \ref{fig:mitm}). In this attack, the adversary intercepts and manipulates the image data transmitted between a USB camera and a detection system (refer to Figs. \ref{fig:minm} and \ref{fig:demo}). 
+This section presents a novel hardware attack that combines the flexibility of physical attacks with the efficiency of digital attacks, inspired by Man-in-the-Middle Attacks in network security (refer to Fig. \ref{fig:mitm}). In this attack, the adversary intercepts and manipulates the image data transmitted between a USB camera and a detection system (refer to Figs. \ref{fig:minm} and \ref{fig:demo}). 
 
 The key contributions of this research are summarized as follows:
 

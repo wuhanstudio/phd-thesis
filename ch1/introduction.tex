@@ -1,9 +1,9 @@
 \chapter{Background \& Related Work}
 \label{chpt:intro}
 
-Due to its high accuracy, \acrfull{dnn} are widely adopted in image classification cloud services, object detection applications, \acrfull{llm}, etc. Meanwhile, as computational resources grow on edge devices, intelligent robots benefit from deep learning models to obtain a more comprehensive perception of the environment than traditional robots. However, deep learning models are vulnerable to adversarial attacks that can manipulate model outputs by adding carefully crafted small perturbations to model inputs.
+Due to its high accuracy, \acrfull{dnn} are widely adopted in image classification cloud services, object detection applications, \acrfull{llm}, etc. Meanwhile, as computational resources grow on edge devices, intelligent robots benefit from deep learning models to obtain a more comprehensive perception of the environment than traditional robots. However, deep learning models are vulnerable to adversarial attacks that can manipulate the model output by adding carefully crafted small perturbations to the model input.
 
-This chapter first introduces how deep learning models are employed in safety-critical applications, such as autonomous driving systems. Then, we review existing adversarial attacks and discuss unexplored research questions. Lastly, we summarize the structure of the thesis.
+This chapter first introduces how deep learning models are employed in safety-critical applications, such as autonomous driving (one type of mobile robot). Then, we review existing adversarial attacks and discuss unexplored research questions. Lastly, we summarize the structure of the thesis and contributions of each chapter.
 
 % For instance, the Amazon Kiva Robot and Alibaba Quicktron Robot can help warehouse staffs find desired items by moving goods shelves. Each robot can perceive the surrounding environment to avoid collisions with other robots, and receive commands from warehouse staff via cloud servers. On the other hand, autonomous driving research teams from Waymo (formerly the Google self-driving car project), Tesla, etc intend to achieve autonomous navigation without human interference.
 
@@ -185,7 +185,7 @@ x' = x + \xi \cdot \text{sign}(\ \bigtriangledown_x \mathcal{L}(f(x, \theta), y^
 \end{equation} 
 where $\text{sign}(\cdot$) calculates the element-wise sign of a given matrix and $\bigtriangledown_x \mathcal{L}(f(x, \theta), y^*)$ is the gradient of the input $x$ with respect to the loss $\mathcal{L}(f(x, \theta), y^*)$.
 
-The \acrshort{fgsm} generates the adversarial example in one step, while the \acrfull{pgd} \citep{madry2017towards} transforms the \acrshort{fgsm} attack into a multi-step attack that updates the perturbation at each iteration while remaining the overall perturbation $x^{'}$ in a $L_p$ ball using the projection function $\texttt{proj}_{p}(\cdot)$:
+The \acrshort{fgsm} generates the adversarial example in one step, while the \acrfull{pgd} \citep{madry2017towards} transforms the \acrshort{fgsm} attack into a \textbf{multi-step attack} that updates the perturbation at each iteration while remaining the overall perturbation $x^{'}$ in a $L_p$ ball using the projection function $\texttt{proj}_{p}(\cdot)$:
 
 \begin{equation}
 x'_{t+1} = \text{proj}_{p}(x'_t + \xi \cdot \text{sign}(\ \bigtriangledown_x \mathcal{L}(f(x, \theta), y^*)\ ))
