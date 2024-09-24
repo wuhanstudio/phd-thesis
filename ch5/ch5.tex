@@ -3,42 +3,52 @@
 
 % \newrefsection
 
-In this chapter, we focus on adversarial attacks against image classification models. Image Classification is one of the most fundamental tasks in computer vision that associate pre-defined labels with each image. Existing image classification models are accurate enough and have been widely adopted in real-world applications, such as Google Cloud Vision, Amazon Rekognition, OpenAI, Imagga, etc.
+The only remaining research question (Research Question 4) is addressed in this chapter, where we focus on attacking image classification Cloud APIs. Image Classification is one of the most fundamental tasks in computer vision that associate pre-defined labels with each image. Current models are highly accurate and have been widely deployed in real-world applications, such as Google Cloud Vision, Amazon Rekognition, and Imagga, offered as cloud APIs. End-users can access classification results without having to understand the underlying model implementations.
 
-One of the most prominent applications for image classification is Cloud Service. Deep learning models deployed in data centers can serve as Cloud APIs. The end-user can receive classification results without knowing the implementation details of various models. Our objective is to achieve adversarial attacks under this black-box scenario, which means we aim to fool the model without access to its structure and weights.
+However, black-box adversarial attacks can fool image classifiers without requiring access to the structure and weights of the model.  Recent studies have reported success rates exceeding 95\% with fewer than 1,000 queries. This raises an important question: Have black-box attacks become a genuine threat to IoT devices that rely on cloud APIs for image classification (Research Question 4)?
 
-% Starting with an introduction to existing image classification models and related black-box adversarial attacks, then we try to achieve a distributed black-box attack against image classification APIs. Lastly, we introduce the Black-box Adversarial Toolbox (BAT) which integrates existing black-box adversarial attack methods into an open-source toolbox.
-
-% \begin{abstract}
-
-Black-box adversarial attacks fool image classifiers into misclassifying images without requiring access to model structure and weights. Recent studies have reported attack success rates of over 95\% with less than 1,000 queries. The question then arises: whether black-box attacks have become a real threat against IoT devices that rely on cloud APIs to achieve image classification. To shed some light on this, note that prior research has primarily focused on increasing the success rate and reducing the number of queries. However, another crucial factor for black-box attacks against cloud APIs is the time required to perform the attack. This paper applies black-box attacks directly to cloud APIs rather than local models, thereby avoiding mistakes made in prior research that obtained unfair advantages by applying the perturbation before image encoding and pre-processing. Further, we exploit load balancing to enable distributed black-box attacks that can reduce the attack time by a factor of about five for both local search and gradient estimation methods. 
-
-% \keywords{Adversarial Attacks \and Black-box Attacks \and Image Classification \and Cloud Service.}
-% \end{abstract}
-
+To shed some light on this, this chapter begins by reviewing existing image classification models and black-box adversarial attacks; we then apply black-box attacks directly to cloud APIs rather than local models, thereby avoiding mistakes made in prior research that obtained unfair advantages by applying the perturbation before image encoding and preprocessing. While prior studies have focused primarily on improving success rates and minimizing query counts, a critical aspect for cloud API attacks is the time required to execute the attack. To address this, we leverage load balancing to enable distributed black-box attacks, reducing attack time by a factor of approximately five for both local search and gradient estimation methods.
 
 \section{Introduction}
 \label{sec:introduction}
-Image classification models are widely used in real-world applications and typically achieve top-5 accuracy of over 90\%. Cloud-based image classification services, such as Google Cloud Vision, provide pre-trained models as APIs, allowing users to classify images by sending requests to cloud servers. Cloud APIs are particularly useful for IoT edge devices that lack the computational power to run deep learning models locally.
+Image classification models are widely used in real-world applications and typically achieve top-5 accuracy of over 90\%. Cloud-based image classification services provide pre-trained models as APIs, allowing users to classify images by sending requests to cloud servers. Cloud APIs are particularly useful for IoT edge devices that lack the computational power to run deep learning models locally.
 
 % (Existing Black-box Attacks)
-However, image classification cloud services are vulnerable to black-box adversarial attacks, which generate imperceptible perturbations to input images to mislead classification models into incorrect predictions. While prior research has shown that black-box attacks can achieve high success rates of over 95\% with only 1,000 queries without access to model structure and weights \citep{bhambri2019survey}, most research has generated adversarial images offline on local models rather than online on cloud servers. The efficiency of online black-box attacks against cloud services remains unclear.
+However, image classification cloud services are vulnerable to black-box adversarial attacks, which generate imperceptible perturbations to input images to mislead classification models into incorrect predictions. Although previous research has shown attack success rates exceeding 95\% with fewer than 1,000 queries, without access to the model's structure or weights \citep{bhambri2019survey}, most studies have generated adversarial images offline on local models rather than directly on cloud servers. The efficiency of online black-box attacks against cloud services remains unclear.
 
 Implementing online black-box attacks is more challenging than offline attacks due to the slower response time of cloud APIs compared to local models with GPUs. Although a local model utilizing a high-performance GPU can respond to over 100 queries per second, the typical response time for a single query from an API server is 0.5 - 2s. As a result, online black-box attacks pose a limited practical threat because generating multiple adversarial images could take several hours. Therefore, online attacks against cloud services must be both time-efficient and can achieve a high attack success rate. However, previous research in this area often underestimates the time consumption and overestimates the attack success rate.
 
-\begin{figure*}[tbp]
+In the next section, we highlight several common mistakes made in prior research when implementing online attacks and explain why these studies often resorted to attacking local models instead of cloud APIs.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{figures/chapter_classification/local.jpg}
-    \caption{Most prior research attacked local models and applied the perturbation after image resizing and pre-processing, assuming access to input shapes of black-box models.}
+    \caption{\textbf{Attacking Local Models}: Most prior research attacked local models and applied the adversarial perturbation after image resizing and pre-processing, assuming access to input shapes of black-box models.}
     \label{fig:local}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[tbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{figures/chapter_classification/cloudapi.jpg}
-    \caption{We initiate the black-box attacks directly against cloud services and apply the perturbation before image encoding and pre-processing.}
+    \caption{\textbf{Attacking Cloud APIs}: We initiate black-box attacks directly against cloud services and apply the perturbation before image encoding and pre-processing, assuming no access to the internal design of commercial APIs.}
     \label{fig:cloudapi}
-\end{figure*}
+\end{figure}
+
+% \begin{figure}[H]
+%     \begin{subfigure}[bp]{\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{figures/chapter_classification/local.jpg}
+%         \caption{Most prior research attacked local models and applied the perturbation after image resizing and pre-processing, assuming access to input shapes of black-box models.}
+%         \label{fig:local}        
+%     \end{subfigure}
+%     \begin{subfigure}[bp]{\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{figures/chapter_classification/cloudapi.jpg}
+%         \caption{We initiate the black-box attacks directly against cloud services and apply the perturbation before image encoding and pre-processing.}
+%         \label{fig:cloudapi}
+%     \end{subfigure}
+%     \caption{The difference}
+% \end{figure}
 
 \clearpage
 
