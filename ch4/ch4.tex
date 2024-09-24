@@ -3,14 +3,18 @@
 
 % \newrefsection
 
-In this chapter, we present adversarial attacks against object tracking systems. Unlike object detection systems that only make predictions based on the current input image from the camera, object tracking models combine prior predictions with current inputs to generate trajectories of moving objects, making them more robust to adversarial attacks.
+In earlier chapters, we demonstrated that real-time online attacks are feasible (Research Question 1) and that perturbations can be injected without access to the operating system (Research Question 2). In this chapter, we address Research Question 3 by attacking object tracking systems. Unlike object detection models, which rely solely on the current input from the camera, object tracking models combine prior predictions with current inputs to generate the trajectories of moving objects, making them inherently more robust against adversarial attacks.
 
 \section{Introduction}
 \label{sec:adv_track}
 
-As introduced in Chapter \ref{chpt:driving}, deep learning models are widely used in autonomous driving for perception tasks, such as object-tracking, to generate trajectories of surrounding vehicles. In the context of autonomous driving, we lack access to gradients, which makes white-box attacks nearly impossible. Additionally, the difficulty in obtaining intermediate query results within the internal data path makes it impractical for black-box attacks to query the model.
+As discussed in Chapter \ref{chpt:driving}, deep learning models are widely used in autonomous driving for perception tasks, such as  objects tracking, to generate trajectories of surrounding vehicles. In this context, the lack of access to gradients renders white-box attacks nearly impossible. Moreover, the inability to obtain intermediate query results from the model's internal data path makes black-box attacks impractical.
 
-However, this does not necessarily mean that current autonomous driving systems are robust against adversarial attacks. Many object tracking systems still rely on pre-trained object detection models (as outlined in Table \ref{tab.detection_github}), making them susceptible to transferable perturbations generated using well-known object detection models. Consequently, adversarial attacks targeting object detection could also impact object tracking systems.
+However, this does not imply that current autonomous driving systems are fully robust against adversarial attacks. Many object tracking systems still depend on pre-trained object detection models (as shown in Table \ref{tab.detection_github}), leaving them vulnerable to transferable perturbations generated from widely-used object detection models. As a result, adversarial attacks designed to target object detection can also compromise object tracking systems.
+
+% As introduced in Chapter \ref{chpt:driving}, deep learning models are widely used in autonomous driving for perception tasks, such as object-tracking, to generate trajectories of surrounding vehicles. In the context of autonomous driving, we lack access to gradients, which makes white-box attacks nearly impossible. Additionally, the difficulty in obtaining intermediate query results within the internal data path makes it impractical for black-box attacks to query the model.
+
+% However, this does not necessarily mean that current autonomous driving systems are robust against adversarial attacks. Many object tracking systems still rely on pre-trained object detection models (as outlined in Table \ref{tab.detection_github}), making them susceptible to transferable perturbations generated using well-known object detection models. Consequently, adversarial attacks targeting object detection could also impact object tracking systems.
 
 \begin{table}[H]
 \centering
