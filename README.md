@@ -7,7 +7,7 @@ Based on [George's template](https://github.com/georgedeath/University_of_Exeter
 ### Thesis Compiling
 
 ```
-$ sudo apt install texlive-base
+$ sudo apt install texlive-base texlive-latex-base
 $ tlmgr install scheme-full
 $ tlmgr path add
 
