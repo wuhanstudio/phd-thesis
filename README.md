@@ -11,6 +11,9 @@ $ sudo apt install texlive-base texlive-latex-base
 $ tlmgr install scheme-full
 $ tlmgr path add
 
+# If your local texlive is older than the latest one, please change the year of the repo accordingly
+$ tlmgr option repository https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2021/tlnet-final/
+
 $ sudo apt-get install latex-cjk-all
 $ tlmgr install cjk
 $ updmap -user
